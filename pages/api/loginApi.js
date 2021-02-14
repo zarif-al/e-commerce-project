@@ -23,11 +23,17 @@ export default async (req, res) => {
             compare(
               req.body.password,
               user[0].password,
-              function (err, result) {
+              async function (err, result) {
                 if (!err && result) {
                   res.statusCode = 200;
                   const claims = { sub: user[0]._id };
                   const jwt = sign(claims, SECRET, { expiresIn: "1h" });
+                  await db
+                    .collection("Users")
+                    .findOneAndUpdate(
+                      { _id: user[0]._id },
+                      { $set: { loginStatus: 1 } }
+                    );
                   res.setHeader(
                     "Set-Cookie",
                     cookie.serialize("auth", jwt, {
@@ -81,18 +87,18 @@ export default async (req, res) => {
           },
           { $set: { loginStatus: 0 } }
         );
+        res.setHeader(
+          "Set-Cookie",
+          cookie.serialize("auth", "", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV !== "development",
+            sameSite: "strict",
+            maxAge: -1,
+            path: "/",
+          })
+        );
+        res.end();
       }
     });
-    res.setHeader(
-      "Set-Cookie",
-      cookie.serialize("auth", "", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV !== "development",
-        sameSite: "strict",
-        maxAge: -1,
-        path: "/",
-      })
-    );
-    res.end();
   }
 };
