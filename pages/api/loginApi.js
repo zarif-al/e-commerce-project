@@ -14,10 +14,17 @@ export default async (req, res) => {
       .find({
         email: req.body.email,
       })
-      .project({ password: 1, name: 1, cart: 1, loginStatus: 1 })
+      .project({ password: 1 })
       .toArray();
     if (user.length === 1) {
-      if (user[0].loginStatus === 0) {
+      const user_id = new ObjectID(user[0]._id);
+      const loggedIn = await db
+        .collection("LoginTable")
+        .find({
+          _id: user_id,
+        })
+        .toArray();
+      if (loggedIn.length === 0) {
         return new Promise((resolve, reject) => {
           try {
             compare(
@@ -25,22 +32,20 @@ export default async (req, res) => {
               user[0].password,
               async function (err, result) {
                 if (!err && result) {
+                  await db.collection("LoginTable").insertOne({
+                    _id: user_id,
+                    loginTime: new Date(),
+                  });
                   res.statusCode = 200;
                   const claims = { sub: user[0]._id };
-                  const jwt = sign(claims, SECRET, { expiresIn: "1h" });
-                  await db
-                    .collection("Users")
-                    .findOneAndUpdate(
-                      { _id: user[0]._id },
-                      { $set: { loginStatus: 1 } }
-                    );
+                  const jwt = sign(claims, SECRET, { expiresIn: "2h" });
                   res.setHeader(
                     "Set-Cookie",
                     cookie.serialize("auth", jwt, {
                       httpOnly: true,
                       secure: process.env.NODE_ENV !== "development",
                       sameSite: "strict",
-                      maxAge: 3600,
+                      maxAge: 7200,
                       path: "/",
                     })
                   );
@@ -81,12 +86,9 @@ export default async (req, res) => {
     verify(req.cookies.auth, SECRET, async function (err, decoded) {
       if (!err && decoded) {
         const user_id = new ObjectID(decoded.sub);
-        await db.collection("Users").findOneAndUpdate(
-          {
-            _id: user_id,
-          },
-          { $set: { loginStatus: 0 } }
-        );
+        await db.collection("LoginTable").findOneAndDelete({
+          _id: user_id,
+        });
         res.setHeader(
           "Set-Cookie",
           cookie.serialize("auth", "", {

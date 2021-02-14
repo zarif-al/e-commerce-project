@@ -2,6 +2,7 @@ import { connectToDatabase } from "../../utils/mongodb";
 import { hash } from "bcrypt";
 import cookie from "cookie";
 import { sign } from "jsonwebtoken";
+import { ObjectID } from "mongodb";
 export default async (req, res) => {
   const { db } = await connectToDatabase();
   const { SECRET } = process.env;
@@ -9,7 +10,7 @@ export default async (req, res) => {
     return new Promise((resolve, reject) => {
       try {
         hash(req.body.password, 10, async function (err, hash) {
-          db.collection("Users").insertOne(
+          await db.collection("Users").insertOne(
             {
               name: req.body.name,
               email: req.body.email,
@@ -18,25 +19,29 @@ export default async (req, res) => {
               address: req.body.address,
               phoneNumber: req.body.phoneNumber,
               cart: [],
-              loginStatus: 1,
             },
-            function (error, response) {
+            async function (error, response) {
               if (error) {
                 res.statusCode = 600;
                 res.setHeader("Content-Type", "application/json");
                 res.end(JSON.stringify({ response: error }));
                 resolve();
               } else {
+                const user_id = new ObjectID(response.insertedId);
+                await db.collection("LoginTable").insertOne({
+                  _id: user_id,
+                  loginTime: new Date(),
+                });
                 res.statusCode = 200;
                 const claims = { sub: response.insertedId };
-                const jwt = sign(claims, SECRET, { expiresIn: "1h" });
+                const jwt = sign(claims, SECRET, { expiresIn: "2h" });
                 res.setHeader(
                   "Set-Cookie",
                   cookie.serialize("auth", jwt, {
                     httpOnly: true,
                     secure: process.env.NODE_ENV !== "development",
                     sameSite: "strict",
-                    maxAge: 3600,
+                    maxAge: 7200,
                     path: "/",
                   })
                 );
