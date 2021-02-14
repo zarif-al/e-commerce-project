@@ -4,9 +4,9 @@ export function postBodyCreate(order) {
   post_body["total_amount"] = order.total;
   post_body["currency"] = "BDT";
   post_body["tran_id"] = order.tran_id;
-  post_body["success_url"] = "https://e-commerce-project-delta.vercel.app";
-  post_body["fail_url"] = "https://e-commerce-project-delta.vercel.app";
-  post_body["cancel_url"] = "https://e-commerce-project-delta.vercel.app";
+  post_body["success_url"] = "https://e-commerce-project-delta.vercel.app/";
+  post_body["fail_url"] = "https://e-commerce-project-delta.vercel.app/";
+  post_body["cancel_url"] = "https://e-commerce-project-delta.vercel.app/";
   post_body["ipn_url"] = ipn_url;
   post_body["emi_option"] = 0;
   post_body["cus_name"] = order.name;
