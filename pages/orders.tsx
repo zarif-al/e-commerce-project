@@ -130,7 +130,7 @@ function orders() {
               className="justify-content-center"
               style={{ marginTop: "2rem", marginBottom: "1rem" }}
             >
-              <h3>Error</h3>
+              <h3>Loading Your Orders. Please Wait...</h3>
             </Row>
           </Container>
         </>
