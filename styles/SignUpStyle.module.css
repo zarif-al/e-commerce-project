@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Rakkas&display=swap");
+.customForm {
+  padding-top: 5rem;
+}
+
+.customSuccessModalBody {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  border: 10px solid green;
+}
+
+.customErrorModalBody {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+  border: 10px solid red;
+}
+
+.message {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  font-family: "Rakkas", cursive;
+}
+
+.redirectMessage {
+  font-family: "Rakkas", cursive;
+}

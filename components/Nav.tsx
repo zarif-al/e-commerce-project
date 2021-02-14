@@ -1,0 +1,104 @@
+import React from "react";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
+import Link from "next/link";
+import { NavDropdown } from "react-bootstrap";
+import { mutate } from "swr";
+import useSWR from "swr";
+import { itemCount } from "../functions/functions";
+import { useRouter } from "next/router";
+function NavBar({ screen, modalShow }) {
+  const router = useRouter();
+  const fetcher = (url) => fetch(url).then((r) => r.json());
+  const { data } = useSWR("/api/userApi", fetcher);
+
+  const loginStatus =
+    data != undefined ? (data.message != "authUser" ? false : true) : false;
+
+  const toggle = () => {
+    if (screen === "signUp") {
+      return null;
+    }
+    if (screen === "home") {
+      return (
+        <>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+          <Navbar.Collapse
+            id="basic-navbar-nav"
+            className="mr-10 justify-content-end"
+          >
+            <Nav>
+              {loginStatus === false ? (
+                <>
+                  <Nav.Link
+                    onClick={() => {
+                      modalShow(true);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faUser} color="green" /> Log In/Sign
+                    Up
+                  </Nav.Link>
+                </>
+              ) : (
+                <NavDropdown title="My Account" id="basic-nav-dropdown">
+                  <NavDropdown.Item
+                    onClick={() => {
+                      router.push("/orders");
+                    }}
+                  >
+                    My Orders
+                  </NavDropdown.Item>
+                  <NavDropdown.Item
+                    onClick={() => {
+                      fetch("/api/loginApi", {
+                        method: "GET",
+                        headers: {
+                          Accept: "application/json",
+                          "Content-Type": "application/json",
+                        },
+                      }).then((res) => {
+                        router.push("/");
+                        mutate("/api/userApi");
+                      });
+                    }}
+                  >
+                    Log Out
+                  </NavDropdown.Item>
+                </NavDropdown>
+              )}
+              <Link href="/cart" passHref>
+                <Nav.Link>
+                  <span className="fa-layers fa-fw">
+                    <FontAwesomeIcon icon={faShoppingCart} color="green" />
+                    <span
+                      className="fa-layers-counter"
+                      style={{ fontSize: "25px" }}
+                    >
+                      {itemCount(data)}
+                    </span>
+                  </span>{" "}
+                  Cart
+                </Nav.Link>
+              </Link>
+            </Nav>
+          </Navbar.Collapse>
+        </>
+      );
+    }
+  };
+
+  return (
+    <>
+      <Navbar bg="light" expand="lg" sticky="top">
+        <Link href="/" passHref>
+          <Navbar.Brand>E-commerce</Navbar.Brand>
+        </Link>
+        {toggle()}
+      </Navbar>
+    </>
+  );
+}
+
+export default NavBar;
