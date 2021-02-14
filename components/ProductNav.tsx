@@ -29,7 +29,7 @@ function ProductNav({
     setSearchValue(e.target[0].value);
   };
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" style={{ fontSize: "1.3rem" }}>
       <Navbar.Toggle aria-controls="basic-navbar-nav">Filter</Navbar.Toggle>
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">

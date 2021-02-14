@@ -74,7 +74,7 @@ function NavBar({ screen, modalShow }) {
                     <FontAwesomeIcon icon={faShoppingCart} color="green" />
                     <span
                       className="fa-layers-counter"
-                      style={{ fontSize: "25px" }}
+                      style={{ fontSize: "2rem" }}
                     >
                       {itemCount(data)}
                     </span>
@@ -91,7 +91,13 @@ function NavBar({ screen, modalShow }) {
 
   return (
     <>
-      <Navbar bg="light" expand="lg" sticky="top">
+      <Navbar
+        bg="light"
+        expand="lg"
+        sticky="top"
+        className="py-2"
+        style={{ fontSize: "1.3rem" }}
+      >
         <Link href="/" passHref>
           <Navbar.Brand>E-commerce</Navbar.Brand>
         </Link>
