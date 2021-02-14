@@ -174,9 +174,12 @@ function cart() {
       return (
         <div className="border border-primary">
           <Row className="justify-content-center">
-            <h4>You have no items in your shopping cart</h4>
+            <h2>You have no items in your shopping cart</h2>
           </Row>
-          <Row className="justify-content-center">
+          <Row
+            className="justify-content-center"
+            style={{ fontSize: "1.5rem" }}
+          >
             <Link href="/">Continue</Link>
           </Row>
         </div>
@@ -299,7 +302,7 @@ function cart() {
           style={{ marginBottom: "2rem", marginTop: "2rem" }}
         >
           <Col>
-            <h3>Shopping Cart</h3>
+            <h1>Shopping Cart</h1>
           </Col>
         </Row>
         {getItems()}

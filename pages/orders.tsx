@@ -100,11 +100,20 @@ function orders() {
           ) : (
             <>
               <Container>
+                <Row
+                  className="justify-content-center"
+                  style={{ marginTop: "2rem", marginBottom: "1rem" }}
+                >
+                  <h1>Orders</h1>
+                </Row>
                 <div className="border border-primary">
                   <Row className="justify-content-center">
-                    <h4>You have no orders</h4>
+                    <h2>You have not completed any orders</h2>
                   </Row>
-                  <Row className="justify-content-center">
+                  <Row
+                    className="justify-content-center"
+                    style={{ fontSize: "1.5rem" }}
+                  >
                     <Link href="/">Continue</Link>
                   </Row>
                 </div>
