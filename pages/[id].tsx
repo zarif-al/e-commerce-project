@@ -16,7 +16,7 @@ import {
   faCartPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import Toast from "react-bootstrap/Toast";
-
+import { NextSeo } from "next-seo";
 function Items({ Item }) {
   let { id, name, price, description, imageLink, type } = Item;
   const [loginShow, setLoginShow] = useState(false);
@@ -24,6 +24,7 @@ function Items({ Item }) {
   let listKeys = 0;
   return (
     <>
+      <NextSeo title={name} />
       <Container fluid>
         <NavBar screen="home" modalShow={setLoginShow} />
       </Container>
@@ -58,12 +59,12 @@ function Items({ Item }) {
               Tk {price}
             </Row>
             <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-              <Link href="/" passHref>
+              {/*          <Link href="/" passHref>
                 <Button variant="primary" style={{ marginRight: "1rem" }}>
                   <FontAwesomeIcon icon={faArrowAltCircleLeft} color="white" />{" "}
                   Return To Shop
                 </Button>
-              </Link>
+              </Link> */}
               <Button
                 variant="success"
                 onClick={async () => {

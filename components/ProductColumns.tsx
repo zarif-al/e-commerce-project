@@ -101,11 +101,16 @@ function ProductColumns({
           </Card.Body>
           <Card.Footer>
             <Row className="justify-content-around">
-              <Link href={`/${productName}`} passHref>
-                <Button variant="primary">
-                  <FontAwesomeIcon icon={faEye} color="white" /> View
-                </Button>
-              </Link>
+              {/*  <Link href={`/${productName}`} passHref> */}
+              <Button
+                variant="primary"
+                onClick={() => {
+                  window.open(`/${productName}`, "_blank");
+                }}
+              >
+                <FontAwesomeIcon icon={faEye} color="white" /> View
+              </Button>
+              {/* </Link> */}
               <Button
                 variant="success"
                 onClick={async () => {
