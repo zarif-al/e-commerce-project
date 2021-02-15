@@ -283,6 +283,7 @@ function cart() {
               variant="success"
               onClick={handleSubmit}
               key={"confirmButton"}
+              disabled={isUpdating}
             >
               Confirm
             </Button>
