@@ -40,9 +40,6 @@ function cart() {
   });
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/userApi", fetcher);
-  //const { response, isLoading, isError } = paymentStatus();
-  //console.log(response);
-  console.log(isValidating);
   const refs = useRef({});
   let sum = 0;
   let loginStatus =
