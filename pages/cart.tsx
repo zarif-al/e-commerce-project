@@ -125,7 +125,6 @@ function cart() {
     };
     const resp = await cartAction(item);
     if (resp === "success") {
-      setUpdating(false);
       mutate("/api/userApi");
     }
   };
