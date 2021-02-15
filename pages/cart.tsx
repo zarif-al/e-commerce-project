@@ -20,7 +20,6 @@ import WarningModal from "../components/WarningModal";
 function cart() {
   const router = useRouter();
   const [loginModalShow, setLoginModalShow] = useState(false);
-  const [isUpdating, setUpdating] = useState(false);
   const [orderModalShow, setOrderModalShow] = useState(false);
   const [warningModalShow, setWarningModalShow] = useState(false);
   const [orderModalData, setOrderModalData] = useState({
@@ -40,9 +39,10 @@ function cart() {
     message: "",
   });
   const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data } = useSWR("/api/userApi", fetcher);
+  const { data, error, isValidating } = useSWR("/api/userApi", fetcher);
   //const { response, isLoading, isError } = paymentStatus();
   //console.log(response);
+  console.log(isValidating);
   const refs = useRef({});
   let sum = 0;
   let loginStatus =
@@ -50,7 +50,6 @@ function cart() {
 
   const updateCart = async (index) => {
     if (refs.current[index].value >= 1) {
-      setUpdating(true);
       refs.current[index].className = "form-control is-valid";
       const item = {
         id: data.data[0].cart[index].id,
@@ -59,7 +58,6 @@ function cart() {
       };
       const resp = await cartAction(item);
       if (resp === "success") {
-        setUpdating(false);
         mutate("/api/userApi");
       }
     } else {
@@ -283,7 +281,7 @@ function cart() {
               variant="success"
               onClick={handleSubmit}
               key={"confirmButton"}
-              disabled={isUpdating}
+              disabled={isValidating}
             >
               Confirm
             </Button>
