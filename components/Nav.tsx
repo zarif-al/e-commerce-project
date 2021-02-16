@@ -14,7 +14,6 @@ function NavBar({ screen, modalShow }) {
   const router = useRouter();
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/userApi", fetcher);
-  console.log(isValidating ? true : false);
   const loginStatus =
     data != undefined ? (data.message != "authUser" ? false : true) : false;
 

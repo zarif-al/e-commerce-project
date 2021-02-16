@@ -27,7 +27,10 @@ function Product({ items, setShow, types }) {
         types={types}
         searchValue={searchValue}
       />
-      <Row className="justify-content-center align-items-center">
+      <Row
+        className="justify-content-center align-items-center"
+        style={{ marginLeft: "1.8rem" }}
+      >
         <ProductColumns
           lowerLimit={lowerLimit}
           showLimit={showLimit}
