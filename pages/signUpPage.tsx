@@ -92,7 +92,7 @@ function signIn() {
 
   return (
     <>
-      <Container fluid>
+      <Container fluid style={{ padding: "0" }}>
         <NavBar screen="signUp" modalShow={"none"} />
         <Container>
           <Form

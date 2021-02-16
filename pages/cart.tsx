@@ -289,7 +289,7 @@ function cart() {
   };
 
   return (
-    <Container fluid>
+    <Container fluid style={{ padding: "0" }}>
       <NavBar screen="home" modalShow={setLoginModalShow} />
       <Container>
         <Row

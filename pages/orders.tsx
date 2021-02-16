@@ -81,7 +81,7 @@ function orders() {
     }
   }
   return (
-    <Container fluid>
+    <Container fluid style={{ padding: "0" }}>
       <NavBar screen="home" modalShow={setLoginModalShow} />
       {data != undefined ? (
         data.message != "error" ? (

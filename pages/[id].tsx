@@ -25,7 +25,7 @@ function Items({ Item }) {
   return (
     <>
       <NextSeo title={name} />
-      <Container fluid>
+      <Container fluid style={{ padding: "0" }}>
         <NavBar screen="home" modalShow={setLoginShow} />
       </Container>
       <Container>

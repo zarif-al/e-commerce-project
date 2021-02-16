@@ -109,6 +109,9 @@ function NavBar({ screen, modalShow }) {
       <Link href="/" passHref>
         <Navbar.Brand>E-commerce</Navbar.Brand>
       </Link>
+      {/*  <Link href="/" passHref>
+        <Nav.Link style={{ color: "white" }}>Home</Nav.Link>
+      </Link> */}
       {toggle()}
     </Navbar>
   );
