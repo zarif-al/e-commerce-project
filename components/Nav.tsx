@@ -36,6 +36,7 @@ function NavBar({ screen, modalShow }) {
                     onClick={() => {
                       modalShow(true);
                     }}
+                    style={{ color: "white" }}
                   >
                     <FontAwesomeIcon icon={faUser} color="green" /> Log In/Sign
                     Up
@@ -69,7 +70,7 @@ function NavBar({ screen, modalShow }) {
                 </NavDropdown>
               )}
               <Link href="/cart" passHref>
-                <Nav.Link>
+                <Nav.Link style={{ color: "white" }}>
                   <span className="fa-layers fa-fw">
                     <FontAwesomeIcon icon={faShoppingCart} color="green" />
                     <span
@@ -97,20 +98,19 @@ function NavBar({ screen, modalShow }) {
   };
 
   return (
-    <>
-      <Navbar
-        bg="light"
-        expand="lg"
-        sticky="top"
-        className="py-2"
-        style={{ fontSize: "1.3rem" }}
-      >
-        <Link href="/" passHref>
-          <Navbar.Brand>E-commerce</Navbar.Brand>
-        </Link>
-        {toggle()}
-      </Navbar>
-    </>
+    <Navbar
+      bg="dark"
+      variant="dark"
+      expand="lg"
+      sticky="top"
+      className="py-2"
+      style={{ fontSize: "1.3rem" }}
+    >
+      <Link href="/" passHref>
+        <Navbar.Brand>E-commerce</Navbar.Brand>
+      </Link>
+      {toggle()}
+    </Navbar>
   );
 }
 

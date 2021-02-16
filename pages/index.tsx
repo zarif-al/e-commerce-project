@@ -15,7 +15,7 @@ export default function Home({ Items, types }) {
       <Head>
         <title>E-Commerce App</title>
       </Head>
-      <Container fluid id="PageTop">
+      <Container fluid id="PageTop" style={{ padding: "0" }}>
         <NavBar screen="home" modalShow={setLoginShow} />
         <Row>
           <Product items={Items} setShow={setShow} types={types} />

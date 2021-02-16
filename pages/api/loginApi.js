@@ -83,24 +83,27 @@ export default async (req, res) => {
       res.end();
     }
   } else {
-    verify(req.cookies.auth, SECRET, async function (err, decoded) {
-      if (!err && decoded) {
-        const user_id = new ObjectID(decoded.sub);
-        await db.collection("LoginTable").findOneAndDelete({
-          _id: user_id,
-        });
-        res.setHeader(
-          "Set-Cookie",
-          cookie.serialize("auth", "", {
-            httpOnly: true,
-            secure: process.env.NODE_ENV !== "development",
-            sameSite: "strict",
-            maxAge: -1,
-            path: "/",
-          })
-        );
-        res.end();
-      }
+    return new Promise((resolve, reject) => {
+      verify(req.cookies.auth, SECRET, async function (err, decoded) {
+        if (!err && decoded) {
+          const user_id = new ObjectID(decoded.sub);
+          await db.collection("LoginTable").findOneAndDelete({
+            _id: user_id,
+          });
+          res.setHeader(
+            "Set-Cookie",
+            cookie.serialize("auth", "", {
+              httpOnly: true,
+              secure: process.env.NODE_ENV !== "development",
+              sameSite: "strict",
+              maxAge: -1,
+              path: "/",
+            })
+          );
+          res.json({ message: "loggedOut" });
+          resolve();
+        }
+      });
     });
   }
 };
