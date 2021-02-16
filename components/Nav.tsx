@@ -78,7 +78,10 @@ function NavBar({ screen, modalShow }) {
                       style={{ fontSize: "2rem" }}
                     >
                       {isValidating ? (
-                        <Spinner animation="border" size="sm" />
+                        <Spinner
+                          animation="border"
+                          style={{ marginBottom: "1rem" }}
+                        />
                       ) : (
                         itemCount(data)
                       )}
