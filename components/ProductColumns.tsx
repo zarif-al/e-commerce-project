@@ -122,8 +122,8 @@ function ProductColumns({
                     price: productPrice,
                   });
                   if (resp === "success") {
-                    setShow(true);
                     mutate("/api/userApi");
+                    setShow(true);
                   }
                 }}
               >

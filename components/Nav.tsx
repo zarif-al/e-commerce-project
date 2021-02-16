@@ -9,11 +9,12 @@ import { mutate } from "swr";
 import useSWR from "swr";
 import { itemCount } from "../functions/functions";
 import { useRouter } from "next/router";
+import Spinner from "react-bootstrap/Spinner";
 function NavBar({ screen, modalShow }) {
   const router = useRouter();
   const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data } = useSWR("/api/userApi", fetcher);
-
+  const { data, error, isValidating } = useSWR("/api/userApi", fetcher);
+  console.log(isValidating ? true : false);
   const loginStatus =
     data != undefined ? (data.message != "authUser" ? false : true) : false;
 
@@ -76,7 +77,11 @@ function NavBar({ screen, modalShow }) {
                       className="fa-layers-counter"
                       style={{ fontSize: "2rem" }}
                     >
-                      {itemCount(data)}
+                      {isValidating ? (
+                        <Spinner animation="border" size="sm" />
+                      ) : (
+                        itemCount(data)
+                      )}
                     </span>
                   </span>{" "}
                   Cart
