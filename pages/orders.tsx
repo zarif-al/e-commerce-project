@@ -114,7 +114,9 @@ function orders() {
                     className="justify-content-center"
                     style={{ fontSize: "1.5rem" }}
                   >
-                    <Link href="/">Continue</Link>
+                    <Link href="/" style={{ color: "blue" }}>
+                      Continue
+                    </Link>
                   </Row>
                 </div>
               </Container>

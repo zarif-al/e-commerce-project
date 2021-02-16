@@ -17,41 +17,43 @@ export default function Home({ Items, types }) {
       </Head>
       <Container fluid id="PageTop" style={{ padding: "0" }}>
         <NavBar screen="home" modalShow={setLoginShow} />
-        <Row>
-          <Product items={Items} setShow={setShow} types={types} />
-        </Row>
-        <LoginModal
-          show={loginShow}
-          onHide={() => setLoginShow(false)}
-          modalShow={setLoginShow}
-        />
-        <div
-          style={{
-            position: "fixed",
-            bottom: 0,
-            left: "50%",
-            transform: "translate(-50%)",
-          }}
-        >
-          <Toast
-            onClose={() => setShow(false)}
-            show={show}
-            delay={2000}
-            autohide
+        <Container>
+          <Row>
+            <Product items={Items} setShow={setShow} types={types} />
+          </Row>
+          <LoginModal
+            show={loginShow}
+            onHide={() => setLoginShow(false)}
+            modalShow={setLoginShow}
+          />
+          <div
+            style={{
+              position: "fixed",
+              bottom: 0,
+              left: "50%",
+              transform: "translate(-50%)",
+            }}
           >
-            <Toast.Body
-              style={{
-                background: "green",
-                color: "white",
-                border: "1px solid black",
-                borderRadius: "5%",
-                opacity: "0.7",
-              }}
+            <Toast
+              onClose={() => setShow(false)}
+              show={show}
+              delay={2000}
+              autohide
             >
-              Added To Cart!
-            </Toast.Body>
-          </Toast>
-        </div>
+              <Toast.Body
+                style={{
+                  background: "green",
+                  color: "white",
+                  border: "1px solid black",
+                  borderRadius: "5%",
+                  opacity: "0.7",
+                }}
+              >
+                Added To Cart!
+              </Toast.Body>
+            </Toast>
+          </div>
+        </Container>
       </Container>
     </>
   );

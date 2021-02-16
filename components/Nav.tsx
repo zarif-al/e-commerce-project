@@ -27,7 +27,7 @@ function NavBar({ screen, modalShow }) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
             id="basic-navbar-nav"
-            className="mr-10 justify-content-end"
+            className="justify-content-end"
           >
             <Nav>
               {loginStatus === false ? (
@@ -37,6 +37,7 @@ function NavBar({ screen, modalShow }) {
                       modalShow(true);
                     }}
                     style={{ color: "white" }}
+                    className="justify-self-end"
                   >
                     <FontAwesomeIcon icon={faUser} color="green" /> Log In/Sign
                     Up
@@ -109,9 +110,9 @@ function NavBar({ screen, modalShow }) {
       <Link href="/" passHref>
         <Navbar.Brand>E-commerce</Navbar.Brand>
       </Link>
-      {/*  <Link href="/" passHref>
-        <Nav.Link style={{ color: "white" }}>Home</Nav.Link>
-      </Link> */}
+      <Nav.Link href="/" style={{ color: "white" }}>
+        Home
+      </Nav.Link>
       {toggle()}
     </Navbar>
   );
