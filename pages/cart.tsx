@@ -174,8 +174,8 @@ function cart() {
             className="justify-content-center"
             style={{ fontSize: "1.5rem" }}
           >
-            <Link href="/" style={{ color: "blue" }}>
-              Continue
+            <Link href="/">
+              <a>Continue</a>
             </Link>
           </Row>
         </div>
