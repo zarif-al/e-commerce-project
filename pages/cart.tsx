@@ -224,6 +224,9 @@ function cart() {
                     onChange={() => {
                       updateCart(index);
                     }}
+                    onWheel={(e) => {
+                      e.target.blur();
+                    }}
                     defaultValue={items.quantity}
                     isValid={true}
                   />
