@@ -7,6 +7,9 @@ import React, { useState } from "react";
 import LoginModal from "../components/LoginModal";
 import Row from "react-bootstrap/Row";
 import Toast from "react-bootstrap/Toast";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false;
 export default function Home({ Items, types }) {
   const [loginShow, setLoginShow] = useState(false);
   const [show, setShow] = useState(false);
