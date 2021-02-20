@@ -7,7 +7,6 @@ import React, { useState } from "react";
 import LoginModal from "../components/LoginModal";
 import Row from "react-bootstrap/Row";
 import Toast from "react-bootstrap/Toast";
-
 export default function Home({ Items, types }) {
   const [loginShow, setLoginShow] = useState(false);
   const [show, setShow] = useState(false);

@@ -10,13 +10,14 @@ import useSWR from "swr";
 import { itemCount } from "../functions/functions";
 import { useRouter } from "next/router";
 import Spinner from "react-bootstrap/Spinner";
+import { signIn, signOut, useSession } from "next-auth/client";
 function NavBar({ screen, modalShow }) {
   const router = useRouter();
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/userApi", fetcher);
-  const loginStatus =
-    data != undefined ? (data.message != "authUser" ? false : true) : false;
-
+  /*   const loginStatus =
+    data != undefined ? (data.message != "authUser" ? false : true) : false; */
+  const [session, loading] = useSession();
   const toggle = () => {
     if (screen === "signUp") {
       return null;
@@ -30,12 +31,10 @@ function NavBar({ screen, modalShow }) {
             className="justify-content-end"
           >
             <Nav>
-              {loginStatus === false ? (
+              {!session ? (
                 <>
                   <Nav.Link
-                    onClick={() => {
-                      modalShow(true);
-                    }}
+                    onClick={() => signIn()}
                     style={{ color: "white" }}
                     className="justify-self-end"
                   >
@@ -52,20 +51,7 @@ function NavBar({ screen, modalShow }) {
                   >
                     My Orders
                   </NavDropdown.Item>
-                  <NavDropdown.Item
-                    onClick={() => {
-                      fetch("/api/loginApi", {
-                        method: "GET",
-                        headers: {
-                          Accept: "application/json",
-                          "Content-Type": "application/json",
-                        },
-                      }).then((res) => {
-                        router.push("/");
-                        mutate("/api/userApi");
-                      });
-                    }}
-                  >
+                  <NavDropdown.Item onClick={() => signOut()}>
                     Log Out
                   </NavDropdown.Item>
                 </NavDropdown>

@@ -1,6 +1,7 @@
 import { connectToDatabase } from "../../utils/mongodb";
 import { verify } from "jsonwebtoken";
 import { ObjectID } from "mongodb";
+import { getSession } from "next-auth/client";
 export default async (req, res) => {
   const { SECRET } = process.env;
   if (req.method === "POST") {
