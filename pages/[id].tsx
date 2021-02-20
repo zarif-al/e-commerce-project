@@ -16,7 +16,7 @@ import {
   faCartPlus,
 } from "@fortawesome/free-solid-svg-icons";
 import Toast from "react-bootstrap/Toast";
-import { NextSeo } from "next-seo";
+import Head from "next/head";
 function Items({ Item }) {
   let { id, name, price, description, imageLink, type } = Item;
   const [loginShow, setLoginShow] = useState(false);
@@ -24,7 +24,9 @@ function Items({ Item }) {
   let listKeys = 0;
   return (
     <>
-      <NextSeo title={name} />
+      <Head>
+        <title>{name}</title>
+      </Head>
       <Container fluid style={{ padding: "0" }}>
         <NavBar screen="home" modalShow={setLoginShow} />
       </Container>

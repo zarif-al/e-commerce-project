@@ -17,6 +17,7 @@ import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { itemCount, cartAction } from "../functions/functions";
 import WarningModal from "../components/WarningModal";
+
 function cart() {
   const router = useRouter();
   const [loginModalShow, setLoginModalShow] = useState(false);
