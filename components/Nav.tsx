@@ -5,19 +5,17 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
 import { NavDropdown } from "react-bootstrap";
-import { mutate } from "swr";
 import useSWR from "swr";
 import { itemCount } from "../functions/functions";
 import { useRouter } from "next/router";
 import Spinner from "react-bootstrap/Spinner";
 import { signIn, signOut, useSession } from "next-auth/client";
-function NavBar({ screen, modalShow }) {
+
+function NavBar({ screen }) {
+  const [session, loading] = useSession();
   const router = useRouter();
   const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data, error, isValidating } = useSWR("/api/userApi", fetcher);
-  /*   const loginStatus =
-    data != undefined ? (data.message != "authUser" ? false : true) : false; */
-  const [session, loading] = useSession();
+  const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
   const toggle = () => {
     if (screen === "signUp") {
       return null;
@@ -28,18 +26,17 @@ function NavBar({ screen, modalShow }) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
             id="basic-navbar-nav"
-            className="justify-content-end"
+            className="justify-content-between"
           >
+            <Nav.Link> </Nav.Link>
+            <Nav.Link href="/" style={{ color: "white" }}>
+              Home
+            </Nav.Link>
             <Nav>
               {!session ? (
                 <>
-                  <Nav.Link
-                    onClick={() => signIn()}
-                    style={{ color: "white" }}
-                    className="justify-self-end"
-                  >
-                    <FontAwesomeIcon icon={faUser} color="green" /> Log In/Sign
-                    Up
+                  <Nav.Link onClick={() => signIn()} style={{ color: "white" }}>
+                    <FontAwesomeIcon icon={faUser} color="green" /> Sign In
                   </Nav.Link>
                 </>
               ) : (
@@ -52,7 +49,7 @@ function NavBar({ screen, modalShow }) {
                     My Orders
                   </NavDropdown.Item>
                   <NavDropdown.Item onClick={() => signOut()}>
-                    Log Out
+                    Sign Out
                   </NavDropdown.Item>
                 </NavDropdown>
               )}
@@ -64,7 +61,7 @@ function NavBar({ screen, modalShow }) {
                       className="fa-layers-counter"
                       style={{ fontSize: "2rem" }}
                     >
-                      {isValidating ? (
+                      {isValidating || data === undefined ? (
                         <Spinner
                           animation="border"
                           style={{ marginBottom: "1rem" }}
@@ -87,18 +84,14 @@ function NavBar({ screen, modalShow }) {
   return (
     <Navbar
       bg="dark"
-      variant="dark"
+      variant="light"
       expand="lg"
       sticky="top"
-      className="py-2"
       style={{ fontSize: "1.3rem" }}
+      className="justify-content-center"
     >
-      <Link href="/" passHref>
-        <Navbar.Brand>E-commerce</Navbar.Brand>
-      </Link>
-      <Nav.Link href="/" style={{ color: "white" }}>
-        Home
-      </Nav.Link>
+      <Navbar.Brand>Ecommerce Demo</Navbar.Brand>
+
       {toggle()}
     </Navbar>
   );

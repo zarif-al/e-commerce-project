@@ -1,0 +1,18 @@
+
+Hope you enjoy your new logo, here are the people that
+made your beautiful logo happen :)
+font name: LeagueMono-ExtraBold
+font link: https://www.tylerfinck.com/shop/league-mono/
+font author: Tyler Finck
+font author site: https://www.tylerfinck.com/
+
+
+icon designer: Alfredo @ IconsAlfredo.com
+icon designer link: /AlfredoCreates
+        
+
+fontColor: {"hex":"#4B279B"}
+bgColor: {"hex":"transparent"}
+iconColor: {"hex":"#4B279B"}
+
+      

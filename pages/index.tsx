@@ -4,7 +4,6 @@ import NavBar from "../components/Nav";
 import Product from "../components/Product";
 import { connectToDatabase } from "../utils/mongodb";
 import React, { useState } from "react";
-import LoginModal from "../components/LoginModal";
 import Row from "react-bootstrap/Row";
 import Toast from "react-bootstrap/Toast";
 export default function Home({ Items, types }) {
@@ -16,16 +15,11 @@ export default function Home({ Items, types }) {
         <title>E-Commerce App</title>
       </Head>
       <Container fluid id="PageTop" style={{ padding: "0" }}>
-        <NavBar screen="home" modalShow={setLoginShow} />
+        <NavBar screen="home" />
         <Container>
           <Row>
             <Product items={Items} setShow={setShow} types={types} />
           </Row>
-          <LoginModal
-            show={loginShow}
-            onHide={() => setLoginShow(false)}
-            modalShow={setLoginShow}
-          />
           <div
             style={{
               position: "fixed",

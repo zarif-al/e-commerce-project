@@ -28,7 +28,7 @@ function Items({ Item }) {
         <title>{name}</title>
       </Head>
       <Container fluid style={{ padding: "0" }}>
-        <NavBar screen="home" modalShow={setLoginShow} />
+        <NavBar screen="home" />
       </Container>
       <Container>
         <Row className="align-items-center">
@@ -61,12 +61,6 @@ function Items({ Item }) {
               Tk {price}
             </Row>
             <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-              {/*          <Link href="/" passHref>
-                <Button variant="primary" style={{ marginRight: "1rem" }}>
-                  <FontAwesomeIcon icon={faArrowAltCircleLeft} color="white" />{" "}
-                  Return To Shop
-                </Button>
-              </Link> */}
               <Button
                 variant="success"
                 onClick={async () => {
