@@ -38,7 +38,11 @@ function NavBar({ screen }) {
             <Nav>
               {loading ? (
                 <>
-                  <Nav.Link onClick={() => signIn()} style={{ color: "white" }}>
+                  <Nav.Link
+                    onClick={() => signIn()}
+                    style={{ color: "white" }}
+                    className="align-self-center"
+                  >
                     <Spinner animation="border" role="status" variant="light">
                       <span className="sr-only">Loading...</span>
                     </Spinner>{" "}
@@ -91,14 +95,10 @@ function NavBar({ screen }) {
                       color: "black",
                       backgroundColor: "white",
                       borderRadius: "5px",
+                      fontSize: "1.1rem",
                     }}
                   >
-                    <FontAwesomeIcon
-                      icon={faSignInAlt}
-                      color="black"
-                      size="lg"
-                    />{" "}
-                    Sign In
+                    <FontAwesomeIcon icon={faSignInAlt} color="black" /> Sign In
                   </Nav.Link>
                 </>
               )}
@@ -111,6 +111,7 @@ function NavBar({ screen }) {
                     borderRadius: "5px",
                     fontSize: "1.1rem",
                   }}
+                  className="align-self-center"
                 >
                   <span
                     className="fa-layers fa-fw"
