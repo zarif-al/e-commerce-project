@@ -50,7 +50,7 @@ function NavBar({ screen }) {
                     <Spinner
                       animation="border"
                       role="status"
-                      variant="light"
+                      variant="dark"
                       size="sm"
                     />{" "}
                     Loading...
