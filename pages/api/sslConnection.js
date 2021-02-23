@@ -25,7 +25,7 @@ export default async (req, res) => {
           return error;
         });
       const order_id = new ObjectID(req.body.tran_id);
-      await db.collection("Orders").findOneAndUpdate(
+      await db.collection("orders").findOneAndUpdate(
         {
           _id: order_id,
         },
@@ -64,7 +64,7 @@ export default async (req, res) => {
         req.body.risk_level === undefined ? -1 : Number(req.body.risk_level);
       const risk_title =
         req.body.risk_title === undefined ? "" : req.body.risk_title;
-      await db.collection("Orders").findOneAndUpdate(
+      await db.collection("orders").findOneAndUpdate(
         {
           _id: order_id,
         },
