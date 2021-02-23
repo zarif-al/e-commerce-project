@@ -6,7 +6,10 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGoogle, faFacebookSquare } from "@fortawesome/free-brands-svg-icons";
-import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEnvelope,
+  faArrowCircleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import NavBar from "../../components/Nav";
 import Form from "react-bootstrap/Form";
 import { useFormik } from "formik";
@@ -18,6 +21,8 @@ export default function SignIn({ providers, csrfToken }) {
   //use formik put email and csrf token in post body to action address
   const [disable, setDisable] = useState(false);
   const router = useRouter();
+  const [message, setMessage] = useState("No Error");
+  const [msgColor, setMsgColor] = useState("lightgray");
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -39,6 +44,19 @@ export default function SignIn({ providers, csrfToken }) {
       router.push(resp.url);
     },
   });
+
+  if (router.query.error !== undefined && message === "No Error") {
+    if (router.query.error === "OAuthAccountNotLinked") {
+      setMsgColor("red");
+      setMessage(
+        "This Email is registered under a different provider. Please select the provider you used the first time."
+      );
+    } else {
+      setMsgColor("blue");
+      setMessage("Please Try Another Signin Method");
+    }
+  }
+
   return (
     <Container fluid style={{ padding: "0" }}>
       <NavBar screen="signUp" />
@@ -52,6 +70,16 @@ export default function SignIn({ providers, csrfToken }) {
               backgroundColor: "lightgray",
             }}
           >
+            <Row
+              style={{
+                color: msgColor,
+                marginTop: "0.5rem",
+              }}
+            >
+              <Col className="text-center">
+                <strong>{message}</strong>
+              </Col>
+            </Row>
             <Row
               className="justify-content-center"
               style={{ marginTop: "1rem" }}
@@ -108,7 +136,11 @@ export default function SignIn({ providers, csrfToken }) {
                   <Col xs={11}>
                     <Button
                       variant="light"
-                      onClick={() => signIn(provider.id)}
+                      onClick={() =>
+                        signIn(provider.id, {
+                          callbackUrl: router.query.callbackUrl,
+                        })
+                      }
                       block
                       disabled={disable}
                     >
@@ -142,7 +174,44 @@ export default function SignIn({ providers, csrfToken }) {
                 </Row>
               )
             )}
+            <Row
+              key="returnButton"
+              className="justify-content-center"
+              style={{ marginBottom: "2.5rem" }}
+            >
+              <Col xs={11}>
+                <Button
+                  variant="light"
+                  onClick={() => {
+                    router.push("/");
+                  }}
+                  block
+                  disabled={disable}
+                >
+                  <FontAwesomeIcon
+                    icon={faArrowCircleLeft}
+                    color="black"
+                    size="lg"
+                  />{" "}
+                  Return to Shop
+                </Button>
+              </Col>
+            </Row>
           </Container>
+        </Row>
+      </Container>
+      <Container
+        fluid
+        style={{
+          position: "absolute",
+          bottom: "0",
+          backgroundColor: "black",
+        }}
+      >
+        <Row>
+          <Col className="text-center" style={{ color: "white" }}>
+            © Copyright 2015 Ecommerce Demo. All rights reserved.
+          </Col>
         </Row>
       </Container>
     </Container>

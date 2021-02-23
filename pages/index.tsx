@@ -17,14 +17,9 @@ export default function Home({ Items, types }) {
       </Head>
       <Container fluid id="PageTop" style={{ padding: "0" }}>
         <NavBar screen="home" />
-        <Container>
+        <Container style={{ marginBottom: "2rem" }}>
           <Row>
             <Product items={Items} setShow={setShow} types={types} />
-          </Row>
-          <Row>
-            <Col className="text-center">
-              © Copyright 2015 Ecommerce Demo. All rights reserved.
-            </Col>
           </Row>
           <div
             style={{
@@ -53,6 +48,20 @@ export default function Home({ Items, types }) {
               </Toast.Body>
             </Toast>
           </div>
+        </Container>
+        <Container
+          fluid
+          style={{
+            position: "absolute",
+            bottom: "0",
+            backgroundColor: "black",
+          }}
+        >
+          <Row>
+            <Col className="text-center" style={{ color: "white" }}>
+              © Copyright 2015 Ecommerce Demo. All rights reserved.
+            </Col>
+          </Row>
         </Container>
       </Container>
     </>

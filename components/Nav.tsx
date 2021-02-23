@@ -22,7 +22,7 @@ function NavBar({ screen }) {
   const router = useRouter();
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
-  console.log(data);
+
   const toggle = () => {
     if (screen === "signUp") {
       return null;
@@ -38,8 +38,8 @@ function NavBar({ screen }) {
             <Nav>
               {loading ? (
                 <>
-                  <Nav.Link onClick={() => signIn()} style={{ color: "black" }}>
-                    <Spinner animation="border" role="status">
+                  <Nav.Link onClick={() => signIn()} style={{ color: "white" }}>
+                    <Spinner animation="border" role="status" variant="light">
                       <span className="sr-only">Loading...</span>
                     </Spinner>{" "}
                     Loading...

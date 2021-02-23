@@ -326,7 +326,7 @@ function cart({ initialData }) {
   return (
     <Container fluid style={{ padding: "0" }}>
       <NavBar screen="home" />
-      <Container>
+      <Container style={{ marginBottom: "2rem" }}>
         <Row
           style={{ marginBottom: "0.5rem", marginTop: "2rem" }}
           className="align-items-center"
@@ -359,7 +359,20 @@ function cart({ initialData }) {
 
         {getItems()}
       </Container>
-
+      <Container
+        fluid
+        style={{
+          position: "absolute",
+          bottom: "0",
+          backgroundColor: "black",
+        }}
+      >
+        <Row>
+          <Col className="text-center" style={{ color: "white" }}>
+            © Copyright 2015 Ecommerce Demo. All rights reserved.
+          </Col>
+        </Row>
+      </Container>
       <OrderModal
         show={orderModalShow}
         onHide={() => setOrderModalShow(false)}

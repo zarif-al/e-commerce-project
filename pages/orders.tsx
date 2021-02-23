@@ -101,7 +101,7 @@ function orders({ initialData }) {
       {orders.message != "error" ? (
         orders.order.length != 0 ? (
           <>
-            <Container>
+            <Container style={{ marginBottom: "2rem" }}>
               <Row
                 className="justify-content-center"
                 style={{ marginTop: "2rem", marginBottom: "0.5rem" }}
@@ -175,7 +175,20 @@ function orders({ initialData }) {
           </Container>
         </>
       )}
-
+      <Container
+        fluid
+        style={{
+          position: "absolute",
+          bottom: "0",
+          backgroundColor: "black",
+        }}
+      >
+        <Row>
+          <Col className="text-center" style={{ color: "white" }}>
+            © Copyright 2015 Ecommerce Demo. All rights reserved.
+          </Col>
+        </Row>
+      </Container>
       <OrderDetailsModal
         show={orderModalShow}
         onHide={() => setOrderModalShow(false)}
