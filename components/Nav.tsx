@@ -43,9 +43,12 @@ function NavBar({ screen }) {
                     style={{ color: "white" }}
                     className="align-self-center"
                   >
-                    <Spinner animation="border" role="status" variant="light">
-                      <span className="sr-only">Loading...</span>
-                    </Spinner>{" "}
+                    <Spinner
+                      animation="border"
+                      role="status"
+                      variant="light"
+                      size="sm"
+                    />{" "}
                     Loading...
                   </Nav.Link>
                 </>
