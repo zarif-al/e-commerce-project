@@ -22,7 +22,7 @@ function NavBar({ screen }) {
   const router = useRouter();
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
-  console.log(session);
+
   const toggle = () => {
     if (screen === "signUp") {
       return null;
