@@ -2,20 +2,26 @@ import React from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faShoppingCart,
+  faUser,
+  faStoreAlt,
+  faSignOutAlt,
+  faSignInAlt,
+  faListAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { NavDropdown } from "react-bootstrap";
-import { mutate } from "swr";
 import useSWR from "swr";
 import { itemCount } from "../functions/functions";
 import { useRouter } from "next/router";
 import Spinner from "react-bootstrap/Spinner";
-function NavBar({ screen, modalShow }) {
+import { signIn, signOut, useSession } from "next-auth/client";
+import Dropdown from "react-bootstrap/Dropdown";
+function NavBar({ screen }) {
+  const [session, loading] = useSession();
   const router = useRouter();
   const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data, error, isValidating } = useSWR("/api/userApi", fetcher);
-  const loginStatus =
-    data != undefined ? (data.message != "authUser" ? false : true) : false;
+  const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
 
   const toggle = () => {
     if (screen === "signUp") {
@@ -30,55 +36,95 @@ function NavBar({ screen, modalShow }) {
             className="justify-content-end"
           >
             <Nav>
-              {loginStatus === false ? (
+              {loading ? (
                 <>
-                  <Nav.Link
-                    onClick={() => {
-                      modalShow(true);
-                    }}
-                    style={{ color: "white" }}
-                    className="justify-self-end"
-                  >
-                    <FontAwesomeIcon icon={faUser} color="green" /> Log In/Sign
-                    Up
+                  <Nav.Link onClick={() => signIn()} style={{ color: "white" }}>
+                    <Spinner animation="border" role="status" variant="light">
+                      <span className="sr-only">Loading...</span>
+                    </Spinner>{" "}
+                    Loading...
                   </Nav.Link>
                 </>
+              ) : session ? (
+                <Dropdown className="align-self-center">
+                  <Dropdown.Toggle
+                    style={{ backgroundColor: "white", color: "black" }}
+                  >
+                    <img
+                      src={
+                        session.user.image
+                          ? session.user.image
+                          : "/defaultIcon.png"
+                      }
+                      style={{ height: "35px" }}
+                    ></img>{" "}
+                    {session.user.name ? session.user.name : "Account"}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={() => {
+                        router.push("/orders");
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faListAlt}
+                        color="black"
+                        size="lg"
+                      />{" "}
+                      My Orders
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => signOut()}>
+                      <FontAwesomeIcon
+                        icon={faSignOutAlt}
+                        color="black"
+                        size="lg"
+                      />{" "}
+                      Sign Out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
-                <NavDropdown title="My Account" id="basic-nav-dropdown">
-                  <NavDropdown.Item
-                    onClick={() => {
-                      router.push("/orders");
+                <>
+                  <Nav.Link
+                    onClick={() => signIn()}
+                    style={{
+                      color: "black",
+                      backgroundColor: "white",
+                      borderRadius: "5px",
                     }}
                   >
-                    My Orders
-                  </NavDropdown.Item>
-                  <NavDropdown.Item
-                    onClick={() => {
-                      fetch("/api/loginApi", {
-                        method: "GET",
-                        headers: {
-                          Accept: "application/json",
-                          "Content-Type": "application/json",
-                        },
-                      }).then((res) => {
-                        router.push("/");
-                        mutate("/api/userApi");
-                      });
-                    }}
-                  >
-                    Log Out
-                  </NavDropdown.Item>
-                </NavDropdown>
+                    <FontAwesomeIcon
+                      icon={faSignInAlt}
+                      color="black"
+                      size="lg"
+                    />{" "}
+                    Sign In
+                  </Nav.Link>
+                </>
               )}
               <Link href="/cart" passHref>
-                <Nav.Link style={{ color: "white" }}>
-                  <span className="fa-layers fa-fw">
-                    <FontAwesomeIcon icon={faShoppingCart} color="green" />
+                <Nav.Link
+                  style={{
+                    color: "black",
+                    marginLeft: "1rem",
+                    backgroundColor: "white",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <span
+                    className="fa-layers fa-fw"
+                    style={{ marginRight: "0.5rem" }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faShoppingCart}
+                      color="black"
+                      size="lg"
+                    />
                     <span
-                      className="fa-layers-counter"
-                      style={{ fontSize: "2rem" }}
+                      className="fa-layers-counter fa-layers-top"
+                      style={{ fontSize: "2.8rem" }}
                     >
-                      {isValidating ? (
+                      {isValidating || data === undefined ? (
                         <Spinner
                           animation="border"
                           style={{ marginBottom: "1rem" }}
@@ -87,8 +133,8 @@ function NavBar({ screen, modalShow }) {
                         itemCount(data)
                       )}
                     </span>
-                  </span>{" "}
-                  Cart
+                  </span>
+                  Your Cart
                 </Nav.Link>
               </Link>
             </Nav>
@@ -101,18 +147,13 @@ function NavBar({ screen, modalShow }) {
   return (
     <Navbar
       bg="dark"
-      variant="dark"
+      variant="light"
       expand="lg"
       sticky="top"
-      className="py-2"
       style={{ fontSize: "1.3rem" }}
+      className="justify-content-start"
     >
-      <Link href="/" passHref>
-        <Navbar.Brand>E-commerce</Navbar.Brand>
-      </Link>
-      <Nav.Link href="/" style={{ color: "white" }}>
-        Home
-      </Nav.Link>
+      <Navbar.Brand>Ecommerce Demo</Navbar.Brand>
       {toggle()}
     </Navbar>
   );

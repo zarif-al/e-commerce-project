@@ -4,7 +4,6 @@ import NavBar from "../components/Nav";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { useRouter } from "next/router";
-import LoginModal from "../components/LoginModal";
 import useSWR from "swr";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -13,14 +12,21 @@ import Image from "react-bootstrap/Image";
 import { mutate } from "swr";
 import Form from "react-bootstrap/Form";
 import OrderModal from "../components/orderModal";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimesCircle,
+  faArrowCircleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { itemCount, cartAction } from "../functions/functions";
 import WarningModal from "../components/WarningModal";
-
-function cart() {
+import { useSession, getSession } from "next-auth/client";
+import { connectToDatabase } from "../utils/mongodb";
+import { verify } from "jsonwebtoken";
+import { ObjectID } from "mongodb";
+import cookie from "cookie";
+function cart({ initialData }) {
   const router = useRouter();
-  const [loginModalShow, setLoginModalShow] = useState(false);
+  const [session, loading] = useSession();
   const [orderModalShow, setOrderModalShow] = useState(false);
   const [warningModalShow, setWarningModalShow] = useState(false);
   const [orderModalData, setOrderModalData] = useState({
@@ -39,30 +45,34 @@ function cart() {
     exists: false,
     message: "",
   });
+  const [cart, setCart] = useState(initialData);
   const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data, error, isValidating } = useSWR("/api/userApi", fetcher);
+  const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
+  if (data != undefined) {
+    if (JSON.stringify(data) != JSON.stringify(cart)) {
+      setCart(data);
+    }
+  }
   const refs = useRef({});
   let sum = 0;
-  let loginStatus =
-    data != undefined ? (data.message != "authUser" ? false : true) : false;
 
   const updateCart = async (index) => {
     if (refs.current[index].value >= 1) {
       refs.current[index].className = "form-control is-valid";
       const item = {
-        id: data.data[0].cart[index].id,
+        id: cart.data[0].cart[index].id,
         quantity: Number(refs.current[index].value),
         action: "addMultiple",
       };
       const resp = await cartAction(item);
       if (resp === "success") {
-        mutate("/api/userApi");
+        mutate("/api/cartApi");
       }
     } else {
       if (refs.current[index].className === "form-control is-valid") {
         setQuantityError({
           exists: true,
-          message: `Please Check Quantity For ${data.data[0].cart[index].name}`,
+          message: `Please Check Quantity For ${cart.data[0].cart[index].name}`,
         });
         refs.current[index].className = "form-control is-invalid";
       }
@@ -70,7 +80,6 @@ function cart() {
   };
 
   const redirect = async (order) => {
-    console.log("redirecting");
     await fetch("/api/sslConnection", {
       method: "POST",
       headers: {
@@ -94,8 +103,8 @@ function cart() {
   const addToOrder = async () => {
     orderModalData.type = "INSERT";
     orderModalData.total = sum;
-    orderModalData.itemCount = itemCount(data);
-    orderModalData.cart = data.data[0].cart;
+    orderModalData.itemCount = itemCount(cart);
+    orderModalData.cart = cart.data[0].cart;
     orderModalData.id = new Date()
       .toLocaleTimeString()
       .replace(/[A-Z-:' ']/g, "");
@@ -109,21 +118,30 @@ function cart() {
     })
       .then((res) => res.json())
       .then(async (result) => {
-        console.log(result);
         setOrderModalShow(false);
-        mutate("/api/userApi");
+        mutate("/api/cartApi");
         redirect(result.data);
       });
   };
 
   const removeItem = async (index) => {
     const item = {
-      id: data.data[0].cart[index].id,
+      id: cart.data[0].cart[index].id,
       action: "delete",
     };
     const resp = await cartAction(item);
     if (resp === "success") {
-      mutate("/api/userApi");
+      mutate("/api/cartApi");
+    }
+  };
+
+  const clearCart = async () => {
+    const item = {
+      action: "clear",
+    };
+    const resp = await cartAction(item);
+    if (resp === "success") {
+      mutate("/api/cartApi");
     }
   };
 
@@ -132,7 +150,7 @@ function cart() {
       alert(quantityError.message);
     } else {
       //modal
-      if (loginStatus === false) {
+      if (!session) {
         setOrderModalData({
           name: "",
           email: "",
@@ -148,11 +166,11 @@ function cart() {
         setOrderModalShow(true);
       } else {
         setOrderModalData({
-          name: data.data[0].name,
-          email: data.data[0].email,
-          phoneNumber: data.data[0].phoneNumber,
-          address: data.data[0].address,
-          city: data.data[0].city,
+          name: session.user.name,
+          email: session.user.email,
+          phoneNumber: "",
+          address: "",
+          city: "",
           type: "",
           total: 0,
           itemCount: 0,
@@ -165,7 +183,7 @@ function cart() {
   };
 
   const getItems = () => {
-    if (itemCount(data) === 0) {
+    if (itemCount(cart) === 0) {
       return (
         <div className="border border-primary">
           <Row className="justify-content-center">
@@ -176,7 +194,7 @@ function cart() {
             style={{ fontSize: "1.5rem" }}
           >
             <Link href="/">
-              <a>Continue</a>
+              <a style={{ color: "blue" }}>Continue</a>
             </Link>
           </Row>
         </div>
@@ -185,15 +203,25 @@ function cart() {
       const rows = [];
       rows.push(
         <Row className="text-center border border-primary" key="header">
-          <Col className="border border-primary">Image</Col>
-          <Col className="border border-primary">Product Name</Col>
-          <Col className="border border-primary">Quantity</Col>
-          <Col className="border border-primary">Unit Price</Col>
-          <Col className="border border-primary">Total Price</Col>
+          <Col className="border border-primary">
+            <strong>Image</strong>
+          </Col>
+          <Col className="border border-primary">
+            <strong>Product Name</strong>
+          </Col>
+          <Col className="border border-primary">
+            <strong>Quantity</strong>
+          </Col>
+          <Col className="border border-primary">
+            <strong>Unit Price</strong>
+          </Col>
+          <Col className="border border-primary">
+            <strong>Total Price</strong>
+          </Col>
         </Row>
       );
 
-      data.data[0].cart.forEach((items, index) => {
+      cart.data[0].cart.forEach((items, index) => {
         sum += items.price * items.quantity;
         rows.push(
           <Row
@@ -273,11 +301,12 @@ function cart() {
             <Button
               style={{ marginRight: "1rem" }}
               onClick={() => {
-                router.push("/");
+                clearCart();
               }}
               key={"homeButton"}
+              variant="danger"
             >
-              Continue Shopping
+              Delete Cart
             </Button>
             <Button
               variant="success"
@@ -296,24 +325,54 @@ function cart() {
 
   return (
     <Container fluid style={{ padding: "0" }}>
-      <NavBar screen="home" modalShow={setLoginModalShow} />
-      <Container>
+      <NavBar screen="home" />
+      <Container style={{ marginBottom: "2rem" }}>
         <Row
-          className="text-center"
-          style={{ marginBottom: "2rem", marginTop: "2rem" }}
+          style={{ marginBottom: "0.5rem", marginTop: "2rem" }}
+          className="align-items-center"
         >
-          <Col>
+          <Col className="text-center">
             <h1>Shopping Cart</h1>
           </Col>
         </Row>
+        {itemCount(cart) != 0 ? (
+          <Row style={{ marginBottom: "1rem" }}>
+            <Col
+              xs={2}
+              style={{
+                color: "blue",
+              }}
+            >
+              <Link href="/" passHref>
+                <a>
+                  <FontAwesomeIcon
+                    icon={faArrowCircleLeft}
+                    color="black"
+                    size="lg"
+                  />{" "}
+                  Back to Store
+                </a>
+              </Link>
+            </Col>
+          </Row>
+        ) : null}
+
         {getItems()}
       </Container>
-
-      <LoginModal
-        show={loginModalShow}
-        onHide={() => setLoginModalShow(false)}
-        modalShow={setLoginModalShow}
-      />
+      <Container
+        fluid
+        style={{
+          position: "absolute",
+          bottom: "0",
+          backgroundColor: "black",
+        }}
+      >
+        <Row>
+          <Col className="text-center" style={{ color: "white" }}>
+            © Copyright 2015 Ecommerce Demo. All rights reserved.
+          </Col>
+        </Row>
+      </Container>
       <OrderModal
         show={orderModalShow}
         onHide={() => setOrderModalShow(false)}
@@ -331,12 +390,47 @@ function cart() {
 
 export default cart;
 
-/* function paymentStatus() {
-  const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data, error } = useSWR("/api/sslTest", fetcher);
-  return {
-    response: data,
-    isLoading: !error && !data,
-    isError: error,
-  };
-} */
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  const { db } = await connectToDatabase();
+  if (session) {
+    const cart = await db
+      .collection("users")
+      .find({ email: session.user.email })
+      .project({ _id: 0, cart: 1 })
+      .toArray();
+    if (cart[0].cart === undefined) {
+      return {
+        props: {},
+      };
+    }
+    let initialData = { message: "ok", data: [{ cart: cart[0].cart }] };
+    return {
+      props: { initialData },
+    };
+  } else {
+    const { SECRET } = process.env;
+    const parsedCookies = cookie.parse(context.req.headers.cookie);
+    const initialData = await verify(
+      parsedCookies.tempAuth,
+      SECRET,
+      async function (err, decoded) {
+        if (!err && decoded) {
+          const temp_id = new ObjectID(decoded.sub);
+          const cart = await db
+            .collection("tempUser")
+            .find({ _id: temp_id })
+            .project({ _id: 0, cart: 1 })
+            .toArray();
+          return { message: "ok", data: cart };
+        } else {
+          return { message: "ok", data: [{ cart: [] }] };
+        }
+      }
+    );
+
+    return {
+      props: { initialData },
+    };
+  }
+}

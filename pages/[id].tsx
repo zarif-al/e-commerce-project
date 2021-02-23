@@ -8,7 +8,7 @@ import Image from "react-bootstrap/Image";
 import Link from "next/link";
 import Button from "react-bootstrap/Button";
 import { mutate } from "swr";
-import LoginModal from "../components/LoginModal";
+
 import { cartAction } from "../functions/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,7 +19,6 @@ import Toast from "react-bootstrap/Toast";
 import Head from "next/head";
 function Items({ Item }) {
   let { id, name, price, description, imageLink, type } = Item;
-  const [loginShow, setLoginShow] = useState(false);
   const [show, setShow] = useState(false);
   let listKeys = 0;
   return (
@@ -28,99 +27,103 @@ function Items({ Item }) {
         <title>{name}</title>
       </Head>
       <Container fluid style={{ padding: "0" }}>
-        <NavBar screen="home" modalShow={setLoginShow} />
-      </Container>
-      <Container>
-        <Row className="align-items-center">
-          <Col>
-            <Image src={imageLink} rounded />
-          </Col>
-          <Col>
-            <Row className="text-center">
-              <h1>{name}</h1>
-            </Row>
-            <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-              <strong>Product Type : </strong> {type}
-            </Row>
-            <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-              <Container>
-                <Row>
-                  <strong>Product Description </strong>
-                </Row>
-                <Row>
-                  <ul>
-                    {description.map((description) => {
-                      return <li key={listKeys++}>{description}</li>;
-                    })}
-                  </ul>
-                </Row>
-              </Container>
-            </Row>
-            <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-              <strong>Price : </strong>
-              Tk {price}
-            </Row>
-            <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
-              {/*          <Link href="/" passHref>
-                <Button variant="primary" style={{ marginRight: "1rem" }}>
-                  <FontAwesomeIcon icon={faArrowAltCircleLeft} color="white" />{" "}
-                  Return To Shop
+        <NavBar screen="home" />
+        <Container style={{ marginBottom: "2rem" }}>
+          <Row className="align-items-center">
+            <Col>
+              <Image src={imageLink} rounded />
+            </Col>
+            <Col>
+              <Row className="text-center">
+                <h1>{name}</h1>
+              </Row>
+              <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                <strong>Product Type : </strong> {type}
+              </Row>
+              <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                <Container>
+                  <Row>
+                    <strong>Product Description </strong>
+                  </Row>
+                  <Row>
+                    <ul>
+                      {description.map((description) => {
+                        return <li key={listKeys++}>{description}</li>;
+                      })}
+                    </ul>
+                  </Row>
+                </Container>
+              </Row>
+              <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                <strong>Price : </strong>
+                Tk {price}
+              </Row>
+              <Row style={{ marginTop: "1rem", marginBottom: "1rem" }}>
+                <Button
+                  variant="success"
+                  onClick={async () => {
+                    const resp = await cartAction({
+                      action: "addOne",
+                      id: id,
+                      image: imageLink,
+                      name: name,
+                      price: price,
+                    });
+                    if (resp === "success") {
+                      setShow(true);
+                      mutate("/api/userApi");
+                    }
+                  }}
+                >
+                  <FontAwesomeIcon icon={faCartPlus} color="white" /> Add to
+                  Cart
                 </Button>
-              </Link> */}
-              <Button
-                variant="success"
-                onClick={async () => {
-                  const resp = await cartAction({
-                    action: "addOne",
-                    id: id,
-                    image: imageLink,
-                    name: name,
-                    price: price,
-                  });
-                  if (resp === "success") {
-                    setShow(true);
-                    mutate("/api/userApi");
-                  }
+              </Row>
+            </Col>
+          </Row>
+          <div
+            style={{
+              position: "fixed",
+              bottom: 0,
+              left: "50%",
+              transform: "translate(-50%)",
+            }}
+          >
+            <Toast
+              onClose={() => setShow(false)}
+              show={show}
+              delay={2000}
+              autohide
+            >
+              <Toast.Body
+                style={{
+                  background: "green",
+                  color: "white",
+                  border: "1px solid black",
+                  borderRadius: "5%",
+                  opacity: "0.7",
                 }}
               >
-                <FontAwesomeIcon icon={faCartPlus} color="white" /> Add to Cart
-              </Button>
-            </Row>
-          </Col>
-        </Row>
-        <div
+                Added To Cart!
+              </Toast.Body>
+            </Toast>
+          </div>
+        </Container>
+        <Container
+          fluid
           style={{
-            position: "fixed",
-            bottom: 0,
-            left: "50%",
-            transform: "translate(-50%)",
+            position: "absolute",
+            bottom: "0",
+            backgroundColor: "black",
           }}
         >
-          <Toast
-            onClose={() => setShow(false)}
-            show={show}
-            delay={2000}
-            autohide
-          >
-            <Toast.Body
-              style={{
-                background: "green",
-                color: "white",
-                border: "1px solid black",
-                borderRadius: "5%",
-                opacity: "0.7",
-              }}
-            >
-              Added To Cart!
-            </Toast.Body>
-          </Toast>
-        </div>
+          <Row>
+            <Col className="text-center" style={{ color: "white" }}>
+              © Copyright 2015 Ecommerce Demo. All rights reserved.
+            </Col>
+          </Row>
+        </Container>
       </Container>
-      <LoginModal
-        show={loginShow}
-        onHide={() => setLoginShow(false)}
-        modalShow={setLoginShow}
-      />
     </>
   );
 }
