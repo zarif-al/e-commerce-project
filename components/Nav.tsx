@@ -159,7 +159,7 @@ function NavBar({ screen }) {
       className="justify-content-start"
     >
       <Navbar.Brand>
-        <img src="/logo_3.png" height="36rem" />
+        <img src="/logo.png" height="36rem" />
       </Navbar.Brand>
       {toggle()}
     </Navbar>
