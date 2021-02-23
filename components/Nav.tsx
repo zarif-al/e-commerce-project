@@ -38,10 +38,21 @@ function NavBar({ screen }) {
             <Nav>
               {loading ? (
                 <>
-                  <Nav.Link onClick={() => signIn()} style={{ color: "white" }}>
-                    <Spinner animation="border" role="status" variant="light">
-                      <span className="sr-only">Loading...</span>
-                    </Spinner>{" "}
+                  <Nav.Link
+                    onClick={() => signIn()}
+                    style={{
+                      color: "black",
+                      backgroundColor: "white",
+                      borderRadius: "5px",
+                      fontSize: "1.1rem",
+                    }}
+                  >
+                    <Spinner
+                      animation="border"
+                      role="status"
+                      variant="dark"
+                      size="sm"
+                    />{" "}
                     Loading...
                   </Nav.Link>
                 </>
@@ -56,7 +67,7 @@ function NavBar({ screen }) {
                           ? session.user.image
                           : "/defaultIcon.png"
                       }
-                      style={{ height: "35px" }}
+                      style={{ height: "28px" }}
                     ></img>{" "}
                     {session.user.name ? session.user.name : "Account"}
                   </Dropdown.Toggle>
@@ -91,14 +102,10 @@ function NavBar({ screen }) {
                       color: "black",
                       backgroundColor: "white",
                       borderRadius: "5px",
+                      fontSize: "1.1rem",
                     }}
                   >
-                    <FontAwesomeIcon
-                      icon={faSignInAlt}
-                      color="black"
-                      size="lg"
-                    />{" "}
-                    Sign In
+                    <FontAwesomeIcon icon={faSignInAlt} color="black" /> Sign In
                   </Nav.Link>
                 </>
               )}
@@ -109,20 +116,18 @@ function NavBar({ screen }) {
                     marginLeft: "1rem",
                     backgroundColor: "white",
                     borderRadius: "5px",
+                    fontSize: "1.1rem",
                   }}
+                  className="align-self-center"
                 >
                   <span
                     className="fa-layers fa-fw"
                     style={{ marginRight: "0.5rem" }}
                   >
-                    <FontAwesomeIcon
-                      icon={faShoppingCart}
-                      color="black"
-                      size="lg"
-                    />
+                    <FontAwesomeIcon icon={faShoppingCart} color="black" />
                     <span
                       className="fa-layers-counter fa-layers-top"
-                      style={{ fontSize: "2.8rem" }}
+                      style={{ fontSize: "2rem" }}
                     >
                       {isValidating || data === undefined ? (
                         <Spinner
@@ -153,7 +158,9 @@ function NavBar({ screen }) {
       style={{ fontSize: "1.3rem" }}
       className="justify-content-start"
     >
-      <Navbar.Brand>Ecommerce Demo</Navbar.Brand>
+      <Navbar.Brand>
+        <img src="/logo.png" height="36rem" />
+      </Navbar.Brand>
       {toggle()}
     </Navbar>
   );

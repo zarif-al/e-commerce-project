@@ -184,8 +184,13 @@ function orders({ initialData }) {
         }}
       >
         <Row>
-          <Col className="text-center" style={{ color: "white" }}>
+          <Col className="text-start" style={{ color: "white" }}>
             © Copyright 2015 Ecommerce Demo. All rights reserved.
+          </Col>
+          <Col className="text-right" style={{ color: "white" }}>
+            <a href="/privacyPolicy" target="_blank">
+              Privacy Policy
+            </a>
           </Col>
         </Row>
       </Container>
