@@ -101,7 +101,7 @@ function orders({ initialData }) {
       {orders.message != "error" ? (
         orders.order.length != 0 ? (
           <>
-            <Container style={{ marginBottom: "2rem" }}>
+            <Container style={{ marginBottom: "4.5rem" }}>
               <Row
                 className="justify-content-center"
                 style={{ marginTop: "2rem", marginBottom: "0.5rem" }}
@@ -183,9 +183,9 @@ function orders({ initialData }) {
           backgroundColor: "black",
         }}
       >
-        <Row>
+        <Row style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
           <Col className="text-start" style={{ color: "white" }}>
-            © Copyright 2015 Ecommerce Demo. All rights reserved.
+            © Copyright 2021 Ecommerce Demo. All rights reserved.
           </Col>
           <Col className="text-right" style={{ color: "white" }}>
             <a href="/privacyPolicy" target="_blank">

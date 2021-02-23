@@ -326,7 +326,7 @@ function cart({ initialData }) {
   return (
     <Container fluid style={{ padding: "0" }}>
       <NavBar screen="home" />
-      <Container style={{ marginBottom: "2rem" }}>
+      <Container style={{ marginBottom: "4.5rem" }}>
         <Row
           style={{ marginBottom: "0.5rem", marginTop: "2rem" }}
           className="align-items-center"
@@ -367,9 +367,9 @@ function cart({ initialData }) {
           backgroundColor: "black",
         }}
       >
-        <Row>
+        <Row style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
           <Col className="text-start" style={{ color: "white" }}>
-            © Copyright 2015 Ecommerce Demo. All rights reserved.
+            © Copyright 2021 Ecommerce Demo. All rights reserved.
           </Col>
           <Col className="text-right" style={{ color: "white" }}>
             <a href="/privacyPolicy" target="_blank">

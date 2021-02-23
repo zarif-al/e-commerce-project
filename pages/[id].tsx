@@ -28,7 +28,7 @@ function Items({ Item }) {
       </Head>
       <Container fluid style={{ padding: "0" }}>
         <NavBar screen="home" />
-        <Container style={{ marginBottom: "2rem" }}>
+        <Container style={{ marginBottom: "3.5rem" }}>
           <Row className="align-items-center">
             <Col>
               <Image src={imageLink} rounded />
@@ -117,9 +117,9 @@ function Items({ Item }) {
             backgroundColor: "black",
           }}
         >
-          <Row>
+          <Row style={{ paddingTop: "1rem", paddingBottom: "1rem" }}>
             <Col className="text-start" style={{ color: "white" }}>
-              © Copyright 2015 Ecommerce Demo. All rights reserved.
+              © Copyright 2021 Ecommerce Demo. All rights reserved.
             </Col>
             <Col className="text-right" style={{ color: "white" }}>
               <a href="/privacyPolicy" target="_blank">

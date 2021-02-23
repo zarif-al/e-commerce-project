@@ -4,8 +4,6 @@ import Navbar from "react-bootstrap/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faShoppingCart,
-  faUser,
-  faStoreAlt,
   faSignOutAlt,
   faSignInAlt,
   faListAlt,
@@ -39,13 +37,13 @@ function NavBar({ screen }) {
               {loading ? (
                 <>
                   <Nav.Link
-                    onClick={() => signIn()}
                     style={{
                       color: "black",
                       backgroundColor: "white",
                       borderRadius: "5px",
                       fontSize: "1.1rem",
                     }}
+                    disabled={true}
                   >
                     <Spinner
                       animation="border"
