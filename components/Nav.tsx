@@ -40,7 +40,12 @@ function NavBar({ screen }) {
                 <>
                   <Nav.Link
                     onClick={() => signIn()}
-                    style={{ color: "white", fontSize: "1.1rem" }}
+                    style={{
+                      color: "black",
+                      backgroundColor: "white",
+                      borderRadius: "5px",
+                      fontSize: "1.1rem",
+                    }}
                   >
                     <Spinner
                       animation="border"
