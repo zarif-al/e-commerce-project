@@ -49,7 +49,7 @@ export default async (req, res) => {
     } else {
       const order_id = new ObjectID(req.body.tran_id);
       const order = await db
-        .collection("Orders")
+        .collection("orders")
         .find({ _id: order_id })
         .project({
           _id: 0,
