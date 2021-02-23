@@ -2,20 +2,27 @@ import React from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faShoppingCart, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faShoppingCart,
+  faUser,
+  faStoreAlt,
+  faSignOutAlt,
+  faSignInAlt,
+  faListAlt,
+} from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import { NavDropdown } from "react-bootstrap";
 import useSWR from "swr";
 import { itemCount } from "../functions/functions";
 import { useRouter } from "next/router";
 import Spinner from "react-bootstrap/Spinner";
 import { signIn, signOut, useSession } from "next-auth/client";
-
+import Dropdown from "react-bootstrap/Dropdown";
 function NavBar({ screen }) {
   const [session, loading] = useSession();
   const router = useRouter();
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
+  console.log(data);
   const toggle = () => {
     if (screen === "signUp") {
       return null;
@@ -26,40 +33,96 @@ function NavBar({ screen }) {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
             id="basic-navbar-nav"
-            className="justify-content-between"
+            className="justify-content-end"
           >
-            <Nav.Link> </Nav.Link>
-            <Nav.Link href="/" style={{ color: "white" }}>
-              Home
-            </Nav.Link>
             <Nav>
-              {!session ? (
+              {loading ? (
                 <>
-                  <Nav.Link onClick={() => signIn()} style={{ color: "white" }}>
-                    <FontAwesomeIcon icon={faUser} color="green" /> Sign In
+                  <Nav.Link onClick={() => signIn()} style={{ color: "black" }}>
+                    <Spinner animation="border" role="status">
+                      <span className="sr-only">Loading...</span>
+                    </Spinner>{" "}
+                    Loading...
                   </Nav.Link>
                 </>
+              ) : session ? (
+                <Dropdown className="align-self-center">
+                  <Dropdown.Toggle
+                    style={{ backgroundColor: "white", color: "black" }}
+                  >
+                    <img
+                      src={
+                        session.user.image
+                          ? session.user.image
+                          : "/defaultIcon.png"
+                      }
+                      style={{ height: "35px" }}
+                    ></img>{" "}
+                    {session.user.name ? session.user.name : "Account"}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item
+                      onClick={() => {
+                        router.push("/orders");
+                      }}
+                    >
+                      <FontAwesomeIcon
+                        icon={faListAlt}
+                        color="black"
+                        size="lg"
+                      />{" "}
+                      My Orders
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => signOut()}>
+                      <FontAwesomeIcon
+                        icon={faSignOutAlt}
+                        color="black"
+                        size="lg"
+                      />{" "}
+                      Sign Out
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
               ) : (
-                <NavDropdown title="My Account" id="basic-nav-dropdown">
-                  <NavDropdown.Item
-                    onClick={() => {
-                      router.push("/orders");
+                <>
+                  <Nav.Link
+                    onClick={() => signIn()}
+                    style={{
+                      color: "black",
+                      backgroundColor: "white",
+                      borderRadius: "5px",
                     }}
                   >
-                    My Orders
-                  </NavDropdown.Item>
-                  <NavDropdown.Item onClick={() => signOut()}>
-                    Sign Out
-                  </NavDropdown.Item>
-                </NavDropdown>
+                    <FontAwesomeIcon
+                      icon={faSignInAlt}
+                      color="black"
+                      size="lg"
+                    />{" "}
+                    Sign In
+                  </Nav.Link>
+                </>
               )}
               <Link href="/cart" passHref>
-                <Nav.Link style={{ color: "white" }}>
-                  <span className="fa-layers fa-fw">
-                    <FontAwesomeIcon icon={faShoppingCart} color="green" />
+                <Nav.Link
+                  style={{
+                    color: "black",
+                    marginLeft: "1rem",
+                    backgroundColor: "white",
+                    borderRadius: "5px",
+                  }}
+                >
+                  <span
+                    className="fa-layers fa-fw"
+                    style={{ marginRight: "0.5rem" }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faShoppingCart}
+                      color="black"
+                      size="lg"
+                    />
                     <span
-                      className="fa-layers-counter"
-                      style={{ fontSize: "2rem" }}
+                      className="fa-layers-counter fa-layers-top"
+                      style={{ fontSize: "2.8rem" }}
                     >
                       {isValidating || data === undefined ? (
                         <Spinner
@@ -70,8 +133,8 @@ function NavBar({ screen }) {
                         itemCount(data)
                       )}
                     </span>
-                  </span>{" "}
-                  Cart
+                  </span>
+                  Your Cart
                 </Nav.Link>
               </Link>
             </Nav>
@@ -88,10 +151,9 @@ function NavBar({ screen }) {
       expand="lg"
       sticky="top"
       style={{ fontSize: "1.3rem" }}
-      className="justify-content-center"
+      className="justify-content-start"
     >
       <Navbar.Brand>Ecommerce Demo</Navbar.Brand>
-
       {toggle()}
     </Navbar>
   );

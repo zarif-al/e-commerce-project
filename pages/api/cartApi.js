@@ -151,6 +151,35 @@ export default async (req, res) => {
           });
         });
       }
+    } else if (req.body.action === "clear") {
+      if (session) {
+        return new Promise(async (resolve, reject) => {
+          await db.collection("users").findOneAndUpdate(
+            {
+              email: session.user.email,
+            },
+            { $set: { cart: [] } }
+          );
+          res.json({ message: "success" });
+          resolve();
+        });
+      } else {
+        return new Promise((resolve, reject) => {
+          verify(req.cookies.tempAuth, SECRET, async function (err, decoded) {
+            if (!err && decoded) {
+              const temp_id = new ObjectID(decoded.sub);
+              await db.collection("tempUser").findOneAndUpdate(
+                {
+                  _id: temp_id,
+                },
+                { $set: { cart: [] } }
+              );
+              res.json({ message: "success" });
+              resolve();
+            }
+          });
+        });
+      }
     }
   } else {
     const session = await getSession({ req });
@@ -170,11 +199,11 @@ export default async (req, res) => {
               { returnOriginal: false }
             );
           res.status(200);
-          res.json({ message: "AuthUser", data: [{ cart: cart.value.cart }] });
+          res.json({ message: "ok", data: [{ cart: cart.value.cart }] });
           resolve();
         } else {
           res.status(200);
-          res.json({ message: "AuthUser", data: cart });
+          res.json({ message: "ok", data: cart });
           resolve();
         }
         resolve();
@@ -190,7 +219,7 @@ export default async (req, res) => {
               .find({ _id: temp_id })
               .project({ _id: 1, cart: 1 })
               .toArray();
-            res.json({ message: "unAuthUser", data: user });
+            res.json({ message: "ok", data: [{ cart: user[0].cart }] });
             resolve();
           } else {
             //create a tempUser and temptoken
@@ -216,7 +245,10 @@ export default async (req, res) => {
                       path: "/",
                     })
                   );
-                  res.json({ message: "unAuthUser", data: resp.ops });
+                  res.json({
+                    message: "ok",
+                    data: [{ cart: resp.ops.cart }],
+                  });
                   resolve();
                 }
               }

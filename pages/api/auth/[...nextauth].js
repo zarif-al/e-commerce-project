@@ -26,6 +26,9 @@ const options = {
   database: process.env.MONGODB_URI,
   secret: process.env.SECRET,
   theme: "light",
+  pages: {
+    signIn: "/auth/signin",
+  },
 };
 
 export default (req, res) => NextAuth(req, res, options);

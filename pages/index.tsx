@@ -5,6 +5,7 @@ import Product from "../components/Product";
 import { connectToDatabase } from "../utils/mongodb";
 import React, { useState } from "react";
 import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Toast from "react-bootstrap/Toast";
 export default function Home({ Items, types }) {
   const [loginShow, setLoginShow] = useState(false);
@@ -19,6 +20,11 @@ export default function Home({ Items, types }) {
         <Container>
           <Row>
             <Product items={Items} setShow={setShow} types={types} />
+          </Row>
+          <Row>
+            <Col className="text-center">
+              © Copyright 2015 Ecommerce Demo. All rights reserved.
+            </Col>
           </Row>
           <div
             style={{

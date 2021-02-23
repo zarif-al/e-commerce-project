@@ -8,7 +8,7 @@ import Image from "react-bootstrap/Image";
 import Link from "next/link";
 import Button from "react-bootstrap/Button";
 import { mutate } from "swr";
-import LoginModal from "../components/LoginModal";
+
 import { cartAction } from "../functions/functions";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -19,7 +19,6 @@ import Toast from "react-bootstrap/Toast";
 import Head from "next/head";
 function Items({ Item }) {
   let { id, name, price, description, imageLink, type } = Item;
-  const [loginShow, setLoginShow] = useState(false);
   const [show, setShow] = useState(false);
   let listKeys = 0;
   return (
@@ -110,11 +109,6 @@ function Items({ Item }) {
           </Toast>
         </div>
       </Container>
-      <LoginModal
-        show={loginShow}
-        onHide={() => setLoginShow(false)}
-        modalShow={setLoginShow}
-      />
     </>
   );
 }

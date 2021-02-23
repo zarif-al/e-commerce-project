@@ -12,13 +12,19 @@ import Image from "react-bootstrap/Image";
 import { mutate } from "swr";
 import Form from "react-bootstrap/Form";
 import OrderModal from "../components/orderModal";
-import { faTimesCircle } from "@fortawesome/free-solid-svg-icons";
+import {
+  faTimesCircle,
+  faArrowCircleLeft,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { itemCount, cartAction } from "../functions/functions";
 import WarningModal from "../components/WarningModal";
 import { useSession, getSession } from "next-auth/client";
 import { connectToDatabase } from "../utils/mongodb";
-function cart({ message }) {
+import { verify } from "jsonwebtoken";
+import { ObjectID } from "mongodb";
+import cookie from "cookie";
+function cart({ initialData }) {
   const router = useRouter();
   const [session, loading] = useSession();
   const [orderModalShow, setOrderModalShow] = useState(false);
@@ -39,14 +45,12 @@ function cart({ message }) {
     exists: false,
     message: "",
   });
-  const [cart, setCart] = useState(message);
+  const [cart, setCart] = useState(initialData);
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
   if (data != undefined) {
     if (JSON.stringify(data) != JSON.stringify(cart)) {
       setCart(data);
-      console.log(data);
-      console.log(message);
     }
   }
   const refs = useRef({});
@@ -62,7 +66,7 @@ function cart({ message }) {
       };
       const resp = await cartAction(item);
       if (resp === "success") {
-        mutate("/api/userApi");
+        mutate("/api/cartApi");
       }
     } else {
       if (refs.current[index].className === "form-control is-valid") {
@@ -76,7 +80,6 @@ function cart({ message }) {
   };
 
   const redirect = async (order) => {
-    console.log("redirecting");
     await fetch("/api/sslConnection", {
       method: "POST",
       headers: {
@@ -115,9 +118,8 @@ function cart({ message }) {
     })
       .then((res) => res.json())
       .then(async (result) => {
-        console.log(result);
         setOrderModalShow(false);
-        mutate("/api/userApi");
+        mutate("/api/cartApi");
         redirect(result.data);
       });
   };
@@ -126,6 +128,16 @@ function cart({ message }) {
     const item = {
       id: cart.data[0].cart[index].id,
       action: "delete",
+    };
+    const resp = await cartAction(item);
+    if (resp === "success") {
+      mutate("/api/cartApi");
+    }
+  };
+
+  const clearCart = async () => {
+    const item = {
+      action: "clear",
     };
     const resp = await cartAction(item);
     if (resp === "success") {
@@ -171,15 +183,6 @@ function cart({ message }) {
   };
 
   const getItems = () => {
-    /*   if (data === undefined) {
-      return (
-        <div className="border border-primary">
-          <Row className="justify-content-center">
-            <h2>Loading Your Cart</h2>
-          </Row>
-        </div>
-      );
-    } else  */
     if (itemCount(cart) === 0) {
       return (
         <div className="border border-primary">
@@ -191,7 +194,7 @@ function cart({ message }) {
             style={{ fontSize: "1.5rem" }}
           >
             <Link href="/">
-              <a>Continue</a>
+              <a style={{ color: "blue" }}>Continue</a>
             </Link>
           </Row>
         </div>
@@ -298,17 +301,18 @@ function cart({ message }) {
             <Button
               style={{ marginRight: "1rem" }}
               onClick={() => {
-                router.push("/");
+                clearCart();
               }}
               key={"homeButton"}
+              variant="danger"
             >
-              Continue Shopping
+              Delete Cart
             </Button>
             <Button
               variant="success"
               onClick={handleSubmit}
               key={"confirmButton"}
-              //disabled={isValidating}
+              disabled={isValidating}
             >
               Confirm
             </Button>
@@ -324,13 +328,35 @@ function cart({ message }) {
       <NavBar screen="home" />
       <Container>
         <Row
-          className="text-center"
-          style={{ marginBottom: "2rem", marginTop: "2rem" }}
+          style={{ marginBottom: "0.5rem", marginTop: "2rem" }}
+          className="align-items-center"
         >
-          <Col>
+          <Col className="text-center">
             <h1>Shopping Cart</h1>
           </Col>
         </Row>
+        {itemCount(cart) != 0 ? (
+          <Row style={{ marginBottom: "1rem" }}>
+            <Col
+              xs={2}
+              style={{
+                color: "blue",
+              }}
+            >
+              <Link href="/" passHref>
+                <a>
+                  <FontAwesomeIcon
+                    icon={faArrowCircleLeft}
+                    color="black"
+                    size="lg"
+                  />{" "}
+                  Back to Store
+                </a>
+              </Link>
+            </Col>
+          </Row>
+        ) : null}
+
         {getItems()}
       </Container>
 
@@ -365,14 +391,33 @@ export async function getServerSideProps(context) {
         props: {},
       };
     }
-    let message = { message: "AuthUser", data: [{ cart: cart[0].cart }] };
+    let initialData = { message: "ok", data: [{ cart: cart[0].cart }] };
     return {
-      props: { message },
+      props: { initialData },
     };
   } else {
-    const cart = undefined;
+    const { SECRET } = process.env;
+    const parsedCookies = cookie.parse(context.req.headers.cookie);
+    const initialData = await verify(
+      parsedCookies.tempAuth,
+      SECRET,
+      async function (err, decoded) {
+        if (!err && decoded) {
+          const temp_id = new ObjectID(decoded.sub);
+          const cart = await db
+            .collection("tempUser")
+            .find({ _id: temp_id })
+            .project({ _id: 0, cart: 1 })
+            .toArray();
+          return { message: "ok", data: cart };
+        } else {
+          return { message: "ok", data: [{ cart: [] }] };
+        }
+      }
+    );
+
     return {
-      props: { cart },
+      props: { initialData },
     };
   }
 }
