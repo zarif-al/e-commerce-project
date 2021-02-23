@@ -7,7 +7,7 @@ export default async (req, res) => {
   if (req.method === "GET") {
     const { db } = await connectToDatabase();
     return new Promise((resolve, reject) => {
-      //check for login Auth token
+      ///check for login Auth token
       verify(req.cookies.auth, SECRET, async function (err, decoded) {
         if (!err && decoded) {
           const user_id = new ObjectID(decoded.sub);
