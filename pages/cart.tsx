@@ -24,6 +24,7 @@ import { connectToDatabase } from "../utils/mongodb";
 import { verify } from "jsonwebtoken";
 import { ObjectID } from "mongodb";
 import cookie from "cookie";
+import styles from "../styles/Cart.module.css";
 function cart({ initialData }) {
   const router = useRouter();
   const [session, loading] = useSession();
@@ -202,20 +203,20 @@ function cart({ initialData }) {
     } else {
       const rows = [];
       rows.push(
-        <Row className="text-center border border-primary" key="header">
-          <Col className="border border-primary">
+        <Row className="text-center" key="header">
+          <Col className={styles.tableCol}>
             <strong>Image</strong>
           </Col>
-          <Col className="border border-primary">
+          <Col className={styles.tableCol}>
             <strong>Product Name</strong>
           </Col>
-          <Col className="border border-primary">
+          <Col className={styles.tableCol}>
             <strong>Quantity</strong>
           </Col>
-          <Col className="border border-primary">
+          <Col className={styles.tableCol}>
             <strong>Unit Price</strong>
           </Col>
-          <Col className="border border-primary">
+          <Col className={styles.tableCol}>
             <strong>Total Price</strong>
           </Col>
         </Row>
@@ -225,13 +226,18 @@ function cart({ initialData }) {
         sum += items.price * items.quantity;
         rows.push(
           <Row
-            className="text-center border border-primary align-items-center"
+            className="text-center border border-dark align-items-center"
             key={items.id}
           >
             <Col>
               <Image
                 src={items.image}
-                style={{ width: 151, height: 160, objectFit: "cover" }}
+                style={{
+                  width: 151,
+                  height: 160,
+                  objectFit: "cover",
+                  paddingTop: "0.5rem",
+                }}
                 rounded
               />
             </Col>
@@ -286,7 +292,14 @@ function cart({ initialData }) {
       });
       rows.push(
         <div key="footerRows">
-          <Row className="text-center border border-primary">
+          <Row
+            className="text-center border border-dark"
+            style={{
+              paddingTop: "0.5rem",
+              paddingBottom: "0.5rem",
+              borderWidth: "2rem",
+            }}
+          >
             <Col></Col>
             <Col></Col>
             <Col></Col>
