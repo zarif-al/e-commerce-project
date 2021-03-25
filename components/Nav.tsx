@@ -149,11 +149,9 @@ function NavBar({ screen }) {
 
   return (
     <Navbar
-      bg="dark"
       variant="light"
-      expand="lg"
       sticky="top"
-      style={{ fontSize: "1.3rem" }}
+      style={{ fontSize: "1.3rem", backgroundColor: "#01c5f1" }}
       className="justify-content-start"
     >
       <Navbar.Brand>

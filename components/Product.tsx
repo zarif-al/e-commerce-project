@@ -13,7 +13,7 @@ function Product({ items, setShow, types }) {
   const [forcePage, setForcePage] = useState(0);
   const [searchValue, setSearchValue] = useState("");
   return (
-    <Container>
+    <Container fluid>
       <ProductNav
         showLimit={showLimit}
         setShowLimit={setShowLimit}
@@ -27,6 +27,7 @@ function Product({ items, setShow, types }) {
         types={types}
         searchValue={searchValue}
       />
+      {/* <Container></Container> */}
       <Row
         className="justify-content-center align-items-center"
         style={{ marginLeft: "1.8rem" }}
