@@ -1,12 +1,26 @@
-@import url("https://fonts.googleapis.com/css2?family=Lato:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap");
+.featuredHeader {
+  font-family: "Roboto", sans-serif;
+  font-size: 1.5rem;
+}
 
-.main {
-  background-image: url("../assets/seller.jpg");
-  background-color: #cccccc;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 95vh;
-  width: 100vw;
-  margin-top: 2.5vh;
+.featuredSubHeader {
+  font-family: "Roboto Mono", monospace;
+  font-size: 1rem;
+}
+
+.carouselImage {
+  display: block;
+  height: 290px;
+  width: 100%;
+}
+
+@media screen and (max-width: 851px) {
+  .sideMenuToggle {
+    visibility: hidden;
+  }
+  .carouselImage {
+    height: 200px;
+  }
 }

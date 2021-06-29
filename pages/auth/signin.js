@@ -10,7 +10,7 @@ import {
   faEnvelope,
   faArrowCircleLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import NavBar from "../../components/Nav";
+import NavBar from "../../components/nav/Nav";
 import Form from "react-bootstrap/Form";
 import { useFormik } from "formik";
 import * as Yup from "yup";

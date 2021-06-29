@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Link from "next/link";
-import NavBar from "../components/Nav";
+import NavBar from "../components/nav/Nav";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faArrowCircleLeft } from "@fortawesome/free-solid-svg-icons";
 import Button from "react-bootstrap/Button";

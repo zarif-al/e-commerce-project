@@ -42,7 +42,7 @@ function Product({ items, setShow, types }) {
           searchValue={searchValue}
           setShow={setShow}
         />
-        <Container>
+        {/*  <Container>
           <Row className="justify-content-center align-items-center">
             {length > 0 ? (
               <>
@@ -84,7 +84,7 @@ function Product({ items, setShow, types }) {
               </>
             ) : null}
           </Row>
-        </Container>
+        </Container> */}
       </Row>
     </Container>
   );

@@ -1,0 +1,58 @@
+.dropdownContent {
+  margin-top: 11px;
+  position: fixed;
+  overflow: hidden;
+  width: max-content;
+  font-size: 1rem;
+  z-index: 3;
+  background-color: white;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-left: 1px solid black;
+  border-bottom: 1px solid black;
+  width: 150px;
+  border-bottom-left-radius: 10px;
+}
+
+.categoriesContent {
+  margin-top: 0.3rem;
+  position: absolute;
+  overflow: hidden;
+  width: 200px;
+  font-size: 1.2rem;
+  z-index: 3;
+  background-color: white;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  border-radius: 5px;
+}
+
+.sidebar_btn {
+  color: black;
+  background-color: white;
+  height: 2.5rem;
+  width: 2.5rem;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.acc_sidebar {
+  align-self: center;
+}
+
+.cateogries_dropdownContainer {
+  align-self: center;
+  margin: 0px 1rem;
+}
+
+.accMenuList {
+  list-style: none;
+  padding: 0;
+  width: fit-content;
+}
+
+.accMenuList li {
+  margin: 0.3rem 0 0.3rem 0;
+}

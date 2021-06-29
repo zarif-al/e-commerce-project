@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import NavBar from "../components/Nav";
+import NavBar from "../components/nav/Nav";
 import { connectToDatabase } from "../utils/mongodb";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";

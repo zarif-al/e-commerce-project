@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
 import Container from "react-bootstrap/Container";
-import NavBar from "../components/Nav";
+import NavBar from "../components/nav/Nav";
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 import { useRouter } from "next/router";
