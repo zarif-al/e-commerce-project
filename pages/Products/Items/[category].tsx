@@ -116,15 +116,7 @@ function Items({ items, category, brands }) {
 
   return (
     <>
-      <Container
-        fluid
-        style={{
-          minHeight: "100vh",
-          marginTop: "1rem",
-          marginBottom: "1rem",
-          padding: "0 15rem",
-        }}
-      >
+      <Container fluid className={styles.mainContainer}>
         <Row>
           <Col className={styles.menuCol} lg={3}>
             <div className={styles.priceRange}>

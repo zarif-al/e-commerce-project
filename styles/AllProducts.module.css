@@ -1,6 +1,15 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
 
+.mainContainer {
+  min-height: 100vh;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0 15rem;
+}
+
+/*BreadCrumb Row*/
+
 .breadcrumb {
   padding: 0 15px;
   justify-content: space-between;
@@ -219,5 +228,15 @@
   }
   .row {
     margin-bottom: 0 !important;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .mainContainer {
+    padding: 0 5rem;
+  }
+  .cardImage {
+    height: 200px;
+    width: 200px;
   }
 }
