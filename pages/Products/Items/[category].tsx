@@ -194,7 +194,7 @@ function Items({ items, category, brands }) {
             </div>
           </Col>
           <Col className={styles.productsCol} lg={9}>
-            <Row className={styles.breadcrumb}>
+            <Row className={styles.productCol_firstRow}>
               <Breadcrumb className={styles.breadcrumb_custom}>
                 <Breadcrumb.Item href="/">
                   <FontAwesomeIcon icon={faHome} color="black" />

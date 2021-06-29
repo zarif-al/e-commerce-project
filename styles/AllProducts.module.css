@@ -10,14 +10,28 @@
 
 /*BreadCrumb Row*/
 
-.breadcrumb {
+.productCol_firstRow {
   padding: 0 15px;
   justify-content: space-between;
   align-items: center;
 }
 
+.breadcrumb_custom > ol{
+  background-color: transparent ;
+  margin-bottom : 0;
+}
+
 .viewOptions {
   display: flex;
+}
+
+.showDiv, .sortDiv{
+  display: flex;
+  align-items: center;
+}
+
+.showDiv > select, .sortDiv > select {
+ height: 100%;
 }
 
 .showDiv,
@@ -236,7 +250,7 @@
     padding: 0 5rem;
   }
   .cardImage {
-    height: 200px;
-    width: 200px;
+    height: 170px;
+    width: 170px;
   }
 }
