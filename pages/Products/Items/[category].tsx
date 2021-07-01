@@ -3,7 +3,7 @@ import { connectToDatabase } from "../../../utils/mongodb";
 import Image from "next/image";
 import Button from "react-bootstrap/Button";
 import { Container, Row, Col } from "react-bootstrap";
-import Slider, { Range } from "rc-slider";
+import { Range } from "rc-slider";
 import Card from "react-bootstrap/Card";
 import styles from "../../../styles/AllProducts.module.css";
 import "rc-slider/assets/index.css";
@@ -16,8 +16,9 @@ import Spinner from "react-bootstrap/Spinner";
 import Link from "next/link";
 function Items({ items, category, brands }) {
   //Version 1 -> Switch to using fetch and mongo skip() for pagination.
+  //Add a way to set Upcoming items to show or not
   //parse props
-  const items_object = JSON.parse(items);
+  const items_object = JSON.parse(items); //change
   const brands_object = JSON.parse(brands);
   //get cookie
   let cookieBrand = Cookie.get("brand");
@@ -49,14 +50,17 @@ function Items({ items, category, brands }) {
   const [maxPrice, setMaxPrice] = useState(0);
   const [userMinPrice, setUserMinPrice] = useState(0);
   const [userMaxPrice, setUserMaxPrice] = useState(0);
-  const [itemFilter, setItemFilter] = useState(null);
+  const [firstFilter, setFirstFilter] = useState(null); //change
+  const [secondFilter, setSecondFilter] = useState(null); //change
+  const [showLimit, setShowLimit] = useState(24);
+  const [page, setPage] = useState([1, 20]);
+  const [sort, setSort] = useState(1);
   const [loading, setLoading] = useState(true);
   //
   //console.log(selected_brands);
   //
-  //find disabled checkbox
   useEffect(() => {
-    setLoading(true);
+    //find disabled checkbox
     let sum = 0;
     let latestKey = null;
     for (const [key, value] of Object.entries(selected_brands)) {
@@ -70,26 +74,48 @@ function Items({ items, category, brands }) {
     } else {
       setDisabledBrand(null);
     }
-    //Filter Items on category
+    //Filter Items on category //change
     const currentFilter = items_object.filter((item) => {
       if (selected_brands[item.brand] === 1) {
         return item;
       }
     });
     //set prices
-    setItemFilter(currentFilter);
-    setMinPrice(currentFilter[0].price);
-    setMaxPrice(currentFilter[currentFilter.length - 1].price);
-    setUserMinPrice(currentFilter[0].price);
-    setUserMaxPrice(currentFilter[currentFilter.length - 1].price);
-    setLoading(false);
+    setFirstFilter(currentFilter); //change
+    setMinPrice(currentFilter[0].price); //change
+    setUserMinPrice(currentFilter[0].price); //change
+    setMaxPrice(currentFilter[currentFilter.length - 1].price); //change
+    setUserMaxPrice(currentFilter[currentFilter.length - 1].price); //change
   }, [selected_brands]);
-  //update brand state when cookiechanges
+  //update brand state when brands object changes
   useEffect(() => {
     setLoading(true);
+    setFirstFilter(null); //change
+    setSecondFilter(null); //change
     setBrands(defaultState);
-    setLoading(false);
   }, [brands]);
+  //update second filter when user price range changes
+  useEffect(() => {
+    if (firstFilter != null) {
+      setLoading(true); //change
+      const priceFilter = firstFilter.filter((item) => {
+        if (item.price >= userMinPrice && item.price <= userMaxPrice) {
+          return item;
+        }
+      });
+      /*       //Pagination
+      const pageArray = [];
+      const startIndex = page[0] * page[1] - page[1];
+      const endIndex = page[0] * page[1];
+      for (var i = startIndex; i < endIndex; i++) {
+        pageArray.push(priceFilter[i]);
+      }
+      //Price Sort
+      const priceSort = pageArray */
+      setSecondFilter(priceFilter);
+      setLoading(false);
+    }
+  }, [userMinPrice, userMaxPrice, page, sort]);
   //checkList state manager
   const handleChecklist = (selection) => {
     if (selection === "All") {
@@ -127,6 +153,10 @@ function Items({ items, category, brands }) {
                 min={minPrice}
                 max={maxPrice}
                 value={[userMinPrice, userMaxPrice]}
+                onChange={(value) => {
+                  setUserMinPrice(value[0]);
+                  setUserMaxPrice(value[1]);
+                }}
               />
               <div className={styles.rangeInput}>
                 <Form.Control
@@ -230,7 +260,7 @@ function Items({ items, category, brands }) {
                   <Spinner animation="border" />
                 </div>
               ) : (
-                itemFilter.map((item, i) => {
+                secondFilter.map((item, i) => {
                   return (
                     <Col lg={3} className={styles.itemCol}>
                       <Link
@@ -256,7 +286,7 @@ function Items({ items, category, brands }) {
                                 </ul>
                               </Card.Text>
                               <Card.Text className={styles.footer}>
-                                {item.price}৳
+                                {item.price > 0 ? item.price + "৳" : "Upcoming"}
                                 <Button variant="outline-primary" block>
                                   Buy Now
                                 </Button>
