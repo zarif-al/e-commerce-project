@@ -6,11 +6,11 @@ export default async (req, res) => {
   if (req.method === "GET") {
     return new Promise(async (resolve, reject) => {
       const brandArray = req.query.brand.split(",");
-      const pageNumber = req.query.pageNumber;
-      const nPerPage = req.query.nPerPage;
-      const userMinPrice = req.query.userMinPrice;
-      const userMaxPrice = req.query.userMaxPrice;
-      const userSort = req.query.sort;
+      const pageNumber = parseInt(req.query.pageNumber);
+      const nPerPage = parseInt(req.query.nPerPage);
+      const userMinPrice = parseInt(req.query.userMinPrice);
+      const userMaxPrice = parseInt(req.query.userMaxPrice);
+      const userSort = parseInt(req.query.sort);
       const minPrice = await db
         .collection("Items")
         .find({
@@ -36,14 +36,37 @@ export default async (req, res) => {
         .find({
           category: req.query.category,
           brand: { $in: brandArray },
+          price: {
+            $gte: userMinPrice == 0 ? minPrice[0].price : userMinPrice,
+            $lte: userMaxPrice == 0 ? maxPrice[0].price : userMaxPrice,
+          },
         })
-        .project({ _id: 0, name: 1, price: 1 })
-        .sort({ price: parseInt(userSort) })
+        .project({
+          _id: 0,
+          category: 1,
+          name: 1,
+          price: 1,
+          description: 1,
+          imageLink: 1,
+        })
+        .sort({ price: userSort })
         .skip(pageNumber > 0 ? (pageNumber - 1) * nPerPage : 0)
-        .limit(parseInt(nPerPage))
+        .limit(nPerPage)
         .toArray();
+      const totalCount = await db
+        .collection("Items")
+        .find({
+          category: req.query.category,
+          brand: { $in: brandArray },
+          price: {
+            $gte: userMinPrice == 0 ? minPrice[0].price : userMinPrice,
+            $lte: userMaxPrice == 0 ? maxPrice[0].price : userMaxPrice,
+          },
+        })
+        .count();
       //res.end(typeof brandArray);
       res.json({
+        totalCount: totalCount,
         minPrice: minPrice[0].price,
         maxPrice: maxPrice[0].price,
         items: items,
