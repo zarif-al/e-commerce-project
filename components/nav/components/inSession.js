@@ -12,17 +12,16 @@ import styles from "../../../styles/nav/components/InSession.module.css";
 import { useState } from "react";
 import { motion, AnimateSharedLayout } from "framer-motion";
 function inSession() {
-  const [session, loading] = useSession();
   const [drop, setDrop] = useState(false);
   const changeDrop = () => setDrop(!drop);
   const dropdown = {
     visible: {
       right: 0,
-      transition: { duration: 0.1 },
+      transition: { duration: 0.3 },
     },
     hidden: {
       right: "-100%",
-      transition: { duration: 0.1 },
+      transition: { duration: 0.3 },
     },
   };
   return (
@@ -52,7 +51,11 @@ function inSession() {
               <FontAwesomeIcon icon={faListAlt} color="black" size="sm" /> My
               Orders
             </li>
-            <li>
+            <li
+              onClick={() => {
+                signOut();
+              }}
+            >
               <FontAwesomeIcon icon={faSignOutAlt} color="black" size="sm" />
               Sign Out
             </li>

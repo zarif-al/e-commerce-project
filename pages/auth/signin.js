@@ -10,13 +10,13 @@ import {
   faEnvelope,
   faArrowCircleLeft,
 } from "@fortawesome/free-solid-svg-icons";
-import NavBar from "../../components/nav/Nav";
 import Form from "react-bootstrap/Form";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import Spinner from "react-bootstrap/Spinner";
 import { useState } from "react";
+import styles from "../../styles/authentication/SignIn.module.css";
 export default function SignIn({ providers, csrfToken }) {
   //use formik put email and csrf token in post body to action address
   const [disable, setDisable] = useState(false);
@@ -58,162 +58,205 @@ export default function SignIn({ providers, csrfToken }) {
   }
 
   return (
-    <Container fluid style={{ padding: "0" }}>
-      <NavBar screen="signUp" />
-      <Container>
-        <Row style={{ height: "90vh" }} className="align-items-center">
-          <Container
-            style={{
-              border: "1px solid black",
-              maxWidth: "600px",
-              borderRadius: "15px",
-              backgroundColor: "lightgray",
-            }}
-          >
-            <Row
-              style={{
-                color: msgColor,
-                marginTop: "0.5rem",
-              }}
-            >
-              <Col className="text-center">
-                <strong>{message}</strong>
-              </Col>
-            </Row>
-            <Row
-              className="justify-content-center"
-              style={{ marginTop: "1rem" }}
-            >
-              <Col xs={11}>
-                <Form onSubmit={formik.handleSubmit} noValidate>
-                  <Form.Group>
-                    <Form.Control
-                      type="email"
-                      name="email"
-                      placeholder="Enter Your Email"
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.email}
-                      autoComplete="username"
-                      isInvalid={formik.touched.email && !!formik.errors.email}
-                      isValid={formik.touched.email && !formik.errors.email}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      {formik.errors.email}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-                  <Button
-                    variant="light"
-                    type="submit"
-                    block
-                    disabled={disable}
-                  >
-                    {disable ? (
-                      <>
-                        <Spinner animation="border" size="sm" /> Redirecting
-                      </>
-                    ) : (
-                      <>
-                        <FontAwesomeIcon
-                          icon={faEnvelope}
-                          color="black"
-                          size="lg"
-                        />{" "}
-                        Sign In with Email
-                      </>
-                    )}
-                  </Button>
-                </Form>
-              </Col>
-            </Row>
+    <Container className={styles.mainContainer}>
+      <Row className={styles.mainRow}>
+        <Col className={styles.emailSignInCol}>
+          <div className={styles.emailSignIn}>
+            <Form onSubmit={formik.handleSubmit} noValidate>
+              <Form.Group>
+                <Form.Control
+                  type="email"
+                  name="email"
+                  placeholder="Enter Your Email"
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                  value={formik.values.email}
+                  autoComplete="username"
+                  isInvalid={formik.touched.email && !!formik.errors.email}
+                  isValid={formik.touched.email && !formik.errors.email}
+                />
+                <Form.Control.Feedback type="invalid">
+                  {formik.errors.email}
+                </Form.Control.Feedback>
+              </Form.Group>
+              <Button
+                variant="outline-primary"
+                type="submit"
+                block
+                disabled={disable}
+              >
+                {disable ? (
+                  <>
+                    <Spinner animation="border" size="sm" /> Redirecting
+                  </>
+                ) : (
+                  <>
+                    <FontAwesomeIcon
+                      icon={faEnvelope}
+                      color="black"
+                      size="lg"
+                    />{" "}
+                    Sign In with Email
+                  </>
+                )}
+              </Button>
+            </Form>
+          </div>
+        </Col>
+        <Col className={styles.providerSignInCol}>
+          <div className={styles.providerSignIn}>
             {Object.values(providers).map((provider) =>
               provider.name != "Email" ? (
-                <Row
-                  key={provider.name}
-                  className="justify-content-center"
-                  style={{ marginBottom: "1rem" }}
+                <Button
+                  variant="outline-primary"
+                  onClick={() =>
+                    signIn(provider.id, {
+                      callbackUrl: router.query.callbackUrl,
+                    })
+                  }
+                  disabled={disable}
+                  className={styles.providerButton}
                 >
-                  <Col xs={11}>
-                    <Button
-                      variant="light"
-                      onClick={() =>
-                        signIn(provider.id, {
-                          callbackUrl: router.query.callbackUrl,
-                        })
-                      }
-                      block
-                      disabled={disable}
-                    >
+                  <Row noGutters={true} className={styles.buttonRow}>
+                    <Col xs={3} sm={2} md={2} lg={2}>
                       <FontAwesomeIcon
                         icon={
                           provider.name === "Google"
                             ? faGoogle
                             : faFacebookSquare
                         }
-                        color="black"
+                        className={
+                          provider.name === "Google"
+                            ? styles.googleIcon
+                            : styles.fbIcon
+                        }
                         size="lg"
-                      />{" "}
+                      />
+                    </Col>
+                    <Col
+                      xs={9}
+                      sm={7}
+                      md={7}
+                      lg={5}
+                      className={styles.buttonTextCol}
+                    >
                       Sign In with {provider.name}
-                    </Button>
-                  </Col>
-                </Row>
+                    </Col>
+                  </Row>
+                </Button>
               ) : (
-                <Row
-                  className="align-items-center"
-                  style={{ margin: "1.5rem" }}
-                >
-                  <Col>
-                    <hr style={{ borderTop: "1px solid black" }} />
-                  </Col>
-                  <Col className="text-center" xs={2}>
-                    <strong>OR</strong>
-                  </Col>
-                  <Col>
-                    <hr style={{ borderTop: "1px solid black" }} />
-                  </Col>
-                </Row>
+                ""
               )
             )}
-            <Row
-              key="returnButton"
-              className="justify-content-center"
-              style={{ marginBottom: "2.5rem" }}
-            >
-              <Col xs={11}>
-                <Button
-                  variant="light"
-                  onClick={() => {
-                    router.push("/");
-                  }}
-                  block
-                  disabled={disable}
-                >
-                  <FontAwesomeIcon
-                    icon={faArrowCircleLeft}
-                    color="black"
-                    size="lg"
-                  />{" "}
-                  Return to Shop
-                </Button>
-              </Col>
-            </Row>
-          </Container>
-        </Row>
-      </Container>
-      <Container
-        fluid
+          </div>
+        </Col>
+      </Row>
+      {/*   <Row
         style={{
-          position: "absolute",
-          bottom: "0",
-          backgroundColor: "black",
+          color: msgColor,
+          marginTop: "0.5rem",
         }}
       >
-        <Row>
-          <Col className="text-center" style={{ color: "white" }}>
-            © Copyright 2015 Ecommerce Demo. All rights reserved.
-          </Col>
-        </Row>
-      </Container>
+        <Col className="text-center">
+          <strong>{message}</strong>
+        </Col>
+      </Row>
+      <Row className="justify-content-center" style={{ marginTop: "1rem" }}>
+        <Col xs={11}>
+          <Form onSubmit={formik.handleSubmit} noValidate>
+            <Form.Group>
+              <Form.Control
+                type="email"
+                name="email"
+                placeholder="Enter Your Email"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.email}
+                autoComplete="username"
+                isInvalid={formik.touched.email && !!formik.errors.email}
+                isValid={formik.touched.email && !formik.errors.email}
+              />
+              <Form.Control.Feedback type="invalid">
+                {formik.errors.email}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <Button variant="light" type="submit" block disabled={disable}>
+              {disable ? (
+                <>
+                  <Spinner animation="border" size="sm" /> Redirecting
+                </>
+              ) : (
+                <>
+                  <FontAwesomeIcon icon={faEnvelope} color="black" size="lg" />{" "}
+                  Sign In with Email
+                </>
+              )}
+            </Button>
+          </Form>
+        </Col>
+      </Row>
+      {Object.values(providers).map((provider) =>
+        provider.name != "Email" ? (
+          <Row
+            key={provider.name}
+            className="justify-content-center"
+            style={{ marginBottom: "1rem" }}
+          >
+            <Col xs={11}>
+              <Button
+                variant="light"
+                onClick={() =>
+                  signIn(provider.id, {
+                    callbackUrl: router.query.callbackUrl,
+                  })
+                }
+                block
+                disabled={disable}
+              >
+                <FontAwesomeIcon
+                  icon={
+                    provider.name === "Google" ? faGoogle : faFacebookSquare
+                  }
+                  color="black"
+                  size="lg"
+                />{" "}
+                Sign In with {provider.name}
+              </Button>
+            </Col>
+          </Row>
+        ) : (
+          <Row className="align-items-center" style={{ margin: "1.5rem" }}>
+            <Col>
+              <hr style={{ borderTop: "1px solid black" }} />
+            </Col>
+            <Col className="text-center" xs={2}>
+              <strong>OR</strong>
+            </Col>
+            <Col>
+              <hr style={{ borderTop: "1px solid black" }} />
+            </Col>
+          </Row>
+        )
+      )}
+      <Row
+        key="returnButton"
+        className="justify-content-center"
+        style={{ marginBottom: "2.5rem" }}
+      >
+        <Col xs={11}>
+          <Button
+            variant="light"
+            onClick={() => {
+              router.push("/");
+            }}
+            block
+            disabled={disable}
+          >
+            <FontAwesomeIcon icon={faArrowCircleLeft} color="black" size="lg" />{" "}
+            Return to Shop
+          </Button>
+        </Col>
+      </Row> */}
     </Container>
   );
 }

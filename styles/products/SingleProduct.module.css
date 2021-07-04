@@ -1,9 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
-.columns {
-  margin-top: 15px;
-  margin-bottom: 15px;
-}
-
+/* Breadcrumbs */
 .breadcrumb_custom > ol {
   border-radius: 40px;
   padding: 1rem 2rem;
@@ -11,20 +7,7 @@
   background-color: transparent;
 }
 
-.infoBar {
-  margin-top: 0.5rem;
-  display: flex;
-}
-
-.infoBar > div {
-  background-color: lightgray;
-  padding: 0.4rem 0.8rem;
-  border-radius: 40px;
-  font-size: 0.8rem;
-  margin: 0 0.2rem;
-  font-family: "Trebuchet MS", sans-serif;
-}
-
+/* Main Image Container */
 .imageContainer {
   width: 100%;
 }
@@ -39,7 +22,21 @@
   position: relative !important;
   height: unset !important;
 }
+/* InfoBar */
+.infoBar {
+  margin-top: 0.5rem;
+  display: flex;
+}
 
+.infoBar > div {
+  background-color: lightgray;
+  padding: 0.4rem 0.8rem;
+  border-radius: 40px;
+  font-size: 0.8rem;
+  margin: 0 0.2rem;
+  font-family: "Trebuchet MS", sans-serif;
+}
+/* KeyFeatures */
 .keyFeatures {
   display: flex;
   flex-direction: column;
@@ -59,11 +56,15 @@
   font-weight: 500;
 }
 
+/* More Info Link */
+
 .moreInfoLink {
   color: blue;
   border-bottom: 0.5px solid blue;
   width: fit-content;
 }
+
+/*Purchase Row */
 
 .purchaseRow {
   margin-top: 1rem;
@@ -76,7 +77,8 @@
   display: flex;
 }
 
-.button {
+.review_button,
+.purchase_button {
   margin-left: 0.5rem;
   height: fit-content;
   padding: 0.35rem 3rem;
@@ -85,6 +87,8 @@
 .quantityInput {
   width: 20%;
 }
+
+/*Specication Review Nav*/
 
 .productDetailNav > div > ul {
   list-style-type: none;
@@ -113,14 +117,20 @@
   border-color: blue !important;
 }
 
+/*Specification/MainDescription Reviews*/
+
+.spec_review_col {
+  overflow-x: hidden;
+  padding-left: 0;
+}
+
 .mainDescriptionList {
   list-style-position: inside;
   padding-left: 0;
 }
 
 .spec_suggest_row {
-  margin-bottom: 1rem;
-  margin-top: 1rem;
+  margin: 1rem 0rem;
 }
 
 .specificationsCol {
@@ -250,6 +260,13 @@
 
 .suggestionsCol {
   background-color: rgba(211, 211, 211, 0.637);
+  padding: 0;
+  border-radius: 5px;
+  height: fit-content;
+}
+
+.suggestionsDiv {
+  background-color: rgba(211, 211, 211, 0.637);
   padding: 1rem;
   border-radius: 5px;
   height: fit-content;
@@ -260,7 +277,7 @@
   padding: 0.5rem;
   border-radius: 5px;
   display: flex;
-  margin: 1rem 0;
+  margin: 1rem 0rem;
   cursor: pointer;
 }
 
@@ -271,6 +288,8 @@
 
 .suggestionInfo {
   margin-left: 0.8rem;
+  display: flex;
+  flex-direction: column;
 }
 
 .suggestionInfo > div:nth-child(1) {
@@ -279,7 +298,7 @@
 }
 
 .suggestionInfo > div:nth-child(2) {
-  margin-top: 0.2rem;
+  margin-top: auto;
   font-weight: 600;
   color: blue;
   font-family: "Trebuchet MS", sans-serif;
@@ -288,4 +307,118 @@
 .suggestionLinks:hover {
   text-decoration: none;
   transition: all 300ms;
+}
+
+@media screen and (max-width: 576px) {
+  .breadcrumb_custom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .breadcrumb_custom > ol {
+    font-size: 0.62rem;
+    border-radius: 30px;
+    padding: 1rem 0.5rem;
+    box-shadow: 0px 1px 4px lightgray;
+    background-color: transparent;
+  }
+  .breadcrumb_custom > ol > li {
+    padding-left: 0.05rem !important;
+  }
+  .breadcrumb_custom > ol > li::before {
+    padding-right: 0.05rem !important;
+  }
+
+  .itemName {
+    text-align: center;
+  }
+
+  .infoBar {
+    padding: 0 0.5rem;
+  }
+
+  .infoBar > div {
+    background-color: lightgray;
+    padding: 0.4rem 0.6rem;
+    border-radius: 40px;
+    font-size: 0.7rem;
+    margin: 0.5rem 0.2rem;
+    font-family: "Trebuchet MS", sans-serif;
+  }
+  .suggestionsCol {
+    margin: 0.5rem 0rem;
+  }
+
+  .suggestionCard {
+    width: inherit;
+  }
+
+  .suggestionImage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .suggestionInfo {
+    margin-left: 0.8rem;
+  }
+
+  .suggestionInfo > div:nth-child(1) {
+    font-size: 0.8rem;
+    font-family: "Roboto", sans-serif;
+  }
+
+  .suggestionInfo > div:nth-child(2) {
+    margin-top: 0.2rem;
+    font-weight: 600;
+    color: blue;
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 0.9rem;
+  }
+
+  .keyFeatures {
+    justify-content: center;
+    margin: 0rem 0.2rem;
+  }
+  .purchaseRow {
+    margin: 0.5rem 0.2rem;
+  }
+
+  .review_button {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .reviewsHeader > div:nth-child(1) > h6 {
+    font-size: 0.73rem;
+  }
+
+  .spec_review_col {
+    overflow-x: hidden;
+    padding: 0;
+  }
+}
+
+@media screen and (min-width: 577px) and (max-width: 800px) {
+  .infoBar > div {
+    font-size: 0.74rem;
+  }
+  .suggestionsCol {
+    margin-top: 1rem;
+  }
+  .spec_review_col {
+    overflow-x: hidden;
+    padding: 0;
+  }
+
+  .suggestionImage {
+    width: 80px;
+    height: 80px;
+  }
+  .suggestionInfo > div:nth-child(1) {
+    font-size: 1.2rem;
+  }
+
+  .suggestionInfo > div:nth-child(2) {
+    font-size: 1rem;
+  }
 }

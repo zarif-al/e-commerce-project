@@ -108,7 +108,7 @@
     0 0 0 6px rgba(27, 108, 184, 0.342);
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 800px) {
   /*  filter options */
   .priceRange,
   .brands {

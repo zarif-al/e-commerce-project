@@ -106,7 +106,7 @@ function Products({ item, relatedItems }) {
           <Breadcrumb.Item active>{item_object.name}</Breadcrumb.Item>
         </Breadcrumb>
         <Row>
-          <Col lg={5} className={styles.imageContainer}>
+          <Col lg={5} xs={12} sm={4} className={styles.imageContainer}>
             <Image
               src={item_object.imageLink}
               layout="fill"
@@ -114,9 +114,9 @@ function Products({ item, relatedItems }) {
               alt={item_object.name}
             />
           </Col>
-          <Col lg={7}>
+          <Col lg={7} xs={12} sm={8}>
             <Row>
-              <h4>{item_object.name}</h4>
+              <h4 className={styles.itemName}>{item_object.name}</h4>
             </Row>
             <Row className={styles.infoBar}>
               <div>
@@ -139,11 +139,11 @@ function Products({ item, relatedItems }) {
                   return <li key={i}>{point}</li>;
                 })}
               </ul>
-              <a href="#" className={styles.moreInfoLink}>
+              <a href="#purchase_row" className={styles.moreInfoLink}>
                 View More Info
               </a>
             </Row>
-            <Row className={styles.purchaseRow}>
+            <Row className={styles.purchaseRow} id="purchase_row">
               <h5 className={styles.purchaseHeader}>Payment</h5>
               <div className={styles.purchaseButton}>
                 <Form.Control
@@ -162,8 +162,9 @@ function Products({ item, relatedItems }) {
                 />
                 <Button
                   variant="primary"
-                  className={styles.button}
+                  className={styles.purchase_button}
                   disabled={Number(purchaseAmount) > 0 ? false : true}
+                  id="purchase_button"
                 >
                   Buy
                 </Button>
@@ -171,6 +172,7 @@ function Products({ item, relatedItems }) {
             </Row>
           </Col>
         </Row>
+        {/*  <div id="productDetailNav" style={{ height: "55px" }}></div> */}
         <Row className={styles.productDetailNav}>
           <Col>
             <ul>
@@ -198,7 +200,7 @@ function Products({ item, relatedItems }) {
           </Col>
         </Row>
         <Row className={styles.spec_suggest_row}>
-          <Col lg={9}>
+          <Col lg={9} sm={12} xs={12} className={styles.spec_review_col}>
             <motion.div
               variants={divAnimation}
               initial="inactive"
@@ -230,7 +232,10 @@ function Products({ item, relatedItems }) {
                   <h6>Check out What the Others Are Saying!</h6>
                 </div>
                 <div>
-                  <Button variant="primary" className={styles.button}>
+                  <Button
+                    variant="outline-primary"
+                    className={styles.review_button}
+                  >
                     Write A Review
                   </Button>
                 </div>
@@ -268,32 +273,34 @@ function Products({ item, relatedItems }) {
               </div>
             </motion.div>
           </Col>
-          <Col lg={3} className={styles.suggestionsCol}>
-            <h4 className={styles.relatedProductsHeader}>Related Products</h4>
-            {relatedItems_array.map((item, i) => {
-              return (
-                <Link
-                  href={`/Products/Item/${item_object.category}/${item.name}`}
-                  passHref={true}
-                  key={i}
-                >
-                  <a className={styles.suggestionLinks}>
-                    <div className={styles.suggestionCard}>
-                      <div>
-                        <img
-                          src={item.imageLink}
-                          className={styles.suggestionImage}
-                        />
+          <Col lg={3} sm={12} xs={12} className={styles.suggestionsCol}>
+            <div className={styles.suggestionsDiv}>
+              <h4 className={styles.relatedProductsHeader}>Related Products</h4>
+              {relatedItems_array.map((item, i) => {
+                return (
+                  <Link
+                    href={`/Products/Item/${item_object.category}/${item.name}`}
+                    passHref={true}
+                    key={i}
+                  >
+                    <a className={styles.suggestionLinks}>
+                      <div className={styles.suggestionCard}>
+                        <div>
+                          <img
+                            src={item.imageLink}
+                            className={styles.suggestionImage}
+                          />
+                        </div>
+                        <div className={styles.suggestionInfo}>
+                          <div>{item.name}</div>
+                          <div>{item.price}&#2547;</div>
+                        </div>
                       </div>
-                      <div className={styles.suggestionInfo}>
-                        <div>{item.name}</div>
-                        <div>{item.price}&#2547;</div>
-                      </div>
-                    </div>
-                  </a>
-                </Link>
-              );
-            })}
+                    </a>
+                  </Link>
+                );
+              })}
+            </div>
           </Col>
         </Row>
       </Container>

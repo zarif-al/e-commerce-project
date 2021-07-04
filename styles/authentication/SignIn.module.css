@@ -1,0 +1,63 @@
+.mainContainer {
+  height: 70vh;
+}
+
+.mainRow {
+  height: 100%;
+  align-items: center;
+}
+
+.emailSignInCol {
+  height: 90%;
+  border-right: 1px solid black;
+}
+
+.emailSignIn {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.providerSignInCol {
+  height: 90%;
+  border-left: 1px solid black;
+}
+
+.providerSignIn {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.providerSignIn > .providerButton:nth-child(1) {
+  margin-bottom: 1rem;
+}
+
+.buttonRow {
+  justify-content: center;
+}
+
+.buttonIconCol {
+  text-align: right;
+}
+
+.buttonTextCol {
+  text-align: left;
+}
+
+.fa-google {
+  background: conic-gradient(
+      from -45deg,
+      #ea4335 110deg,
+      #4285f4 90deg 180deg,
+      #34a853 180deg 270deg,
+      #fbbc05 270deg
+    )
+    73% 55%/150% 150% no-repeat;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}

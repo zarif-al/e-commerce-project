@@ -322,7 +322,13 @@ function Items({ category, brands, handleOverlay }) {
               ) : (
                 items.map((item, i) => {
                   return (
-                    <Col lg={3} xs={12} className={styles.itemCol} key={i}>
+                    <Col
+                      lg={3}
+                      xs={12}
+                      sm={4}
+                      className={styles.itemCol}
+                      key={i}
+                    >
                       <Link
                         href={`/Products/Item/${item.category}/${item.name}`}
                         passHref={true}

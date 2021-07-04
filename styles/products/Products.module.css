@@ -253,7 +253,32 @@
   }
 }
 
-@media screen and (min-width: 577px) and (max-width: 1440px) {
+@media screen and (min-width: 577px) and (max-width: 800px) {
+  .mainContainer {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .pageOptions {
+    justify-content: space-evenly;
+    font-size: 0.9rem;
+    padding: 0.3rem 0rem;
+  }
+
+  .mobileFilter {
+    display: block;
+  }
+
+  .menuCol {
+    display: none;
+  }
+
+  .productsCol {
+    padding: 0;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 1440px) {
   .mainContainer {
     padding: 0 5rem;
   }

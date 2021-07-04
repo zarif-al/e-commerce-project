@@ -30,8 +30,9 @@
 
 @media screen and (max-width: 851px) {
   .indexContainer {
-    margin-top: 0rem;
+    margin: 0rem;
     padding: 0;
+    max-width: 100% !important;
   }
   .carouselImage {
     height: 190px;
