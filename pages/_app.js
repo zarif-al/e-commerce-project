@@ -1,15 +1,17 @@
+import "bootstrap/dist/css/bootstrap.min.css";
+import "../styles/globals.css";
 import Head from "next/head";
 import NavBar from "../components/nav/Nav";
 import SubNav from "../components/nav/SubNav";
 import Footer from "../components/layout/Footer";
 import SideNav from "../components/nav/components/SideNav";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../styles/globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { Provider } from "next-auth/client";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { useEffect, useState } from "react";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
+config.autoAddCss = false;
+
 function MyApp({ Component, pageProps }) {
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
