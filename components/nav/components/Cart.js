@@ -15,7 +15,6 @@ import { itemCount } from "../../../functions/functions";
 function Cart() {
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
-  console.log(data);
   const [drop, setDrop] = useState(false);
   const changeDrop = () => setDrop(!drop);
   const dropdown = {

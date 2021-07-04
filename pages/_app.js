@@ -33,25 +33,24 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <Provider session={pageProps.session}>
-      <div style={{ display: "flex", flexDirection: "column" }} id="mainDiv">
-        <Head>
-          <title>E-Commerce App</title>
-        </Head>
-        <NavBar
-          screen="home"
-          showSidebar={showSidebar}
-          handleOverlay={handleOverlay}
-        />
-        <SubNav categories={Categories} />
-        <SideNav
-          categories={Categories}
-          sidebar={sidebar}
-          showSidebar={showSidebar}
-          handleOverlay={handleOverlay}
-        />
-        <Component {...pageProps} handleOverlay={handleOverlay} />
-        <Footer />
-      </div>
+      <Head>
+        <title>E-Commerce App</title>
+      </Head>
+
+      <NavBar
+        screen="home"
+        showSidebar={showSidebar}
+        handleOverlay={handleOverlay}
+      />
+      <SubNav categories={Categories} />
+      <SideNav
+        categories={Categories}
+        sidebar={sidebar}
+        showSidebar={showSidebar}
+        handleOverlay={handleOverlay}
+      />
+      <Component {...pageProps} handleOverlay={handleOverlay} />
+      <Footer />
     </Provider>
   );
 }
