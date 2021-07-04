@@ -339,7 +339,9 @@ function Items({ category, brands, handleOverlay }) {
                     >
                       <Card className={styles.card}>
                         <Link
-                          href={`/Products/Item/${item.category}/${item.name}`}
+                          href={`/Products/Item/${item.category}/${encodeURI(
+                            item.name
+                          )}`}
                           passHref={true}
                         >
                           <a className={styles.cardLink}>
@@ -387,7 +389,9 @@ function Items({ category, brands, handleOverlay }) {
                                 Add to Cart!
                               </Button>
                               <Link
-                                href={`/Products/Item/${item.category}/${item.name}`}
+                                href={`/Products/Item/${
+                                  item.category
+                                }/${encodeURI(item.name)}`}
                                 passHref={true}
                               >
                                 <Button
