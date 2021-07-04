@@ -339,9 +339,9 @@ function Items({ category, brands, handleOverlay }) {
                     >
                       <Card className={styles.card}>
                         <Link
-                          href={`/Products/Item/${item.category}/${encodeURI(
-                            item.name
-                          )}`}
+                          href={`/Products/Item/${
+                            item.category
+                          }/${encodeURIComponent(item.name)}`}
                           passHref={true}
                         >
                           <a className={styles.cardLink}>
@@ -391,7 +391,7 @@ function Items({ category, brands, handleOverlay }) {
                               <Link
                                 href={`/Products/Item/${
                                   item.category
-                                }/${encodeURI(item.name)}`}
+                                }/${encodeURIComponent(item.name)}`}
                                 passHref={true}
                               >
                                 <Button

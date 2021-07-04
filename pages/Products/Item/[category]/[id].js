@@ -279,7 +279,9 @@ function Products({ item, relatedItems }) {
               {relatedItems_array.map((item, i) => {
                 return (
                   <Link
-                    href={`/Products/Item/${item_object.category}/${item.name}`}
+                    href={`/Products/Item/${
+                      item_object.category
+                    }/${encodeURIComponent(item.name)}`}
                     passHref={true}
                     key={i}
                   >
