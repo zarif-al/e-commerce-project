@@ -281,7 +281,7 @@ function Products({ item, relatedItems }) {
                   <Link
                     href={`/Products/Item/${
                       item_object.category
-                    }/${encodeURIComponent(item.name)}`}
+                    }/${encodeURIComponent(item.productCode)}`}
                     passHref={true}
                     key={i}
                   >
@@ -317,7 +317,7 @@ export async function getStaticPaths() {
   const data = await db
     .collection("Items")
     .find()
-    .project({ _id: 0, name: 1, category: 1 })
+    .project({ _id: 0, productCode: 1, category: 1 })
     .toArray();
   if (!data) {
     return {
@@ -327,7 +327,7 @@ export async function getStaticPaths() {
   const paths = data.map((items) => {
     return {
       params: {
-        id: items.name,
+        id: items.productCode,
         category: items.category,
       },
     };
@@ -342,7 +342,7 @@ export async function getStaticProps({ params }) {
   const { db } = await connectToDatabase();
   const Item = await db
     .collection("Items")
-    .find({ category: params.category, name: params.id })
+    .find({ category: params.category, productCode: params.id })
     .toArray();
 
   let RelatedItems;

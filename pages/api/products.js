@@ -47,6 +47,7 @@ export default async (req, res) => {
           price: 1,
           description: 1,
           imageLink: 1,
+          productCode: 1,
         })
         .sort({ price: userSort })
         .skip(pageNumber > 0 ? (pageNumber - 1) * nPerPage : 0)

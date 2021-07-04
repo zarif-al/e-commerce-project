@@ -19,7 +19,7 @@ function Featured({ Items }) {
         <Link
           href={`/Products/Item/${encodeURIComponent(
             item.category
-          )}/${encodeURIComponent(item.name)}`}
+          )}/${encodeURIComponent(item.productCode)}`}
           passHref={true}
         >
           <a>
