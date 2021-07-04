@@ -18,10 +18,10 @@
   justify-content: center;
 }
 
-.spinner {
+.signInBtn,
+.cartBtn {
   color: black;
   background-color: white;
-  border-radius: 5px;
   font-size: 1.1rem;
   height: 2.5rem;
   width: 2.5rem;
@@ -31,10 +31,10 @@
   justify-content: center;
 }
 
-.signInBtn,
-.cartBtn {
+.spinner {
   color: black;
   background-color: white;
+  border-radius: 5px;
   font-size: 1.1rem;
   height: 2.5rem;
   width: 2.5rem;

@@ -53,7 +53,7 @@ function Products({ item, relatedItems }) {
     for (var key1 in specifications) {
       let specification = specifications[key1];
       specificationRows.push(
-        <Row className={styles.key1}>
+        <Row className={styles.key1} key={key1}>
           <Col>
             <h5>{key1}</h5>
           </Col>
@@ -106,7 +106,7 @@ function Products({ item, relatedItems }) {
           <Breadcrumb.Item active>{item_object.name}</Breadcrumb.Item>
         </Breadcrumb>
         <Row>
-          <Col lg={5} xs={12} sm={4} className={styles.imageContainer}>
+          <Col lg={5} xs={12} sm={12} md={4} className={styles.imageContainer}>
             <Image
               src={item_object.imageLink}
               layout="fill"
@@ -114,7 +114,7 @@ function Products({ item, relatedItems }) {
               alt={item_object.name}
             />
           </Col>
-          <Col lg={7} xs={12} sm={8}>
+          <Col lg={7} xs={12} sm={12} md={8}>
             <Row>
               <h4 className={styles.itemName}>{item_object.name}</h4>
             </Row>
@@ -337,7 +337,6 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  console.log(params);
   const { db } = await connectToDatabase();
   const Item = await db
     .collection("Items")

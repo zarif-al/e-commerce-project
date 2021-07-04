@@ -2,15 +2,13 @@ import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { signIn, signOut, useSession } from "next-auth/client";
 import {
-  faShoppingCart,
   faSignOutAlt,
-  faSignInAlt,
   faListAlt,
-  faIdBadge,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import styles from "../../../styles/nav/components/InSession.module.css";
 import { useState } from "react";
-import { motion, AnimateSharedLayout } from "framer-motion";
+import { motion } from "framer-motion";
 function inSession() {
   const [drop, setDrop] = useState(false);
   const changeDrop = () => setDrop(!drop);
@@ -26,14 +24,9 @@ function inSession() {
   };
   return (
     <>
-      <motion.div className={styles.acc_sidebar}>
-        <a href="#" className={styles.sidebar_btn} onClick={changeDrop}>
-          <img
-            /*   src={session.user.image ? session.user.image : "/defaultIcon.png"} */
-            src="/defaultIcon.png"
-            style={{ height: "20px", width: "20px" }}
-          ></img>{" "}
-          {/*  {session.user.name ? session.user.name : "Account"} */}
+      <div className={styles.acc_sidebar}>
+        <a className={styles.sidebar_btn} onClick={changeDrop}>
+          <FontAwesomeIcon icon={faUser} color="black" size="lg" />
         </a>
         <motion.div
           id="myDropdown"
@@ -43,14 +36,15 @@ function inSession() {
           variants={dropdown}
         >
           <motion.ul className={styles.accMenuList}>
-            <li>
+            {/*  <li>
               <FontAwesomeIcon icon={faIdBadge} color="black" size="sm" />{" "}
               Profile
-            </li>
+            </li> */}
             <li>
               <FontAwesomeIcon icon={faListAlt} color="black" size="sm" /> My
               Orders
             </li>
+            <hr className={styles.listDivider} />
             <li
               onClick={() => {
                 signOut();
@@ -61,7 +55,7 @@ function inSession() {
             </li>
           </motion.ul>
         </motion.div>
-      </motion.div>
+      </div>
     </>
   );
 }

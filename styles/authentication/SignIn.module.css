@@ -1,10 +1,13 @@
 .mainContainer {
-  height: 70vh;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.mainRow {
-  height: 100%;
+.signInRow {
   align-items: center;
+  height: 100%;
 }
 
 .emailSignInCol {
@@ -32,7 +35,7 @@
 }
 
 .providerSignIn > .providerButton:nth-child(1) {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .buttonRow {
@@ -47,17 +50,34 @@
   text-align: left;
 }
 
-.fa-google {
-  background: conic-gradient(
-      from -45deg,
-      #ea4335 110deg,
-      #4285f4 90deg 180deg,
-      #34a853 180deg 270deg,
-      #fbbc05 270deg
-    )
-    73% 55%/150% 150% no-repeat;
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+@media screen and (max-width: 576px) {
+  .mainContainer {
+    height: 60vh;
+  }
+  .emailSignInCol {
+    height: 50%;
+    border-bottom: 1px solid black;
+    border-right: none;
+  }
+
+  .providerSignInCol {
+    height: 50%;
+    border-left: none;
+  }
+}
+
+@media screen and (min-width: 577px) and (max-width: 712px) {
+  .mainContainer {
+    height: 40vh;
+  }
+  .emailSignInCol {
+    height: 50%;
+    border-bottom: 1px solid black;
+    border-right: none;
+  }
+
+  .providerSignInCol {
+    height: 50%;
+    border-left: none;
+  }
 }

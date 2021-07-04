@@ -8,19 +8,13 @@ import {
   faBars,
 } from "@fortawesome/free-solid-svg-icons";
 import Link from "next/link";
-import useSWR from "swr";
-import { itemCount } from "../../functions/functions";
-import { useRouter } from "next/router";
 import Spinner from "react-bootstrap/Spinner";
-import { signIn, signOut, useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/client";
 import InSession from "./components/inSession";
+import Cart from "./components/cart";
 import styles from "../../styles/nav/Nav.module.css";
 function NavBar({ screen, showSidebar, handleOverlay }) {
   const [session, loading] = useSession();
-  const router = useRouter();
-  const fetcher = (url) => fetch(url).then((r) => r.json());
-  const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
-
   const toggle = () => {
     if (screen === "signUp") {
       return null;
@@ -49,26 +43,7 @@ function NavBar({ screen, showSidebar, handleOverlay }) {
                 </Nav.Link>
               </>
             )}
-            <Link href="/cart" passHref>
-              <Nav.Link className={styles.cartBtn}>
-                <span className="fa-layers fa-fw">
-                  <FontAwesomeIcon icon={faShoppingCart} color="black" />
-                  <span
-                    className="fa-layers-counter fa-layers-top"
-                    style={{ fontSize: "2rem" }}
-                  >
-                    {isValidating || data === undefined ? (
-                      <Spinner
-                        animation="border"
-                        style={{ marginBottom: "1rem" }}
-                      />
-                    ) : (
-                      itemCount(data)
-                    )}
-                  </span>
-                </span>
-              </Nav.Link>
-            </Link>
+            <Cart />
           </Nav>
         </>
       );

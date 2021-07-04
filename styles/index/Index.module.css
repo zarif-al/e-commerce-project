@@ -28,7 +28,18 @@
   width: 100%;
 }
 
-@media screen and (max-width: 851px) {
+@media screen and (max-width: 576px) {
+  .indexContainer {
+    margin: 0rem;
+    padding: 0;
+    max-width: 100% !important;
+  }
+  .carouselImage {
+    height: 150px;
+  }
+}
+
+@media screen and (min-width: 577px) and (max-width: 851px) {
   .indexContainer {
     margin: 0rem;
     padding: 0;

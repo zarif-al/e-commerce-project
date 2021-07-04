@@ -1,5 +1,5 @@
-import { providers, signIn } from "next-auth/client";
-import { csrfToken } from "next-auth/client";
+import { getProviders, signIn } from "next-auth/client";
+import { getCsrfToken } from "next-auth/client";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -16,13 +16,14 @@ import * as Yup from "yup";
 import { useRouter } from "next/router";
 import Spinner from "react-bootstrap/Spinner";
 import { useState } from "react";
+import ErrorModal from "../../components/auth/components/ErrorModal";
 import styles from "../../styles/authentication/SignIn.module.css";
 export default function SignIn({ providers, csrfToken }) {
   //use formik put email and csrf token in post body to action address
   const [disable, setDisable] = useState(false);
   const router = useRouter();
+  const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState("No Error");
-  const [msgColor, setMsgColor] = useState("lightgray");
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -39,7 +40,10 @@ export default function SignIn({ providers, csrfToken }) {
           Accept: "application/json",
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email: values.email, csrfToken: csrfToken }),
+        body: JSON.stringify({
+          email: values.email,
+          csrfToken: csrfToken,
+        }),
       });
       router.push(resp.url);
     },
@@ -47,20 +51,31 @@ export default function SignIn({ providers, csrfToken }) {
 
   if (router.query.error !== undefined && message === "No Error") {
     if (router.query.error === "OAuthAccountNotLinked") {
-      setMsgColor("red");
       setMessage(
-        "This Email is registered under a different provider. Please select the provider you used the first time."
+        "This Email is registered under a different provider (Google,Facebook). Please select the provider you used the first time."
       );
+    } else if (router.query.error === "OAuthSignin") {
+      setMessage("Error in constructing an authorization URL");
+    } else if (router.query.error === "OAuthCallback") {
+      setMessage(" Error in handling the response from an OAuth provider.");
+    } else if (router.query.error === "OAuthCreateAccount") {
+      setMessage("Could not create OAuth provider user in the database.");
+    } else if (router.query.error === "EmailCreateAccount") {
+      setMessage("Could not create email provider user in the database.");
+    } else if (router.query.error === "EmailSignin") {
+      setMessage(" Sending the e-mail with the verification token failed.");
+    } else if (router.query.error === "CredentialsSignin") {
+      setMessage("Account/Password mismatch.");
     } else {
-      setMsgColor("blue");
       setMessage("Please Try Another Signin Method");
     }
+    setShowModal(true);
   }
 
   return (
     <Container className={styles.mainContainer}>
-      <Row className={styles.mainRow}>
-        <Col className={styles.emailSignInCol}>
+      <Row className={styles.signInRow}>
+        <Col className={styles.emailSignInCol} xs={12} sm={12} md={6}>
           <div className={styles.emailSignIn}>
             <Form onSubmit={formik.handleSubmit} noValidate>
               <Form.Group>
@@ -91,19 +106,27 @@ export default function SignIn({ providers, csrfToken }) {
                   </>
                 ) : (
                   <>
-                    <FontAwesomeIcon
-                      icon={faEnvelope}
-                      color="black"
-                      size="lg"
-                    />{" "}
-                    Sign In with Email
+                    <Row noGutters={true} className={styles.buttonRow}>
+                      <Col xs={3} sm={2} md={2} lg={2}>
+                        <FontAwesomeIcon icon={faEnvelope} size="lg" />
+                      </Col>
+                      <Col
+                        xs={9}
+                        sm={7}
+                        md={7}
+                        lg={5}
+                        className={styles.buttonTextCol}
+                      >
+                        Sign In with Email
+                      </Col>
+                    </Row>
                   </>
                 )}
               </Button>
             </Form>
           </div>
         </Col>
-        <Col className={styles.providerSignInCol}>
+        <Col className={styles.providerSignInCol} xs={12} sm={12} md={6}>
           <div className={styles.providerSignIn}>
             {Object.values(providers).map((provider) =>
               provider.name != "Email" ? (
@@ -114,8 +137,10 @@ export default function SignIn({ providers, csrfToken }) {
                       callbackUrl: router.query.callbackUrl,
                     })
                   }
+                  block
                   disabled={disable}
                   className={styles.providerButton}
+                  key={provider.name}
                 >
                   <Row noGutters={true} className={styles.buttonRow}>
                     <Col xs={3} sm={2} md={2} lg={2}>
@@ -124,11 +149,6 @@ export default function SignIn({ providers, csrfToken }) {
                           provider.name === "Google"
                             ? faGoogle
                             : faFacebookSquare
-                        }
-                        className={
-                          provider.name === "Google"
-                            ? styles.googleIcon
-                            : styles.fbIcon
                         }
                         size="lg"
                       />
@@ -151,6 +171,11 @@ export default function SignIn({ providers, csrfToken }) {
           </div>
         </Col>
       </Row>
+      <ErrorModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
+        message={message}
+      />
       {/*   <Row
         style={{
           color: msgColor,
@@ -261,9 +286,10 @@ export default function SignIn({ providers, csrfToken }) {
   );
 }
 
-SignIn.getInitialProps = async (context) => {
+export async function getServerSideProps(context) {
+  const providers = await getProviders();
+  const csrfToken = await getCsrfToken(context);
   return {
-    providers: await providers(context),
-    csrfToken: await csrfToken(context),
+    props: { providers, csrfToken },
   };
-};
+}

@@ -317,10 +317,7 @@
   }
   .breadcrumb_custom > ol {
     font-size: 0.62rem;
-    border-radius: 30px;
     padding: 1rem 0.5rem;
-    box-shadow: 0px 1px 4px lightgray;
-    background-color: transparent;
   }
   .breadcrumb_custom > ol > li {
     padding-left: 0.05rem !important;
@@ -330,11 +327,14 @@
   }
 
   .itemName {
+    width: 100%;
     text-align: center;
   }
 
   .infoBar {
-    padding: 0 0.5rem;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
   }
 
   .infoBar > div {
@@ -397,10 +397,68 @@
     padding: 0;
   }
 }
+@media screen and (min-width: 577px) and (max-width: 712px) {
+  .breadcrumb_custom > ol {
+    font-size: 1rem;
+    padding: 1rem 0.5rem;
+  }
+  .breadcrumb_custom > ol > li {
+    padding-left: 0.1rem !important;
+  }
+  .breadcrumb_custom > ol > li::before {
+    padding-right: 0.1rem !important;
+  }
+  .suggestionsCol {
+    margin: 0.5rem 0rem;
+  }
 
-@media screen and (min-width: 577px) and (max-width: 800px) {
+  .suggestionCard {
+    width: inherit;
+  }
+
+  .suggestionImage {
+    width: 60px;
+    height: 60px;
+  }
+
+  .suggestionInfo {
+    margin-left: 0.8rem;
+  }
+
+  .suggestionInfo > div:nth-child(1) {
+    font-size: 0.8rem;
+    font-family: "Roboto", sans-serif;
+  }
+
+  .suggestionInfo > div:nth-child(2) {
+    margin-top: 0.2rem;
+    font-weight: 600;
+    color: blue;
+    font-family: "Trebuchet MS", sans-serif;
+    font-size: 0.9rem;
+  }
+  .review_button {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .reviewsHeader > div:nth-child(1) > h6 {
+    font-size: 0.73rem;
+  }
+
+  .spec_review_col {
+    overflow-x: hidden;
+    padding: 0;
+  }
+  .spec_suggest_row {
+    margin: 1rem -1rem;
+  }
+}
+
+@media screen and (min-width: 713px) and (max-width: 800px) {
   .infoBar > div {
     font-size: 0.74rem;
+    margin: 0.5rem 0.2rem;
   }
   .suggestionsCol {
     margin-top: 1rem;

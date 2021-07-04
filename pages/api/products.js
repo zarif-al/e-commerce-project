@@ -42,7 +42,6 @@ export default async (req, res) => {
           },
         })
         .project({
-          _id: 0,
           category: 1,
           name: 1,
           price: 1,

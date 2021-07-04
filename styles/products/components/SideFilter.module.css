@@ -20,7 +20,7 @@
   position: fixed;
   top: 0;
   right: -100%;
-  margin-top: 113px;
+  margin-top: 117px;
   transition: 850ms;
   z-index: 5;
   border-right: 1px solid lightgrey;
@@ -31,4 +31,10 @@
   right: 0;
   transition: 350ms;
   overflow-y: visible;
+}
+
+@media screen and (max-width: 576px) {
+  .filterMenu {
+    margin-top: 113px;
+  }
 }

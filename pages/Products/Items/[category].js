@@ -18,6 +18,9 @@ import Spinner from "react-bootstrap/Spinner";
 import Link from "next/link";
 import ProductFilter from "../../../components/products/ProductFilter";
 import SideFilter from "../../../components/products/SideFilter";
+import { cartAction } from "../../../functions/functions";
+import Toast from "react-bootstrap/Toast";
+import { mutate } from "swr";
 function Items({ category, brands, handleOverlay }) {
   //add filter sidebar for mobile
   //Add a way to set Upcoming items to show or not
@@ -55,6 +58,8 @@ function Items({ category, brands, handleOverlay }) {
   const [loading, setLoading] = useState(true);
   //
   const [showSideFilter, setShowFilter] = useState(false);
+  //For Toast. For some reason it doesn't work with a differently named variable
+  const [show, setShow] = useState(false);
   //fetch
   function getProducts() {
     fetch(
@@ -85,12 +90,14 @@ function Items({ category, brands, handleOverlay }) {
   //useEffect to getProducts on brands and user prices change
   useEffect(() => {
     //find disabled checkbox
+
     setLoading(true);
     if (selected_brands.length === 1) {
       setDisabledBrand(selected_brands[0]);
     } else {
       setDisabledBrand(null);
     }
+
     getProducts();
     //Filter Items on category //change
     /*  const currentFilter = items_object.filter((item) => {
@@ -110,6 +117,7 @@ function Items({ category, brands, handleOverlay }) {
     setMaxPrice(0);
     setMinPrice(0);
     setBrands(defaultState);
+    window.scrollTo(0, 0);
   }, [category, cookieBrand]);
   //checkList state manager
   const handleChecklist = (selection) => {
@@ -329,42 +337,71 @@ function Items({ category, brands, handleOverlay }) {
                       className={styles.itemCol}
                       key={i}
                     >
-                      <Link
-                        href={`/Products/Item/${item.category}/${item.name}`}
-                        passHref={true}
-                      >
-                        <a className={styles.cardLink}>
-                          <Card className={styles.card}>
+                      <Card className={styles.card}>
+                        <Link
+                          href={`/Products/Item/${item.category}/${item.name}`}
+                          passHref={true}
+                        >
+                          <a className={styles.cardLink}>
                             <Card.Img
                               variant="top"
                               src={item.imageLink}
                               className={styles.cardImage}
                             />
-                            <Card.Body className={styles.cardBody}>
-                              <Card.Title className={styles.cardTitle}>
-                                {item.name}
-                              </Card.Title>
-                              <div className={styles.descriptionList}>
-                                <ul>
-                                  {item.description.map((desc, i) => {
-                                    return <li key={i}>{desc}</li>;
-                                  })}
-                                </ul>
-                              </div>
-                              <Card.Text className={styles.cardFooter}>
-                                <span className={styles.cardFooter_price}>
-                                  {item.price > 0
-                                    ? item.price + "৳"
-                                    : "Upcoming"}
-                                </span>
-                                <Button variant="outline-primary" block>
-                                  Buy Now
+                          </a>
+                        </Link>
+                        <Card.Body className={styles.cardBody}>
+                          <Card.Title className={styles.cardTitle}>
+                            {item.name}
+                          </Card.Title>
+                          <div className={styles.descriptionList}>
+                            <ul>
+                              {item.description.map((desc, i) => {
+                                return <li key={i}>{desc}</li>;
+                              })}
+                            </ul>
+                          </div>
+
+                          <Card.Text className={styles.cardFooter}>
+                            <span className={styles.cardFooter_price}>
+                              {item.price > 0 ? item.price + "৳" : "Upcoming"}
+                            </span>
+                            <div className={styles.cardFooter_buttons}>
+                              <Button
+                                variant="outline-success"
+                                block
+                                onClick={async () => {
+                                  const resp = await cartAction({
+                                    action: "addOne",
+                                    id: item._id,
+                                    image: item.imageLink,
+                                    name: item.name,
+                                    price: item.price,
+                                  });
+                                  if (resp === "success") {
+                                    mutate("/api/cartApi");
+                                    setShow(true);
+                                  }
+                                }}
+                              >
+                                Add to Cart!
+                              </Button>
+                              <Link
+                                href={`/Products/Item/${item.category}/${item.name}`}
+                                passHref={true}
+                              >
+                                <Button
+                                  href="#"
+                                  variant="outline-primary"
+                                  block
+                                >
+                                  View
                                 </Button>
-                              </Card.Text>
-                            </Card.Body>
-                          </Card>
-                        </a>
-                      </Link>
+                              </Link>
+                            </div>
+                          </Card.Text>
+                        </Card.Body>
+                      </Card>
                     </Col>
                   );
                 })
@@ -384,6 +421,7 @@ function Items({ category, brands, handleOverlay }) {
                     className={styles.paginationButtons}
                     onClick={() => {
                       if (pageNumber - 1 > 0) {
+                        window.scrollTo(0, 0);
                         setFormPageNumber(formPageNumber - 1);
                         setPageNumber(pageNumber - 1);
                       }
@@ -401,8 +439,10 @@ function Items({ category, brands, handleOverlay }) {
                       if (
                         parseInt(e.target.value) > 0 &&
                         parseInt(e.target.value) <= Math.ceil(total / nPerPage)
-                      )
+                      ) {
+                        window.scrollTo(0, 0);
                         setPageNumber(parseInt(e.target.value));
+                      }
                     }}
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
@@ -411,6 +451,7 @@ function Items({ category, brands, handleOverlay }) {
                           parseInt(e.target.value) <=
                             Math.ceil(total / nPerPage)
                         ) {
+                          window.scrollTo(0, 0);
                           setPageNumber(parseInt(e.target.value));
                         }
                       }
@@ -438,6 +479,7 @@ function Items({ category, brands, handleOverlay }) {
                     className={styles.paginationButtons}
                     onClick={() => {
                       if (pageNumber + 1 <= Math.ceil(total / nPerPage)) {
+                        window.scrollTo(0, 0);
                         setFormPageNumber(formPageNumber + 1);
                         setPageNumber(pageNumber + 1);
                       }
@@ -447,6 +489,33 @@ function Items({ category, brands, handleOverlay }) {
                 <span>of {Math.ceil(total / nPerPage)}</span>
               </div>
             </Row>
+            <div
+              style={{
+                position: "fixed",
+                bottom: 0,
+                left: "60%",
+                transform: "translate(-60%)",
+              }}
+            >
+              <Toast
+                onClose={() => setShow(false)}
+                show={show}
+                delay={3000}
+                autohide
+              >
+                <Toast.Body
+                  style={{
+                    background: "green",
+                    color: "white",
+                    border: "1px solid black",
+                    borderRadius: "5%",
+                    opacity: "0.7",
+                  }}
+                >
+                  Added To Cart!
+                </Toast.Body>
+              </Toast>
+            </div>
           </Col>
         </Row>
         <SideFilter
