@@ -10,6 +10,7 @@ import { Provider } from "next-auth/client";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { useEffect, useState } from "react";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
+import { Container } from "react-bootstrap";
 config.autoAddCss = false;
 
 function MyApp({ Component, pageProps }) {
@@ -36,21 +37,22 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <title>E-Commerce App</title>
       </Head>
-
-      <NavBar
-        screen="home"
-        showSidebar={showSidebar}
-        handleOverlay={handleOverlay}
-      />
-      <SubNav categories={Categories} />
-      <SideNav
-        categories={Categories}
-        sidebar={sidebar}
-        showSidebar={showSidebar}
-        handleOverlay={handleOverlay}
-      />
-      <Component {...pageProps} handleOverlay={handleOverlay} />
-      <Footer />
+      <Container fluid style={{ padding: "0" }}>
+        <NavBar
+          screen="home"
+          showSidebar={showSidebar}
+          handleOverlay={handleOverlay}
+        />
+        <SubNav categories={Categories} />
+        <SideNav
+          categories={Categories}
+          sidebar={sidebar}
+          showSidebar={showSidebar}
+          handleOverlay={handleOverlay}
+        />
+        <Component {...pageProps} handleOverlay={handleOverlay} />
+        <Footer />
+      </Container>
     </Provider>
   );
 }
