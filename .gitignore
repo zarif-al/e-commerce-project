@@ -39,3 +39,7 @@ backup Pagination.txt
 reducer
 notes.txt
 unused
+
+#unfinished
+/pages/cart.js
+/pages/orders.js
