@@ -20,6 +20,7 @@ function Featured({ Items }) {
           href={`/Products/Item/${encodeURIComponent(
             item.category
           )}/${encodeURIComponent(item.name)}`}
+          passHref={true}
         >
           <a>
             <Card className={styles.card}>
