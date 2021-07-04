@@ -34,12 +34,13 @@ yarn-error.log*
 # vercel
 .vercel
 
+#unfinished
+/pages/cart
+/pages/orders
+
 #myDocsAndFolder
 backup Pagination.txt
 reducer
 notes.txt
 unused
 
-#unfinished
-/pages/cart.js
-/pages/orders.js
