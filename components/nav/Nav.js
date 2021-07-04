@@ -11,7 +11,7 @@ import Link from "next/link";
 import Spinner from "react-bootstrap/Spinner";
 import { signIn, useSession } from "next-auth/client";
 import InSession from "./components/inSession";
-import Cart from "./components/cart";
+import Cart from "./components/Cart";
 import styles from "../../styles/nav/Nav.module.css";
 function NavBar({ screen, showSidebar, handleOverlay }) {
   const [session, loading] = useSession();
