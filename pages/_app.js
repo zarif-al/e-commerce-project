@@ -10,8 +10,6 @@ import { Provider } from "next-auth/client";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { useEffect, useState } from "react";
 import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
-config.autoAddCss = false;
-
 function MyApp({ Component, pageProps }) {
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
