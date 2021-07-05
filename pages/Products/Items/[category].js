@@ -117,6 +117,8 @@ function Items({ category, brands, handleOverlay }) {
     setMaxPrice(0);
     setMinPrice(0);
     setBrands(defaultState);
+    setFormPageNumber(1);
+    setPageNumber(1);
     window.scrollTo(0, 0);
   }, [category, cookieBrand]);
   //checkList state manager
@@ -367,9 +369,15 @@ function Items({ category, brands, handleOverlay }) {
                           </div>
 
                           <Card.Text className={styles.cardFooter}>
-                            <span className={styles.cardFooter_price}>
-                              {item.price > 0 ? item.price + "৳" : "Upcoming"}
-                            </span>
+                            {item.price > 0 ? (
+                              <span className={styles.cardFooter_price}>
+                                &#36;{item.price}
+                              </span>
+                            ) : (
+                              <span className={styles.cardFooter_price}>
+                                Upcoming !
+                              </span>
+                            )}
                             <div className={styles.cardFooter_buttons}>
                               <Button
                                 variant="outline-success"
@@ -387,6 +395,7 @@ function Items({ category, brands, handleOverlay }) {
                                     setShow(true);
                                   }
                                 }}
+                                disabled={item.price === 0 ? true : false}
                               >
                                 Add to Cart!
                               </Button>

@@ -11,9 +11,11 @@ import Button from "react-bootstrap/Button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 function Products({ item, relatedItems }) {
+  //Fix for Json Parse error given in vercel logs
   if (item === undefined || relatedItems === undefined) {
     return <></>;
   }
+  //
   const [purchaseAmount, setPurchaseAmount] = useState(1);
   const [direction, setDirection] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);

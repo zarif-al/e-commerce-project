@@ -33,7 +33,9 @@ function Featured({ Items }) {
                 <Card.Title className={styles.cardTitle}>
                   {item.name}
                 </Card.Title>
-                <Card.Text className={styles.cardText}>{item.price}৳</Card.Text>
+                <Card.Text className={styles.cardText}>
+                  &#36;{item.price}
+                </Card.Text>
               </Card.Body>
             </Card>
           </a>
