@@ -122,9 +122,15 @@ function Products({ item, relatedItems }) {
               <h4 className={styles.itemName}>{item_object.name}</h4>
             </Row>
             <Row className={styles.infoBar}>
-              <div>
-                Price : <strong>{item_object.price}&#2547;</strong>
-              </div>
+              {item_object.price > 0 ? (
+                <div>
+                  Price : <strong>&#36;{item_object.price}</strong>
+                </div>
+              ) : (
+                <div>
+                  Price : <strong>Upcoming!</strong>
+                </div>
+              )}
               <div>
                 Status : <strong>In Stock</strong>
               </div>
@@ -168,6 +174,7 @@ function Products({ item, relatedItems }) {
                   className={styles.purchase_button}
                   disabled={Number(purchaseAmount) > 0 ? false : true}
                   id="purchase_button"
+                  disabled={item_object.price > 0 ? false : true}
                 >
                   Buy
                 </Button>
@@ -298,7 +305,11 @@ function Products({ item, relatedItems }) {
                         </div>
                         <div className={styles.suggestionInfo}>
                           <div>{item.name}</div>
-                          <div>{item.price}&#2547;</div>
+                          {item.price > 0 ? (
+                            <div>{item.price}&#2547;</div>
+                          ) : (
+                            <div>Upcoming!</div>
+                          )}
                         </div>
                       </div>
                     </a>
