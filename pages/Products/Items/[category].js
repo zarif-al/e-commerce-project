@@ -95,7 +95,6 @@ function Items({ category, brands, handleOverlay }) {
   //useEffect to getProducts on brands and user prices change
   useEffect(() => {
     //find disabled checkbox
-
     setLoading(true);
     if (selected_brands.length === 1) {
       setDisabledBrand(selected_brands[0]);
@@ -149,7 +148,15 @@ function Items({ category, brands, handleOverlay }) {
     setShowFilter(!showSideFilter);
     handleOverlay();
   };
-
+  //handle select options
+  //handle sort options
+  const handleSort = (e) => {
+    setSort(e.target.value);
+  };
+  //handle nPerPage
+  const handleShow = (e) => {
+    setnPerPage(e.target.value);
+  };
   return (
     <>
       <Container fluid className={styles.mainContainer}>
@@ -257,68 +264,19 @@ function Items({ category, brands, handleOverlay }) {
               <div className={styles.viewOptions}>
                 <div className={styles.showDiv}>
                   <label htmlFor="show">Show: </label>
-                  <select name="show" id="show">
-                    <option
-                      value="20"
-                      onClick={() => {
-                        setnPerPage(20);
-                      }}
-                    >
-                      20
-                    </option>
-                    <option
-                      value="24"
-                      onClick={() => {
-                        setnPerPage(24);
-                      }}
-                    >
-                      24
-                    </option>
-                    <option
-                      value="48"
-                      onClick={() => {
-                        setnPerPage(48);
-                      }}
-                    >
-                      48
-                    </option>
-                    <option
-                      value="75"
-                      onClick={() => {
-                        setnPerPage(75);
-                      }}
-                    >
-                      75
-                    </option>
-                    <option
-                      value="90"
-                      onClick={() => {
-                        setnPerPage(90);
-                      }}
-                    >
-                      90
-                    </option>
+                  <select name="show" id="show" onChange={handleShow}>
+                    <option value="20">20</option>
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                    <option value="75">75</option>
+                    <option value="90">90</option>
                   </select>
                 </div>
                 <div className={styles.sortDiv}>
                   <label htmlFor="sort">Sort: </label>
-                  <select name="sort" id="sort">
-                    <option
-                      value="1"
-                      onClick={() => {
-                        setSort(1);
-                      }}
-                    >
-                      Price (Low {`>`} High)
-                    </option>
-                    <option
-                      value="-1"
-                      onClick={() => {
-                        setSort(-1);
-                      }}
-                    >
-                      Price (High {`>`} Low)
-                    </option>
+                  <select name="sort" id="sort" onChange={handleSort}>
+                    <option value="1">Price (Low {`>`} High)</option>
+                    <option value="-1">Price (High {`>`} Low)</option>
                   </select>
                 </div>
               </div>
