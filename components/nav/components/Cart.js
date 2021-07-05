@@ -1,22 +1,25 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { signIn, signOut, useSession } from "next-auth/client";
-import {
-  faSignOutAlt,
-  faListAlt,
-  faShoppingCart,
-} from "@fortawesome/free-solid-svg-icons";
+import { faShoppingCart, faTrash } from "@fortawesome/free-solid-svg-icons";
 import useSWR from "swr";
 import styles from "../../../styles/nav/components/Cart.module.css";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import Spinner from "react-bootstrap/Spinner";
-import { itemCount } from "../../../functions/functions";
-function Cart() {
+import { itemCount, cartTotal, cartAction } from "../../../functions/functions";
+import Button from "react-bootstrap/Button";
+import { mutate } from "swr";
+function Cart({ handleOverlay }) {
+  //states
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
   const [drop, setDrop] = useState(false);
-  const changeDrop = () => setDrop(!drop);
+  //Drop state changer
+  const changeDrop = () => {
+    handleOverlay();
+    setDrop(!drop);
+  };
+  //motion framer settings
   const dropdown = {
     visible: {
       right: 0,
@@ -27,52 +30,112 @@ function Cart() {
       transition: { duration: 0.3 },
     },
   };
+  //holding cart, might switch to directly using data
+  let cart = null;
+  if (data != undefined) {
+    if (data.data[0].cart !== undefined) {
+      cart = data.data[0].cart;
+    }
+  }
+  //
+  //remove item from cart function
+  const removeItem = async (index) => {
+    const item = {
+      id: cart[index].id,
+      action: "delete",
+    };
+    const resp = await cartAction(item);
+    if (resp === "success") {
+      mutate("/api/cartApi");
+    }
+  };
   return (
     <>
-      <div className={styles.acc_sidebar}>
-        <a className={styles.sidebar_btn} onClick={changeDrop}>
-          <span className="fa-layers fa-fw">
-            <FontAwesomeIcon icon={faShoppingCart} color="black" />
-            <span
-              className="fa-layers-counter fa-layers-top"
-              style={{ fontSize: "2rem" }}
-            >
-              {isValidating || data === undefined ? (
-                <Spinner animation="border" style={{ marginBottom: "1rem" }} />
-              ) : (
-                itemCount(data)
-              )}
-            </span>
+      <div
+        className={
+          drop ? styles.backdrop + " " + styles.active : styles.backdrop
+        }
+        onClick={() => {
+          handleOverlay();
+          changeDrop();
+        }}
+      ></div>
+      {/*       <div className={styles.cart_sidebar}> */}
+      <a className={styles.cart_btn} onClick={changeDrop}>
+        <span className="fa-layers fa-fw">
+          <FontAwesomeIcon icon={faShoppingCart} color="black" />
+          <span
+            className="fa-layers-counter fa-layers-top"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "2.3rem",
+              padding: "0.5rem",
+            }}
+          >
+            {isValidating || data === undefined ? (
+              <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
+            ) : (
+              itemCount(data)
+            )}
           </span>
-        </a>
-        <motion.div
-          id="myDropdown"
-          className={styles.dropdownContent}
-          initial={"hidden"}
-          animate={drop ? "visible" : "hidden"}
-          variants={dropdown}
-        >
-          <motion.ul className={styles.accMenuList}>
-            {/*  <li>
-              <FontAwesomeIcon icon={faIdBadge} color="black" size="sm" />{" "}
-              Profile
-            </li> */}
-            <li>
-              <FontAwesomeIcon icon={faListAlt} color="black" size="sm" /> My
-              Orders
-            </li>
-            <hr className={styles.listDivider} />
-            <li
-              onClick={() => {
-                signOut();
-              }}
-            >
-              <FontAwesomeIcon icon={faSignOutAlt} color="black" size="sm" />
-              Sign Out
-            </li>
-          </motion.ul>
-        </motion.div>
-      </div>
+        </span>
+      </a>
+      <motion.div
+        id="myDropdown"
+        className={styles.dropdownContent}
+        initial={"hidden"}
+        animate={drop ? "visible" : "hidden"}
+        variants={dropdown}
+      >
+        {cart === null ? (
+          <div>Loading Items</div>
+        ) : cart.length === 0 ? (
+          <div className={styles.noItems}>No Items Added Yet!</div>
+        ) : (
+          <div className={styles.itemsContainer}>
+            {cart.map((item, i) => {
+              return (
+                <>
+                  <div className={styles.item} key={item.id}>
+                    <div className={styles.imageContainer}>
+                      <img src={item.image} className={styles.image} />
+                    </div>
+                    <div className={styles.name_quantity}>
+                      <div>{item.name}</div>
+                      <div>
+                        &#36;{item.price} X {item.quantity} = &#36;
+                        {item.quantity * item.price}
+                      </div>
+                    </div>
+                    <div
+                      className={styles.trash}
+                      onClick={() => {
+                        removeItem(i);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} color="grey" size="xs" />
+                    </div>
+                  </div>
+                </>
+              );
+            })}
+          </div>
+        )}
+        <div className={styles.checkoutDiv}>
+          <div className={styles.total}>
+            <div>Total</div>
+            <div>&#36;{cartTotal(data)}</div>
+          </div>
+          <div className={styles.purchaseButton}>
+            <Button variant="outline-dark" disabled={true} block>
+              Stripe Checkout Coming Soon!
+            </Button>
+          </div>
+        </div>
+      </motion.div>
+      {/*     </div> */}
     </>
   );
 }

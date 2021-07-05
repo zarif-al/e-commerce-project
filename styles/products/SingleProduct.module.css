@@ -455,7 +455,7 @@
   }
 }
 
-@media screen and (min-width: 713px) and (max-width: 800px) {
+@media screen and (min-width: 713px) and (max-width: 834px) {
   .infoBar > div {
     font-size: 0.74rem;
     margin: 0.5rem 0.2rem;

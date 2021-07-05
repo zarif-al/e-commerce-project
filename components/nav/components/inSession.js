@@ -9,9 +9,12 @@ import {
 import styles from "../../../styles/nav/components/InSession.module.css";
 import { useState } from "react";
 import { motion } from "framer-motion";
-function inSession() {
+function inSession({ handleOverlay }) {
   const [drop, setDrop] = useState(false);
-  const changeDrop = () => setDrop(!drop);
+  const changeDrop = () => {
+    handleOverlay();
+    setDrop(!drop);
+  };
   const dropdown = {
     visible: {
       right: 0,
@@ -24,38 +27,45 @@ function inSession() {
   };
   return (
     <>
-      <div className={styles.acc_sidebar}>
-        <a className={styles.sidebar_btn} onClick={changeDrop}>
-          <FontAwesomeIcon icon={faUser} color="black" size="lg" />
-        </a>
-        <motion.div
-          id="myDropdown"
-          className={styles.dropdownContent}
-          initial={"hidden"}
-          animate={drop ? "visible" : "hidden"}
-          variants={dropdown}
-        >
-          <motion.ul className={styles.accMenuList}>
-            {/*  <li>
+      <div
+        className={
+          drop ? styles.backdrop + " " + styles.active : styles.backdrop
+        }
+        onClick={() => {
+          handleOverlay();
+          changeDrop();
+        }}
+      ></div>
+      <a className={styles.sidebar_btn} onClick={changeDrop}>
+        <FontAwesomeIcon icon={faUser} color="black" size="lg" />
+      </a>
+      <motion.div
+        id="myDropdown"
+        className={styles.dropdownContent}
+        initial={"hidden"}
+        animate={drop ? "visible" : "hidden"}
+        variants={dropdown}
+      >
+        <motion.ul className={styles.accMenuList}>
+          {/*  <li>
               <FontAwesomeIcon icon={faIdBadge} color="black" size="sm" />{" "}
               Profile
             </li> */}
-            <li>
-              <FontAwesomeIcon icon={faListAlt} color="black" size="sm" /> My
-              Orders
-            </li>
-            <hr className={styles.listDivider} />
-            <li
-              onClick={() => {
-                signOut();
-              }}
-            >
-              <FontAwesomeIcon icon={faSignOutAlt} color="black" size="sm" />
-              Sign Out
-            </li>
-          </motion.ul>
-        </motion.div>
-      </div>
+          <li>
+            <FontAwesomeIcon icon={faListAlt} color="black" size="sm" /> My
+            Orders
+          </li>
+          <hr className={styles.listDivider} />
+          <li
+            onClick={() => {
+              signOut();
+            }}
+          >
+            <FontAwesomeIcon icon={faSignOutAlt} color="black" size="sm" />
+            Sign Out
+          </li>
+        </motion.ul>
+      </motion.div>
     </>
   );
 }

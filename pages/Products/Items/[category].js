@@ -305,20 +305,11 @@ function Items({ category, brands, handleOverlay }) {
                       key={i}
                     >
                       <Card className={styles.card}>
-                        <Link
-                          href={`/Products/Item/${encodeURIComponent(
-                            item.category
-                          )}/${encodeURIComponent(item.productCode)}`}
-                          passHref={true}
-                        >
-                          <a className={styles.cardLink}>
-                            <Card.Img
-                              variant="top"
-                              src={item.imageLink}
-                              className={styles.cardImage}
-                            />
-                          </a>
-                        </Link>
+                        <Card.Img
+                          variant="top"
+                          src={item.imageLink}
+                          className={styles.cardImage}
+                        />
                         <Card.Body className={styles.cardBody}>
                           <Card.Title className={styles.cardTitle}>
                             {item.name}
@@ -341,43 +332,39 @@ function Items({ category, brands, handleOverlay }) {
                                 Upcoming !
                               </span>
                             )}
-                            <div className={styles.cardFooter_buttons}>
-                              <Button
-                                variant="outline-success"
-                                block
-                                onClick={async () => {
-                                  const resp = await cartAction({
-                                    action: "addOne",
-                                    id: item._id,
-                                    image: item.imageLink,
-                                    name: item.name,
-                                    price: item.price,
-                                  });
-                                  if (resp === "success") {
-                                    mutate("/api/cartApi");
-                                    setShow(true);
-                                  }
-                                }}
-                                disabled={item.price === 0 ? true : false}
-                              >
-                                Add to Cart!
-                              </Button>
-                              <Link
-                                href={`/Products/Item/${encodeURIComponent(
-                                  item.category
-                                )}/${encodeURIComponent(item.productCode)}`}
-                                passHref={true}
-                              >
-                                <Button
-                                  href="#"
-                                  variant="outline-primary"
-                                  block
-                                >
-                                  View
-                                </Button>
-                              </Link>
-                            </div>
                           </Card.Text>
+                          <div className={styles.cardFooter_buttons}>
+                            <Button
+                              variant="outline-success"
+                              block
+                              onClick={async () => {
+                                const resp = await cartAction({
+                                  action: "addOne",
+                                  id: item._id,
+                                  image: item.imageLink,
+                                  name: item.name,
+                                  price: item.price,
+                                });
+                                if (resp === "success") {
+                                  mutate("/api/cartApi");
+                                  setShow(true);
+                                }
+                              }}
+                              disabled={item.price === 0 ? true : false}
+                            >
+                              Add to Cart!
+                            </Button>
+                            <Link
+                              href={`/Products/Item/${encodeURIComponent(
+                                item.category
+                              )}/${encodeURIComponent(item.productCode)}`}
+                              passHref={true}
+                            >
+                              <Button href="#" variant="outline-primary" block>
+                                View
+                              </Button>
+                            </Link>
+                          </div>
                         </Card.Body>
                       </Card>
                     </Col>

@@ -122,6 +122,11 @@
   padding-bottom: 15px;
 }
 
+.cardLink {
+  display: flex;
+  flex-direction: column;
+}
+
 .cardLink:hover {
   text-decoration: none;
   color: inherit;
@@ -260,7 +265,10 @@
   }
 }
 
-@media screen and (min-width: 577px) and (max-width: 800px) {
+@media screen and (min-width: 577px) and (max-width: 834px) {
+  .cardImage {
+    align-self: center;
+  }
   .mainContainer {
     padding: 0 !important;
     margin: 0 !important;

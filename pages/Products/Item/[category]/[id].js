@@ -172,9 +172,14 @@ function Products({ item, relatedItems }) {
                 <Button
                   variant="primary"
                   className={styles.purchase_button}
-                  disabled={Number(purchaseAmount) > 0 ? false : true}
+                  disabled={
+                    item_object.price === 0
+                      ? true
+                      : Number(purchaseAmount) > 0
+                      ? false
+                      : true
+                  }
                   id="purchase_button"
-                  disabled={item_object.price > 0 ? false : true}
                 >
                   Buy
                 </Button>

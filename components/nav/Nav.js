@@ -35,7 +35,7 @@ function NavBar({ screen, showSidebar, handleOverlay }) {
                 </Nav.Link>
               </>
             ) : session ? (
-              <InSession />
+              <InSession handleOverlay={handleOverlay} />
             ) : (
               <>
                 <Nav.Link onClick={() => signIn()} className={styles.signInBtn}>
@@ -43,7 +43,7 @@ function NavBar({ screen, showSidebar, handleOverlay }) {
                 </Nav.Link>
               </>
             )}
-            <Cart />
+            <Cart handleOverlay={handleOverlay} />
           </Nav>
         </>
       );
