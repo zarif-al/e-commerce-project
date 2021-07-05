@@ -11,6 +11,9 @@ import Button from "react-bootstrap/Button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 function Products({ item, relatedItems }) {
+  if (item === undefined) {
+    return <></>;
+  }
   const [purchaseAmount, setPurchaseAmount] = useState(1);
   const [direction, setDirection] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
@@ -88,7 +91,6 @@ function Products({ item, relatedItems }) {
       return <li key={i}>{desc}</li>;
     });
   }
-
   return (
     <>
       <Container style={{ marginTop: "1rem" }}>
