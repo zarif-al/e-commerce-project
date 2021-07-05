@@ -48,7 +48,10 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
     const navContentArray = [];
     navContentArray.push(
       <li key="all">
-        <Link href={`/Products/Items/${category.category}`} passHref={true}>
+        <Link
+          href={`/Products/Items/${encodeURIComponent(category.category)}`}
+          passHref={true}
+        >
           <a
             onClick={() => {
               Cookie.set("brand", "All", { sameSite: "strict" });
@@ -66,7 +69,10 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
     category.brand.forEach((brand) => {
       navContentArray.push(
         <li key={brand}>
-          <Link href={`/Products/Items/${category.category}`} passHref={true}>
+          <Link
+            href={`/Products/Items/${encodeURIComponent(category.category)}`}
+            passHref={true}
+          >
             <a
               onClick={() => {
                 Cookie.set("brand", brand, { sameSite: "strict" });
@@ -103,7 +109,7 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
               transition: "1000",
             }}
           >
-            {category.category}
+            {decodeURIComponent(category.category)}
           </a>
           {!subNav ? (
             selectedCategory === category.category ? (

@@ -169,8 +169,10 @@ function Items({ category, brands, handleOverlay }) {
                 <Breadcrumb.Item href="/">
                   <FontAwesomeIcon icon={faHome} />
                 </Breadcrumb.Item>
-                <Breadcrumb.Item href={`/Products/Items/${category}`}>
-                  {category}
+                <Breadcrumb.Item
+                  href={`/Products/Items/${encodeURIComponent(category)}`}
+                >
+                  {decodeURIComponent(category)}
                 </Breadcrumb.Item>
               </Breadcrumb>
               <div className={styles.pagination}>

@@ -45,7 +45,7 @@ export default function Home({ Items }) {
 export async function getStaticProps(context) {
   const { db } = await connectToDatabase();
 
-  const keyboards_data = await db
+  /*  const keyboards_data = await db
     .collection("Items")
     .find({ category: "Keyboard" })
     .project({
@@ -59,10 +59,10 @@ export async function getStaticProps(context) {
     .sort({ price: -1 })
     .limit(4)
     .toArray();
-
+ */
   const graphics_data = await db
     .collection("Items")
-    .find({ category: "Graphics Card" })
+    .find({ category: "Graphics%20Card" })
     .project({
       _id: 0,
       productCode: 1,
@@ -75,7 +75,7 @@ export async function getStaticProps(context) {
     .limit(4)
     .toArray();
 
-  const headphones_data = await db
+  /*  const headphones_data = await db
     .collection("Items")
     .find({ category: "Headphone" })
     .project({
@@ -88,9 +88,10 @@ export async function getStaticProps(context) {
     })
     .sort({ price: -1 })
     .limit(4)
-    .toArray();
-
-  const items_data = keyboards_data.concat(graphics_data, headphones_data);
+    .toArray(); */
+  /* 
+  const items_data = keyboards_data.concat(graphics_data, headphones_data); */
+  const items_data = graphics_data;
   return {
     props: {
       Items: items_data,

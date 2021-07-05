@@ -98,7 +98,7 @@ function Products({ item, relatedItems }) {
             <FontAwesomeIcon icon={faHome} color="black" />
           </Breadcrumb.Item>
           <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
-            {item_object.category}
+            {decodeURIComponent(item_object.category)}
           </Breadcrumb.Item>
           <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
             {item_object.brand}
