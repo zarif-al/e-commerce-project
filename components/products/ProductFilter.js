@@ -107,7 +107,7 @@ function ProductFilter({
         <h6>Brands</h6>
         <hr className={styles.divider} />
         <div className={styles.brandsChecklist}>
-          <div>
+          <div key={"all"}>
             <input
               className={styles.checkbox}
               type="checkbox"
@@ -125,7 +125,7 @@ function ProductFilter({
           </div>
           {brands_object.brand.map((brand, i) => {
             return (
-              <div>
+              <div key={brand}>
                 <input
                   className={styles.checkbox}
                   type="checkbox"

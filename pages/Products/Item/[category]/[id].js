@@ -60,9 +60,10 @@ function Products({ item, relatedItems }) {
         </Row>
       );
       let columns = [];
+
       for (var key2 in specification) {
         columns.push(
-          <>
+          <Row className={styles.subFeatureRow} key={key2}>
             <Col lg={4}>
               <p className={styles.key2}>{key2}</p>
             </Col>
@@ -74,12 +75,10 @@ function Products({ item, relatedItems }) {
               </ul>
             </Col>
             <hr className={styles.divider} />
-          </>
+          </Row>
         );
       }
-      specificationRows.push(
-        <Row className={styles.subFeatureRow}>{columns}</Row>
-      );
+      specificationRows.push(columns);
     }
   } else if (specifications === undefined) {
     const filter = mainDescription.description.filter(
@@ -346,28 +345,30 @@ export async function getStaticProps({ params }) {
     .toArray();
 
   let RelatedItems;
-  RelatedItems = await db
-    .collection("Items")
-    .find({
-      category: params.category,
-      price: { $lte: Item[0].price },
-      productCode: { $nin: [Item[0].productCode] },
-    })
-    .project({ _id: -1, name: 1, imageLink: 1, price: 1, productCode: 1 })
-    .limit(5)
-    .toArray();
-
-  if (RelatedItems.length < 5) {
+  if (Item != undefined) {
     RelatedItems = await db
       .collection("Items")
       .find({
         category: params.category,
-        price: { $gte: Item[0].price },
+        price: { $lte: Item[0].price },
         productCode: { $nin: [Item[0].productCode] },
       })
       .project({ _id: -1, name: 1, imageLink: 1, price: 1, productCode: 1 })
       .limit(5)
       .toArray();
+
+    if (RelatedItems.length < 5) {
+      RelatedItems = await db
+        .collection("Items")
+        .find({
+          category: params.category,
+          price: { $gte: Item[0].price },
+          productCode: { $nin: [Item[0].productCode] },
+        })
+        .project({ _id: -1, name: 1, imageLink: 1, price: 1, productCode: 1 })
+        .limit(5)
+        .toArray();
+    }
   }
 
   if (!Item) {
