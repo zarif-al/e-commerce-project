@@ -345,7 +345,7 @@ export async function getStaticProps({ params }) {
     .toArray();
 
   let RelatedItems;
-  if (Item != undefined) {
+  if (Item[0] != undefined) {
     RelatedItems = await db
       .collection("Items")
       .find({
