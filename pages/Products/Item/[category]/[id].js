@@ -11,7 +11,7 @@ import Button from "react-bootstrap/Button";
 import { motion } from "framer-motion";
 import Link from "next/link";
 function Products({ item, relatedItems }) {
-  if (item === undefined) {
+  if (item === undefined || relatedItems === undefined) {
     return <></>;
   }
   const [purchaseAmount, setPurchaseAmount] = useState(1);
