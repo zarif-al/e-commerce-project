@@ -22,6 +22,11 @@ import { cartAction } from "../../../functions/functions";
 import Toast from "react-bootstrap/Toast";
 import { mutate } from "swr";
 function Items({ category, brands, handleOverlay }) {
+  //Fix for Json Parse error given in vercel logs
+  if (brands === undefined) {
+    return <></>;
+  }
+  //
   //add filter sidebar for mobile
   //Add a way to set Upcoming items to show or not
   //parse props
