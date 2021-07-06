@@ -36,8 +36,12 @@ function inSession({ handleOverlay }) {
           changeDrop();
         }}
       ></div>
-      <a className={styles.sidebar_btn} onClick={changeDrop}>
-        <FontAwesomeIcon icon={faUser} color="black" size="lg" />
+      <a
+        className={styles.sidebar_btn}
+        onClick={changeDrop}
+        style={{ zIndex: drop ? 5 : 1 }}
+      >
+        <FontAwesomeIcon icon={faUser} color="black" size="md" />
       </a>
       <motion.div
         id="myDropdown"

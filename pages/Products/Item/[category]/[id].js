@@ -10,7 +10,10 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { motion } from "framer-motion";
 import Link from "next/link";
-function Products({ item, relatedItems }) {
+import Cookie from "js-cookie";
+import { cartAction } from "../../../../functions/functions";
+import { mutate } from "swr";
+function Products({ item, relatedItems, fireSwal }) {
   //Fix for Json Parse error given in vercel logs
   if (item === undefined || relatedItems === undefined) {
     return <></>;
@@ -100,10 +103,20 @@ function Products({ item, relatedItems }) {
           <Breadcrumb.Item href="/">
             <FontAwesomeIcon icon={faHome} color="black" />
           </Breadcrumb.Item>
-          <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
+          <Breadcrumb.Item
+            href={`/Products/Items/${encodeURIComponent(item_object.category)}`}
+            onClick={() => {
+              Cookie.set("brand", "All", { sameSite: "strict" });
+            }}
+          >
             {decodeURIComponent(item_object.category)}
           </Breadcrumb.Item>
-          <Breadcrumb.Item href="https://getbootstrap.com/docs/4.0/components/breadcrumb/">
+          <Breadcrumb.Item
+            href={`/Products/Items/${encodeURIComponent(item_object.category)}`}
+            onClick={() => {
+              Cookie.set("brand", item_object.brand, { sameSite: "strict" });
+            }}
+          >
             {item_object.brand}
           </Breadcrumb.Item>
           <Breadcrumb.Item active>{item_object.name}</Breadcrumb.Item>
@@ -153,37 +166,50 @@ function Products({ item, relatedItems }) {
               </a>
             </Row>
             <Row className={styles.purchaseRow} id="purchase_row">
-              <h5 className={styles.purchaseHeader}>Payment</h5>
-              <div className={styles.purchaseButton}>
-                <Form.Control
-                  type="number"
-                  min={1}
-                  className={styles.quantityInput}
-                  onChange={(e) => {
-                    setPurchaseAmount(parseInt(e.target.value));
-                  }}
-                  onWheel={(e) => {
-                    e.target.blur();
-                  }}
-                  value={purchaseAmount}
-                  isValid={Number(purchaseAmount) > 0 ? true : false}
-                  isInvalid={Number(purchaseAmount) < 0 ? true : false}
-                />
-                <Button
-                  variant="primary"
-                  className={styles.purchase_button}
-                  disabled={
-                    item_object.price === 0
-                      ? true
-                      : Number(purchaseAmount) > 0
-                      ? false
-                      : true
-                  }
-                  id="purchase_button"
-                >
-                  Buy
-                </Button>
-              </div>
+              {item_object.price > 0 ? (
+                <>
+                  <h5 className={styles.purchaseHeader}>Payment</h5>
+                  <div className={styles.purchaseButton}>
+                    <Form.Control
+                      type="number"
+                      min={1}
+                      className={styles.quantityInput}
+                      onChange={(e) => {
+                        setPurchaseAmount(parseInt(e.target.value));
+                      }}
+                      onWheel={(e) => {
+                        e.target.blur();
+                      }}
+                      value={purchaseAmount}
+                      isValid={Number(purchaseAmount) > 0 ? true : false}
+                      isInvalid={Number(purchaseAmount) < 0 ? true : false}
+                    />
+                    <Button
+                      variant="primary"
+                      className={styles.purchase_button}
+                      disabled={Number(purchaseAmount) > 0 ? false : true}
+                      id="purchase_button"
+                      onClick={async () => {
+                        const resp = await cartAction({
+                          action: "addOne",
+                          id: item_object._id,
+                          image: item_object.imageLink,
+                          name: item_object.name,
+                          price: item_object.price,
+                        });
+                        if (resp === "success") {
+                          mutate("/api/cartApi");
+                          fireSwal();
+                        }
+                      }}
+                    >
+                      Buy
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <div className={styles.upComing}>Upcoming!</div>
+              )}
             </Row>
           </Col>
         </Row>
@@ -250,6 +276,7 @@ function Products({ item, relatedItems }) {
                   <Button
                     variant="outline-primary"
                     className={styles.review_button}
+                    disabled
                   >
                     Write A Review
                   </Button>
@@ -262,7 +289,7 @@ function Products({ item, relatedItems }) {
                 </div>
                 <h6>No reviews yet? Be the first!</h6>
               </div>
-              <div className={styles.reviewsList}>
+              {/* <div className={styles.reviewsList}>
                 <div className={styles.reviewContainer}>
                   <div className={styles.reviewHeader}>
                     <div className={styles.userContainer}>
@@ -285,7 +312,7 @@ function Products({ item, relatedItems }) {
                     elit occaecat laboris elit excepteur eu ut sit. Sint non ea
                   </div>
                 </div>
-              </div>
+              </div> */}
             </motion.div>
           </Col>
           <Col lg={3} sm={12} xs={12} className={styles.suggestionsCol}>
@@ -311,7 +338,7 @@ function Products({ item, relatedItems }) {
                         <div className={styles.suggestionInfo}>
                           <div>{item.name}</div>
                           {item.price > 0 ? (
-                            <div>{item.price}&#2547;</div>
+                            <div>&#36;{item.price}</div>
                           ) : (
                             <div>Upcoming!</div>
                           )}
@@ -366,28 +393,46 @@ export async function getStaticProps({ params }) {
 
   let RelatedItems;
   if (Item[0] != undefined) {
-    RelatedItems = await db
-      .collection("Items")
-      .find({
-        category: params.category,
-        price: { $lte: Item[0].price },
-        productCode: { $nin: [Item[0].productCode] },
-      })
-      .project({ _id: -1, name: 1, imageLink: 1, price: 1, productCode: 1 })
-      .limit(5)
-      .toArray();
-
-    if (RelatedItems.length < 5) {
+    if (Item[0].price === 0) {
       RelatedItems = await db
         .collection("Items")
         .find({
           category: params.category,
-          price: { $gte: Item[0].price },
+          productCode: { $nin: [Item[0].productCode] },
+        })
+        .project({ _id: -1, name: 1, imageLink: 1, price: 1, productCode: 1 })
+        .sort({ price: -1 })
+        .limit(5)
+        .toArray();
+    } else {
+      RelatedItems = await db
+        .collection("Items")
+        .find({
+          category: params.category,
+          price: { $lte: Item[0].price, $gt: 0 },
           productCode: { $nin: [Item[0].productCode] },
         })
         .project({ _id: -1, name: 1, imageLink: 1, price: 1, productCode: 1 })
         .limit(5)
         .toArray();
+      if (RelatedItems.length < 5) {
+        RelatedItems = await db
+          .collection("Items")
+          .find({
+            category: params.category,
+            price: { $gte: Item[0].price },
+            productCode: { $nin: [Item[0].productCode] },
+          })
+          .project({
+            _id: -1,
+            name: 1,
+            imageLink: 1,
+            price: 1,
+            productCode: 1,
+          })
+          .limit(5)
+          .toArray();
+      }
     }
   }
 

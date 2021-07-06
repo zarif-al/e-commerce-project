@@ -1,14 +1,27 @@
 import React from "react";
 import styles from "/styles/nav/components/Sidebar.module.css";
 import Categories from "./categories";
-function SideNav({ categories, sidebar, showSidebar, handleOverlay }) {
-  /*   if (process.browser) {
-    //Disable Body Scroll when side filter active
-    sidebar ? disableBodyScroll(document) : enableBodyScroll(document);
-  } */
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faBars } from "@fortawesome/free-solid-svg-icons";
+import { motion } from "framer-motion";
+import { useState } from "react";
+function SideNav({ categories, handleOverlay }) {
+  const [sidebar, setSidebar] = useState(false);
+  const showSidebar = () => setSidebar(!sidebar);
+  //motion framer settings
+  const dropdown = {
+    visible: {
+      left: 0,
+      transition: { duration: 0.3 },
+    },
+    hidden: {
+      left: "-100%",
+      transition: { duration: 0.3 },
+    },
+  };
   if (categories != null) {
     return (
-      <div id="sideNav">
+      <>
         <div
           className={
             sidebar ? styles.backdrop + " " + styles.active : styles.backdrop
@@ -18,10 +31,22 @@ function SideNav({ categories, sidebar, showSidebar, handleOverlay }) {
             showSidebar();
           }}
         ></div>
-        <nav
-          className={
-            sidebar ? styles.navMenu + " " + styles.active : styles.navMenu
-          }
+        <a
+          className={styles.side_btn}
+          style={{ zIndex: sidebar ? 5 : 1 }}
+          onClick={() => {
+            handleOverlay();
+            showSidebar();
+          }}
+        >
+          <FontAwesomeIcon icon={faBars} color="white" />
+        </a>
+        <motion.div
+          id="myDropdown"
+          className={styles.dropdownContent}
+          initial={"hidden"}
+          animate={sidebar ? "visible" : "hidden"}
+          variants={dropdown}
         >
           <ul className={styles.navMenuItems}>
             <Categories
@@ -31,8 +56,8 @@ function SideNav({ categories, sidebar, showSidebar, handleOverlay }) {
               handleOverlay={handleOverlay}
             />
           </ul>
-        </nav>
-      </div>
+        </motion.div>
+      </>
     );
   } else {
     return <></>;

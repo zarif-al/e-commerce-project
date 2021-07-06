@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600&family=Roboto:wght@500;700&display=swap");
 .backdrop.active {
   position: fixed;
   display: flex;
@@ -20,7 +21,7 @@
   z-index: 5;
   background-color: white;
   border-left: 2px solid black;
-  margin-top: 63px;
+  margin-top: 57px;
   height: 100vh;
 }
 
@@ -86,6 +87,8 @@
   border-bottom: 1px solid gray;
 }
 
+/* item image */
+
 .imageContainer {
   width: 90px;
 }
@@ -95,26 +98,72 @@
   width: 80px;
 }
 
+/* item info */
+
 .name_quantity {
   display: flex;
   width: 200px;
   flex-direction: column;
+  justify-content: space-around;
 }
 
 .name_quantity > div:nth-child(1) {
   font-size: 0.8rem;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
 }
 
 .name_quantity > div:nth-child(2) {
   font-size: 0.9rem;
+  font-weight: 500;
+  font-family: "Roboto", sans-serif;
+}
+
+.priceHighlight {
+  font-weight: 700;
+  font-family: "Roboto", sans-serif;
+}
+
+/* item control buttons */
+
+.control_buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 30px;
+  margin: 0.2rem 0rem;
+}
+
+.trash,
+.plus,
+.minus {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0.2rem 0rem;
 }
 
 .trash {
-  display: flex;
-  justify-content: center;
-  width: 30px;
-  margin: 0.2rem 0rem;
-  cursor: pointer;
+  color: darkgray;
+  outline-color: darkgray;
+}
+.plus {
+  color: green;
+  outline-color: green;
+}
+.minus {
+  color: red;
+  outline-color: red;
+}
+
+.trash:active {
+  color: lightgray;
+}
+.plus:active {
+  color: lightgreen;
+}
+.minus:active {
+  color: lightcoral;
 }
 
 /* checkoutDiv */
@@ -135,15 +184,34 @@
 
 .total > div:nth-child(1) {
   flex: 1 0 auto;
-  text-align: right;
+  text-align: center;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
 }
 
 .total > div:nth-child(2) {
-  flex: 1 0 auto;
-  text-align: right;
+  flex: 1.2 0 auto;
+  text-align: left;
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
 }
 
 .purchaseButton {
   display: flex;
   justify-content: center;
+}
+
+@media screen and (max-width: 576px) {
+  .itemsContainer {
+    overflow-y: auto;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    padding: 0rem 0.5rem;
+  }
+  .checkoutDiv {
+    border-top: 3px solid black;
+    height: 30vh;
+    padding: 0 0.5rem;
+  }
 }

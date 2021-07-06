@@ -21,7 +21,7 @@ import SideFilter from "../../../components/products/SideFilter";
 import { cartAction } from "../../../functions/functions";
 import Toast from "react-bootstrap/Toast";
 import { mutate } from "swr";
-function Items({ category, brands, handleOverlay }) {
+function Items({ category, brands, handleOverlay, setShow, fireSwal }) {
   //Fix for Json Parse error given in vercel logs
   if (brands === undefined) {
     return <></>;
@@ -64,7 +64,7 @@ function Items({ category, brands, handleOverlay }) {
   //
   const [showSideFilter, setShowFilter] = useState(false);
   //For Toast. For some reason it doesn't work with a differently named variable
-  const [show, setShow] = useState(false);
+  /*  const [show, setShow] = useState(false); */
   //fetch
   function getProducts() {
     fetch(
@@ -285,6 +285,7 @@ function Items({ category, brands, handleOverlay }) {
                 onClick={() => {
                   handleFilter();
                 }}
+                style={{ zIndex: showSideFilter ? 6 : 1 }}
               >
                 <FontAwesomeIcon icon={faBars} color="white" /> Filter
               </div>
@@ -347,12 +348,13 @@ function Items({ category, brands, handleOverlay }) {
                                 });
                                 if (resp === "success") {
                                   mutate("/api/cartApi");
-                                  setShow(true);
+                                  /*   setShow(true); */
+                                  fireSwal();
                                 }
                               }}
                               disabled={item.price === 0 ? true : false}
                             >
-                              Add to Cart!
+                              Add To Cart!
                             </Button>
                             <Link
                               href={`/Products/Item/${encodeURIComponent(
@@ -454,7 +456,7 @@ function Items({ category, brands, handleOverlay }) {
                 <span>of {Math.ceil(total / nPerPage)}</span>
               </div>
             </Row>
-            <div
+            {/* <div
               style={{
                 position: "fixed",
                 bottom: 0,
@@ -480,7 +482,7 @@ function Items({ category, brands, handleOverlay }) {
                   Added To Cart!
                 </Toast.Body>
               </Toast>
-            </div>
+            </div> */}
           </Col>
         </Row>
         <SideFilter

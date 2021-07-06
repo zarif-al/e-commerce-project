@@ -5,21 +5,7 @@
   background-color: #020202d7;
 }
 
-.cartBtn {
-  color: black;
-  margin-left: 1rem;
-  background-color: white;
-  border-radius: 50%;
-  font-size: 1.1rem;
-  height: 2.5rem;
-  width: 2.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.signInBtn,
-.cartBtn {
+.signInBtn {
   color: black;
   background-color: white;
   font-size: 1.1rem;
@@ -62,6 +48,10 @@
   color: white;
 }
 
+.sideMenuToggle {
+  cursor: default;
+}
+
 @media screen and (max-width: 850px) {
   .brandName > h4 {
     font-size: 1.2rem;
@@ -77,5 +67,6 @@
 @media screen and (min-width: 851px) {
   .sideMenuToggle {
     visibility: hidden;
+    z-index: 0;
   }
 }

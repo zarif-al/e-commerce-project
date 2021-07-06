@@ -13,41 +13,37 @@ import { signIn, useSession } from "next-auth/client";
 import InSession from "./components/inSession";
 import Cart from "./components/Cart";
 import styles from "../../styles/nav/Nav.module.css";
-function NavBar({ screen, showSidebar, handleOverlay }) {
+import SideNav from "./components/SideNav";
+function NavBar({ screen, handleOverlay, categories }) {
   const [session, loading] = useSession();
   const toggle = () => {
-    if (screen === "signUp") {
-      return null;
-    }
-    if (screen === "home") {
-      return (
-        <>
-          <Nav>
-            {loading ? (
-              <>
-                <Nav.Link style={{}} disabled={true} className={styles.spinner}>
-                  <Spinner
-                    animation="border"
-                    role="status"
-                    variant="dark"
-                    size="sm"
-                  />
-                </Nav.Link>
-              </>
-            ) : session ? (
-              <InSession handleOverlay={handleOverlay} />
-            ) : (
-              <>
-                <Nav.Link onClick={() => signIn()} className={styles.signInBtn}>
-                  <FontAwesomeIcon icon={faSignInAlt} color="black" />
-                </Nav.Link>
-              </>
-            )}
-            <Cart handleOverlay={handleOverlay} />
-          </Nav>
-        </>
-      );
-    }
+    return (
+      <>
+        <Nav>
+          {loading ? (
+            <>
+              <Nav.Link style={{}} disabled={true} className={styles.spinner}>
+                <Spinner
+                  animation="border"
+                  role="status"
+                  variant="dark"
+                  size="sm"
+                />
+              </Nav.Link>
+            </>
+          ) : session ? (
+            <InSession handleOverlay={handleOverlay} />
+          ) : (
+            <>
+              <Nav.Link onClick={() => signIn()} className={styles.signInBtn}>
+                <FontAwesomeIcon icon={faSignInAlt} color="black" />
+              </Nav.Link>
+            </>
+          )}
+          <Cart handleOverlay={handleOverlay} />
+        </Nav>
+      </>
+    );
   };
 
   return (
@@ -55,7 +51,10 @@ function NavBar({ screen, showSidebar, handleOverlay }) {
       variant="dark"
       className={styles.mainNav + " justify-content-between"}
     >
-      <Nav.Link
+      <Nav.Link className={styles.sideMenuToggle}>
+        <SideNav categories={categories} handleOverlay={handleOverlay} />
+      </Nav.Link>
+      {/*  <Nav.Link
         onClick={() => {
           showSidebar();
           handleOverlay();
@@ -63,7 +62,7 @@ function NavBar({ screen, showSidebar, handleOverlay }) {
         className={styles.sideMenuToggle}
       >
         <FontAwesomeIcon icon={faBars} color="white" />
-      </Nav.Link>
+      </Nav.Link> */}
       <Nav.Link className={styles.brandName}>
         <h4>Ecommerce Demo</h4>
       </Nav.Link>

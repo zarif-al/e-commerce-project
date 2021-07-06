@@ -88,6 +88,12 @@
   width: 20%;
 }
 
+.upComing {
+  font-size: 1.5rem;
+  font-family: "Roboto", sans-serif;
+  color: blue;
+}
+
 /*Specication Review Nav*/
 
 .productDetailNav > div > ul {
@@ -198,7 +204,6 @@
   align-items: center;
   flex-direction: column;
   min-height: 100px;
-  display: none;
 }
 
 .noReviews > h6 {
@@ -258,6 +263,11 @@
 }
 /*Suggestions*/
 
+.relatedProductsHeader {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+}
+
 .suggestionsCol {
   background-color: rgba(211, 211, 211, 0.637);
   padding: 0;
@@ -312,7 +322,6 @@
 @media screen and (max-width: 576px) {
   .breadcrumb_custom {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
   }
   .breadcrumb_custom > ol {
@@ -321,6 +330,11 @@
   }
   .breadcrumb_custom > ol > li {
     padding-left: 0.05rem !important;
+    display: inline;
+    max-width: 62%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .breadcrumb_custom > ol > li::before {
     padding-right: 0.05rem !important;
@@ -398,12 +412,21 @@
   }
 }
 @media screen and (min-width: 577px) and (max-width: 712px) {
+  .breadcrumb_custom {
+    display: flex;
+    justify-content: center;
+  }
   .breadcrumb_custom > ol {
     font-size: 1rem;
     padding: 1rem 0.5rem;
   }
   .breadcrumb_custom > ol > li {
     padding-left: 0.1rem !important;
+    display: inline;
+    max-width: 67%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .breadcrumb_custom > ol > li::before {
     padding-right: 0.1rem !important;
@@ -456,6 +479,20 @@
 }
 
 @media screen and (min-width: 713px) and (max-width: 834px) {
+  .breadcrumb_custom {
+    display: flex;
+    justify-content: center;
+  }
+  .breadcrumb_custom > ol {
+    font-size: 1rem;
+    padding: 1rem 0.5rem;
+  }
+  .breadcrumb_custom > ol > li {
+    padding-left: 0.1rem !important;
+  }
+  .breadcrumb_custom > ol > li::before {
+    padding-right: 0.1rem !important;
+  }
   .infoBar > div {
     font-size: 0.74rem;
     margin: 0.5rem 0.2rem;

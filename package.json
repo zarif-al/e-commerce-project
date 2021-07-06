@@ -7,9 +7,6 @@
     "build": "next build",
     "start": "next start"
   },
-  "peerOptionalDependencies": {
-    "mongodb": "^3.6.0"
-  },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-brands-svg-icons": "^5.15.2",
@@ -23,7 +20,7 @@
     "framer-motion": "^4.1.17",
     "js-cookie": "^2.2.1",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.11.13",
+    "mongodb": "^3.6.9",
     "next": "^10.2.3",
     "next-auth": "^3.27.1",
     "nodemailer": "^6.4.18",
@@ -31,8 +28,7 @@
     "react": "17.0.1",
     "react-bootstrap": "^1.4.3",
     "react-dom": "17.0.1",
-    "react-paginate": "^7.0.0",
-    "sslcommerz-nodejs": "^1.0.8",
+    "sweetalert2": "^11.0.18",
     "swr": "^0.4.1",
     "yup": "^0.32.8"
   }
