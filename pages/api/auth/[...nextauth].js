@@ -25,9 +25,9 @@ const options = {
   ],
   database: process.env.MONGODB_URI,
   secret: process.env.SECRET,
-  theme: "light",
   pages: {
     signIn: "/auth/signin",
+    verifyRequest: "/auth/verifyRequest", // (used for check email message)
   },
 };
 

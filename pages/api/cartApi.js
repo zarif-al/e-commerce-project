@@ -33,7 +33,7 @@ export default async (req, res) => {
             const result = await db
               .collection("users")
               .updateOne(query, updateDocument);
-            res.json(result);
+            res.json({ message: "success" });
           } else {
             const query = { email: session.user.email, "cart.id": req.body.id };
             const updateDocument = {
@@ -42,7 +42,7 @@ export default async (req, res) => {
             const result = await db
               .collection("users")
               .updateOne(query, updateDocument);
-            res.json(result);
+            res.json({ message: "success" });
           }
           resolve();
         });
@@ -73,7 +73,7 @@ export default async (req, res) => {
                 const result = await db
                   .collection("tempUser")
                   .updateOne(query, updateDocument);
-                res.json(result);
+                res.json({ message: "success" });
               } else {
                 const query = { _id: ob_id, "cart.id": req.body.id };
                 const updateDocument = {
@@ -82,7 +82,7 @@ export default async (req, res) => {
                 const result = await db
                   .collection("tempUser")
                   .updateOne(query, updateDocument);
-                res.json(result);
+                res.json({ message: "success" });
               }
               resolve();
             }
@@ -99,7 +99,7 @@ export default async (req, res) => {
           const result = await db
             .collection("users")
             .updateOne(query, updateDocument);
-          res.json(result);
+          res.json({ message: "success" });
           resolve();
         });
       } else {
@@ -114,7 +114,58 @@ export default async (req, res) => {
               const result = await db
                 .collection("tempUser")
                 .updateOne(query, updateDocument);
-              res.json(result);
+              res.json({ message: "success" });
+              resolve();
+            }
+          });
+        });
+      }
+    } else if (req.body.action === "removeOne") {
+      if (session) {
+        return new Promise(async (resolve, reject) => {
+          const user = await db
+            .collection("users")
+            .find({ email: session.user.email })
+            .project({ _id: 1, cart: 1 })
+            .toArray();
+          var found = user[0].cart.find(({ id }) => id === req.body.id);
+          if (found === undefined) {
+            res.json({ message: "Item doesn't exist." });
+          } else {
+            const query = { email: session.user.email, "cart.id": req.body.id };
+            const updateDocument = {
+              $set: { "cart.$.quantity": found.quantity - 1 },
+            };
+            const result = await db
+              .collection("users")
+              .updateOne(query, updateDocument);
+            res.json({ message: "success" });
+          }
+          resolve();
+        });
+      } else {
+        return new Promise((resolve, reject) => {
+          verify(req.cookies.tempAuth, SECRET, async function (err, decoded) {
+            if (!err && decoded) {
+              const ob_id = new ObjectID(decoded.sub);
+              const user = await db
+                .collection("tempUser")
+                .find({ _id: ob_id })
+                .project({ _id: 1, cart: 1 })
+                .toArray();
+              var found = user[0].cart.find(({ id }) => id === req.body.id);
+              if (found === undefined) {
+                res.json({ message: "Item doesn't exist." });
+              } else {
+                const query = { _id: ob_id, "cart.id": req.body.id };
+                const updateDocument = {
+                  $set: { "cart.$.quantity": found.quantity - 1 },
+                };
+                const result = await db
+                  .collection("tempUser")
+                  .updateOne(query, updateDocument);
+                res.json({ message: "success" });
+              }
               resolve();
             }
           });
@@ -130,7 +181,7 @@ export default async (req, res) => {
           const result = await db
             .collection("users")
             .updateOne(query, updateDocument);
-          res.json(result);
+          res.json({ message: "success" });
           resolve();
         });
       } else {
@@ -145,7 +196,7 @@ export default async (req, res) => {
               const result = await db
                 .collection("tempUser")
                 .updateOne(query, updateDocument);
-              res.json(result);
+              res.json({ message: "success" });
               resolve();
             }
           });

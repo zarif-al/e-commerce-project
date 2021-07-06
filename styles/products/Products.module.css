@@ -1,0 +1,303 @@
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400&display=swap");
+
+.mainContainer {
+  min-height: 100vh;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  padding: 0 15rem;
+}
+
+/*BreadCrumb Row*/
+
+.pagination {
+  display: flex;
+  align-items: center;
+}
+
+.pagination_footer {
+  display: flex;
+  align-items: center;
+}
+
+.paginationControlDiv {
+  display: flex;
+  margin: 0 0.5rem;
+  align-items: center;
+}
+
+.paginationButtons {
+  cursor: pointer;
+}
+
+.pageInput {
+  width: 60px;
+  height: 25px;
+  text-align: center;
+  margin: 0 0.25rem;
+  padding: 0;
+}
+
+.pageInput,
+.is-invalid {
+  background-image: none !important;
+  padding: 0 !important;
+}
+
+.pageOptions {
+  padding: 0 15px;
+  justify-content: space-between;
+  align-items: center;
+  background-color: black;
+  color: white;
+  margin: 0;
+}
+
+.pageOptions_footer {
+  display: flex;
+  justify-content: center;
+  background-color: black;
+  color: white;
+  padding: 12px 15px;
+  margin: 0;
+}
+
+.breadcrumb_custom > ol {
+  background-color: transparent;
+  margin-bottom: 0;
+  padding-left: 0;
+}
+
+.viewOptions {
+  display: flex;
+}
+
+.showDiv,
+.sortDiv {
+  display: flex;
+  align-items: center;
+}
+
+.showDiv {
+  margin-right: 0.4rem;
+}
+
+.showDiv > label,
+.sortDiv > label {
+  margin-right: 0.4rem;
+  margin-bottom: 0;
+}
+
+.mobileFilter {
+  display: none;
+  cursor: pointer;
+  background-color: rgba(138, 126, 126, 0.486);
+  padding: 0.4rem;
+  border-radius: 5px;
+}
+
+/*Loading Screen*/
+.loader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.loader > div {
+  margin: 0 0.3rem;
+  width: 50px;
+  height: 50px;
+}
+
+/*Items*/
+.items {
+  min-height: 50vh;
+  margin: 0;
+}
+
+.itemCol {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.cardLink {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardLink:hover {
+  text-decoration: none;
+  color: inherit;
+}
+
+.card {
+  border: 1px solid black;
+  padding: 0.5rem;
+  height: 100%;
+}
+
+.cardImage {
+  height: 210px;
+  width: 210px;
+}
+
+.cardBody {
+  padding: 0.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitle {
+  border-top: 1px solid black;
+  padding-top: 0.5rem;
+  font-size: 1.05rem;
+  font-family: "Roboto", sans-serif;
+  text-align: left;
+}
+
+.cardFooter {
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1rem;
+  font-family: "Trebuchet MS", sans-serif;
+  align-items: center;
+  margin-top: auto;
+}
+
+.cardFooter_price {
+  padding: 0.5rem 0rem;
+}
+
+.cardFooter_buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.descriptionList {
+  height: 100%;
+  border-bottom: 1px solid black;
+}
+
+.descriptionList > ul {
+  padding-left: 1.5rem;
+  list-style-position: outside;
+  font-size: 0.9rem;
+}
+.descriptionList > ul > li {
+  line-height: 16px;
+  padding-bottom: 10px;
+}
+
+@media screen and (max-width: 851px) {
+  .cardTitle {
+    font-size: 0.7rem;
+  }
+  .cardText {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 712px) {
+  /*main container*/
+  .mainContainer {
+    padding: 0rem 0rem !important;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  /*page options*/
+  .showDiv {
+    display: none;
+  }
+  .pageOptions {
+    justify-content: space-evenly;
+    font-size: 0.7rem;
+    padding: 0.3rem 0rem;
+  }
+  .pagination {
+    display: none;
+  }
+  .pageInput {
+    font-size: 0.7rem;
+    width: 40px;
+    height: 25px;
+  }
+  .productsCol {
+    padding: 0;
+  }
+  .items {
+    justify-content: center;
+  }
+  .menuCol {
+    display: none;
+  }
+  .mobileFilter {
+    display: block;
+  }
+  /*   product cards */
+  .cardImage {
+    height: 160px;
+    width: 160px;
+    align-self: center;
+  }
+
+  .cardTitle {
+    font-size: 1.1rem;
+    font-family: "Roboto", sans-serif;
+    text-align: left;
+  }
+
+  .cardFooter {
+    font-size: 1.1rem;
+  }
+
+  .descriptionList > ul {
+    padding-left: 1rem;
+    font-size: 1rem;
+  }
+
+  .descriptionList > ul > li {
+    line-height: 16px;
+    padding-bottom: 10px;
+  }
+}
+
+@media screen and (min-width: 577px) and (max-width: 834px) {
+  .cardImage {
+    align-self: center;
+  }
+  .mainContainer {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .pageOptions {
+    justify-content: space-evenly;
+    font-size: 0.9rem;
+    padding: 0.3rem 0rem;
+  }
+
+  .mobileFilter {
+    display: block;
+  }
+
+  .menuCol {
+    display: none;
+  }
+
+  .productsCol {
+    padding: 0;
+  }
+}
+
+@media screen and (min-width: 800px) and (max-width: 1440px) {
+  .mainContainer {
+    padding: 0 5rem;
+  }
+  .cardImage {
+    height: 170px;
+    width: 170px;
+  }
+}
