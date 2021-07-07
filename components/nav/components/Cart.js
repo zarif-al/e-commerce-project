@@ -55,8 +55,8 @@ function Cart({ handleOverlay }) {
     };
     const resp = await cartAction(item);
     if (resp === "success") {
-      setUpdate(null);
       mutate("/api/cartApi");
+      setUpdate(null);
     }
   };
   //decrement item from cart function
@@ -65,6 +65,7 @@ function Cart({ handleOverlay }) {
     if (currentItem.quantity === 1) {
       removeItem(id);
     } else {
+      setUpdate(id);
       const item = {
         id: id,
         action: "removeOne",
@@ -72,11 +73,13 @@ function Cart({ handleOverlay }) {
       const resp = await cartAction(item);
       if (resp === "success") {
         mutate("/api/cartApi");
+        setUpdate(null);
       }
     }
   };
   //increment item from cart function
   const incrementItem = async (id) => {
+    setUpdate(id);
     const item = {
       id: id,
       action: "addOne",
@@ -84,6 +87,7 @@ function Cart({ handleOverlay }) {
     const resp = await cartAction(item);
     if (resp === "success") {
       mutate("/api/cartApi");
+      setUpdate(null);
     }
   };
   return (
