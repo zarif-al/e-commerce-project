@@ -30,15 +30,17 @@ function Products({
   if (item === undefined || relatedItems === undefined) {
     return <></>;
   }
-  //
-  const [purchaseAmount, setPurchaseAmount] = useState(1);
-  const [direction, setDirection] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
-
   const item_object = JSON.parse(item);
   const relatedItems_array = JSON.parse(relatedItems);
+  //
+  const [purchaseAmount, setPurchaseAmount] = useState(1);
+  // For reviews and specification animations
+  const [direction, setDirection] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(0);
   const specifications = item_object.specifications;
   const mainDescription = item_object.mainDescription;
+  //for Add To Cart Button
+  const [addingToCart, setAddToCart] = useState(false);
   let specificationRows = [];
   let mainDescriptionRows = [];
   const switchDiv = (index) => {
@@ -197,11 +199,18 @@ function Products({
                       isInvalid={Number(purchaseAmount) < 0 ? true : false}
                     />
                     <Button
-                      variant="primary"
+                      variant={addingToCart ? "outline-info" : "primary"}
                       className={styles.purchase_button}
-                      disabled={Number(purchaseAmount) > 0 ? false : true}
+                      disabled={
+                        addingToCart
+                          ? true
+                          : Number(purchaseAmount) <= 0
+                          ? true
+                          : false
+                      }
                       id="purchase_button"
                       onClick={async () => {
+                        setAddToCart(true);
                         const resp = await cartAction({
                           action: "addOne",
                           id: item_object._id,
@@ -212,10 +221,11 @@ function Products({
                         if (resp === "success") {
                           mutate("/api/cartApi");
                           fireSwal();
+                          setAddToCart(false);
                         }
                       }}
                     >
-                      Buy
+                      {addingToCart ? "Adding..." : "Buy"}
                     </Button>
                   </div>
                 </>

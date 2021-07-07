@@ -112,6 +112,8 @@ function Cart({ handleOverlay }) {
           >
             {!data ? (
               <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
+            ) : error ? (
+              <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
             ) : (
               itemCount(cart)
             )}

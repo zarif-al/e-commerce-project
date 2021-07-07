@@ -76,8 +76,8 @@ function Items({
   const [loading, setLoading] = useState(true);
   //
   const [showSideFilter, setShowFilter] = useState(false);
-  //For Toast. For some reason it doesn't work with a differently named variable
-  /*  const [show, setShow] = useState(false); */
+  //for Add To Cart Button
+  const [addingToCart, setAddToCart] = useState(null);
   //fetch
   function getProducts() {
     fetch(
@@ -349,9 +349,14 @@ function Items({
                           </Card.Text>
                           <div className={styles.cardFooter_buttons}>
                             <Button
-                              variant="outline-success"
+                              variant={
+                                addingToCart === i
+                                  ? "outline-info"
+                                  : "outline-success"
+                              }
                               block
                               onClick={async () => {
+                                setAddToCart(i);
                                 const resp = await cartAction({
                                   action: "addOne",
                                   id: item._id,
@@ -363,11 +368,20 @@ function Items({
                                   mutate("/api/cartApi");
                                   /*   setShow(true); */
                                   fireSwal();
+                                  setAddToCart(null);
                                 }
                               }}
-                              disabled={item.price === 0 ? true : false}
+                              disabled={
+                                addingToCart === i
+                                  ? true
+                                  : item.price === 0
+                                  ? true
+                                  : false
+                              }
                             >
-                              Add To Cart!
+                              {addingToCart === i
+                                ? "Adding..."
+                                : "Add To Cart!"}
                             </Button>
                             <Link
                               href={`/Products/Item/${encodeURIComponent(
@@ -469,33 +483,6 @@ function Items({
                 <span>of {Math.ceil(total / nPerPage)}</span>
               </div>
             </Row>
-            {/* <div
-              style={{
-                position: "fixed",
-                bottom: 0,
-                left: "60%",
-                transform: "translate(-60%)",
-              }}
-            >
-              <Toast
-                onClose={() => setShow(false)}
-                show={show}
-                delay={3000}
-                autohide
-              >
-                <Toast.Body
-                  style={{
-                    background: "green",
-                    color: "white",
-                    border: "1px solid black",
-                    borderRadius: "5%",
-                    opacity: "0.7",
-                  }}
-                >
-                  Added To Cart!
-                </Toast.Body>
-              </Toast>
-            </div> */}
           </Col>
         </Row>
         <SideFilter

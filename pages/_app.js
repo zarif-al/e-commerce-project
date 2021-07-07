@@ -33,7 +33,8 @@ function MyApp({ Component, pageProps }) {
       icon: "success",
       title: "Added To Cart!",
       showConfirmButton: false,
-      timer: 2000,
+      showCloseButton: true,
+      timer: 3500,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.addEventListener("mouseenter", Swal.stopTimer);
