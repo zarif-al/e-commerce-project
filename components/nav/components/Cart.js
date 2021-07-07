@@ -16,7 +16,6 @@ import Spinner from "react-bootstrap/Spinner";
 import { itemCount, cartTotal, cartAction } from "../../../functions/functions";
 import Button from "react-bootstrap/Button";
 import { mutate } from "swr";
-import { remove } from "js-cookie";
 function Cart({ handleOverlay }) {
   //states
   const fetcher = (url) => fetch(url).then((r) => r.json());
@@ -43,7 +42,6 @@ function Cart({ handleOverlay }) {
   if (!data || error) {
     cart = null;
   } else {
-    console.log(data);
     cart = data.data[0].cart;
   }
   //
