@@ -1,3 +1,4 @@
+import { connectToDatabase } from "../../utils/mongodb";
 import { getProviders, signIn } from "next-auth/client";
 import { getCsrfToken } from "next-auth/client";
 import Container from "react-bootstrap/Container";
@@ -15,10 +16,21 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/router";
 import Spinner from "react-bootstrap/Spinner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ErrorModal from "../../components/auth/components/ErrorModal";
 import styles from "../../styles/authentication/SignIn.module.css";
-export default function SignIn({ providers, csrfToken }) {
+export default function SignIn({
+  providers,
+  csrfToken,
+  categories_data,
+  setCategories,
+}) {
+  //Sets the subNav instantly with no load time
+  useEffect(() => {
+    if (categories_data) {
+      setCategories(categories_data);
+    }
+  }, [categories_data]);
   //use formik put email and csrf token in post body to action address
   const [disable, setDisable] = useState(false);
   const router = useRouter();
@@ -176,120 +188,20 @@ export default function SignIn({ providers, csrfToken }) {
         onHide={() => setShowModal(false)}
         message={message}
       />
-      {/*   <Row
-        style={{
-          color: msgColor,
-          marginTop: "0.5rem",
-        }}
-      >
-        <Col className="text-center">
-          <strong>{message}</strong>
-        </Col>
-      </Row>
-      <Row className="justify-content-center" style={{ marginTop: "1rem" }}>
-        <Col xs={11}>
-          <Form onSubmit={formik.handleSubmit} noValidate>
-            <Form.Group>
-              <Form.Control
-                type="email"
-                name="email"
-                placeholder="Enter Your Email"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.email}
-                autoComplete="username"
-                isInvalid={formik.touched.email && !!formik.errors.email}
-                isValid={formik.touched.email && !formik.errors.email}
-              />
-              <Form.Control.Feedback type="invalid">
-                {formik.errors.email}
-              </Form.Control.Feedback>
-            </Form.Group>
-            <Button variant="light" type="submit" block disabled={disable}>
-              {disable ? (
-                <>
-                  <Spinner animation="border" size="sm" /> Redirecting
-                </>
-              ) : (
-                <>
-                  <FontAwesomeIcon icon={faEnvelope} color="black" size="lg" />{" "}
-                  Sign In with Email
-                </>
-              )}
-            </Button>
-          </Form>
-        </Col>
-      </Row>
-      {Object.values(providers).map((provider) =>
-        provider.name != "Email" ? (
-          <Row
-            key={provider.name}
-            className="justify-content-center"
-            style={{ marginBottom: "1rem" }}
-          >
-            <Col xs={11}>
-              <Button
-                variant="light"
-                onClick={() =>
-                  signIn(provider.id, {
-                    callbackUrl: router.query.callbackUrl,
-                  })
-                }
-                block
-                disabled={disable}
-              >
-                <FontAwesomeIcon
-                  icon={
-                    provider.name === "Google" ? faGoogle : faFacebookSquare
-                  }
-                  color="black"
-                  size="lg"
-                />{" "}
-                Sign In with {provider.name}
-              </Button>
-            </Col>
-          </Row>
-        ) : (
-          <Row className="align-items-center" style={{ margin: "1.5rem" }}>
-            <Col>
-              <hr style={{ borderTop: "1px solid black" }} />
-            </Col>
-            <Col className="text-center" xs={2}>
-              <strong>OR</strong>
-            </Col>
-            <Col>
-              <hr style={{ borderTop: "1px solid black" }} />
-            </Col>
-          </Row>
-        )
-      )}
-      <Row
-        key="returnButton"
-        className="justify-content-center"
-        style={{ marginBottom: "2.5rem" }}
-      >
-        <Col xs={11}>
-          <Button
-            variant="light"
-            onClick={() => {
-              router.push("/");
-            }}
-            block
-            disabled={disable}
-          >
-            <FontAwesomeIcon icon={faArrowCircleLeft} color="black" size="lg" />{" "}
-            Return to Shop
-          </Button>
-        </Col>
-      </Row> */}
     </Container>
   );
 }
 
 export async function getServerSideProps(context) {
+  const { db } = await connectToDatabase();
   const providers = await getProviders();
   const csrfToken = await getCsrfToken(context);
+  const categories_data = await db
+    .collection("Categories")
+    .find()
+    .project({ _id: 0, category: 1, brand: 1 })
+    .toArray();
   return {
-    props: { providers, csrfToken },
+    props: { providers, csrfToken, categories_data },
   };
 }

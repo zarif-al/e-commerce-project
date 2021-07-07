@@ -21,7 +21,20 @@ import SideFilter from "../../../components/products/SideFilter";
 import { cartAction } from "../../../functions/functions";
 import Toast from "react-bootstrap/Toast";
 import { mutate } from "swr";
-function Items({ category, brands, handleOverlay, setShow, fireSwal }) {
+function Items({
+  category,
+  brands,
+  handleOverlay,
+  fireSwal,
+  categories_data,
+  setCategories,
+}) {
+  //Sets the subNav instantly with no load time
+  useEffect(() => {
+    if (categories_data) {
+      setCategories(categories_data);
+    }
+  }, [categories_data]);
   //Fix for Json Parse error given in vercel logs
   if (brands === undefined) {
     return <></>;
@@ -536,6 +549,11 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const { db } = await connectToDatabase();
+  const categories_data = await db
+    .collection("Categories")
+    .find()
+    .project({ _id: 0, category: 1, brand: 1 })
+    .toArray();
   const Brands = await db
     .collection("Categories")
     .find({ category: params.category })
@@ -548,7 +566,7 @@ export async function getStaticProps({ params }) {
   }
   var brands = JSON.stringify(Brands[0]);
   return {
-    props: { category: params.category, brands },
+    props: { category: params.category, brands, categories_data },
     revalidate: 600,
   };
 }

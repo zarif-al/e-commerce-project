@@ -19,12 +19,12 @@ function SubNav({ categories }) {
     return (
       <motion.header
         className={styles.navContainer}
-        variants={subNav}
+        /*         variants={subNav}
         initial="hidden"
-        animate="visible"
+        animate="visible" */
       >
         <div>
-          <motion.nav className={styles.custom_nav}>
+          <nav className={styles.custom_nav}>
             <ul className={styles.categoryList}>
               <Categories
                 categories={categories}
@@ -32,7 +32,7 @@ function SubNav({ categories }) {
                 showSidebar={null}
               />
             </ul>
-          </motion.nav>
+          </nav>
         </div>
       </motion.header>
     );

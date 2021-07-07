@@ -21,7 +21,7 @@ function SideNav({ categories, handleOverlay }) {
   };
   if (categories != null) {
     return (
-      <>
+      <div>
         <div
           className={
             sidebar ? styles.backdrop + " " + styles.active : styles.backdrop
@@ -57,10 +57,10 @@ function SideNav({ categories, handleOverlay }) {
             />
           </ul>
         </motion.div>
-      </>
+      </div>
     );
   } else {
-    return <></>;
+    return <div></div>;
   }
 }
 

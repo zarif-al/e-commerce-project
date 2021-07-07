@@ -60,3 +60,9 @@
   width: 100%;
   margin: 0;
 }
+
+.userImage {
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+}

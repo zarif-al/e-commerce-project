@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
       icon: "success",
       title: "Added To Cart!",
       showConfirmButton: false,
-      timer: 900,
+      timer: 2000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.addEventListener("mouseenter", Swal.stopTimer);
@@ -42,13 +42,13 @@ function MyApp({ Component, pageProps }) {
     });
   };
 
-  useEffect(() => {
+  /*   useEffect(() => {
     fetch("/api/categories")
       .then((response) => response.json())
       .then((data) => {
         setCategories(data);
       });
-  }, []);
+  }, []); */
 
   return (
     <Provider session={pageProps.session}>
@@ -62,6 +62,7 @@ function MyApp({ Component, pageProps }) {
           {...pageProps}
           handleOverlay={handleOverlay}
           fireSwal={fireSwal}
+          setCategories={setCategories}
         />
         <Footer />
       </Container>

@@ -9,7 +9,8 @@ import {
 import styles from "../../../styles/nav/components/InSession.module.css";
 import { useState } from "react";
 import { motion } from "framer-motion";
-function inSession({ handleOverlay }) {
+function inSession({ handleOverlay, session }) {
+  /*   const [session, loading] = useSession(); */
   const [drop, setDrop] = useState(false);
   const changeDrop = () => {
     handleOverlay();
@@ -26,7 +27,7 @@ function inSession({ handleOverlay }) {
     },
   };
   return (
-    <>
+    <div>
       <div
         className={
           drop ? styles.backdrop + " " + styles.active : styles.backdrop
@@ -41,7 +42,11 @@ function inSession({ handleOverlay }) {
         onClick={changeDrop}
         style={{ zIndex: drop ? 5 : 1 }}
       >
-        <FontAwesomeIcon icon={faUser} color="black" size="md" />
+        {session.user.image ? (
+          <img src={session.user.image} className={styles.userImage}></img>
+        ) : (
+          <FontAwesomeIcon icon={faUser} color="black" size="sm" />
+        )}
       </a>
       <motion.div
         id="myDropdown"
@@ -70,7 +75,7 @@ function inSession({ handleOverlay }) {
           </li>
         </motion.ul>
       </motion.div>
-    </>
+    </div>
   );
 }
 

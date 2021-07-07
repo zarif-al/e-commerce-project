@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connectToDatabase } from "../../../../utils/mongodb";
 import Breadcrumb from "react-bootstrap/Breadcrumb";
 import { Container, Row, Col } from "react-bootstrap";
@@ -13,7 +13,19 @@ import Link from "next/link";
 import Cookie from "js-cookie";
 import { cartAction } from "../../../../functions/functions";
 import { mutate } from "swr";
-function Products({ item, relatedItems, fireSwal }) {
+function Products({
+  item,
+  relatedItems,
+  fireSwal,
+  categories_data,
+  setCategories,
+}) {
+  //Sets the subNav instantly with no load time
+  useEffect(() => {
+    if (categories_data) {
+      setCategories(categories_data);
+    }
+  }, [categories_data]);
   //Fix for Json Parse error given in vercel logs
   if (item === undefined || relatedItems === undefined) {
     return <></>;
@@ -386,6 +398,11 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const { db } = await connectToDatabase();
+  const categories_data = await db
+    .collection("Categories")
+    .find()
+    .project({ _id: 0, category: 1, brand: 1 })
+    .toArray();
   const Item = await db
     .collection("Items")
     .find({ category: params.category, productCode: params.id })
@@ -444,7 +461,7 @@ export async function getStaticProps({ params }) {
   var item = JSON.stringify(Item[0]);
   var relatedItems = JSON.stringify(RelatedItems);
   return {
-    props: { item, relatedItems },
+    props: { item, relatedItems, categories_data },
     revalidate: 600,
   };
 }

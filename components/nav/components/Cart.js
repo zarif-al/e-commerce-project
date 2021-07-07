@@ -39,11 +39,12 @@ function Cart({ handleOverlay }) {
     },
   };
   //holding cart, might switch to directly using data
-  let cart = null;
-  if (data != undefined) {
-    if (data.data[0].cart !== undefined) {
-      cart = data.data[0].cart;
-    }
+  let cart;
+  if (!data || error) {
+    cart = null;
+  } else {
+    console.log(data);
+    cart = data.data[0].cart;
   }
   //
   //remove item from cart function
@@ -84,7 +85,7 @@ function Cart({ handleOverlay }) {
     }
   };
   return (
-    <>
+    <div>
       <div
         className={
           drop ? styles.backdrop + " " + styles.active : styles.backdrop
@@ -195,7 +196,7 @@ function Cart({ handleOverlay }) {
           </div>
         </div>
       </motion.div>
-    </>
+    </div>
   );
 }
 

@@ -32,7 +32,7 @@ function NavBar({ screen, handleOverlay, categories }) {
               </Nav.Link>
             </>
           ) : session ? (
-            <InSession handleOverlay={handleOverlay} />
+            <InSession handleOverlay={handleOverlay} session={session} />
           ) : (
             <>
               <Nav.Link onClick={() => signIn()} className={styles.signInBtn}>
@@ -51,18 +51,9 @@ function NavBar({ screen, handleOverlay, categories }) {
       variant="dark"
       className={styles.mainNav + " justify-content-between"}
     >
-      <Nav.Link className={styles.sideMenuToggle}>
+      <div className={styles.sideMenuToggle}>
         <SideNav categories={categories} handleOverlay={handleOverlay} />
-      </Nav.Link>
-      {/*  <Nav.Link
-        onClick={() => {
-          showSidebar();
-          handleOverlay();
-        }}
-        className={styles.sideMenuToggle}
-      >
-        <FontAwesomeIcon icon={faBars} color="white" />
-      </Nav.Link> */}
+      </div>
       <Nav.Link className={styles.brandName}>
         <h4>Ecommerce Demo</h4>
       </Nav.Link>
