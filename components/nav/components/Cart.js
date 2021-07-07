@@ -40,10 +40,15 @@ function Cart({ handleOverlay }) {
   };
   //holding cart, might switch to directly using data
   let cart = null;
-  if (!data || error || data === undefined) {
+  /*if (!data || error || data === undefined) {
     cart = null;
   } else {
     cart = data.data[0].cart;
+  } */
+  if (data != undefined) {
+    if (data.data[0].cart !== undefined) {
+      cart = data.data[0].cart;
+    }
   }
   //
   //remove item from cart function
@@ -118,7 +123,7 @@ function Cart({ handleOverlay }) {
               padding: "0.5rem",
             }}
           >
-            {cart === null ? (
+            {data === undefined ? (
               <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
             ) : (
               itemCount(cart)
@@ -142,7 +147,7 @@ function Cart({ handleOverlay }) {
             {cart.map((item) => {
               return (
                 <div className={styles.itemContainer} key={item.id}>
-                  <div
+                  {/*    <div
                     className={styles.loadingDiv}
                     style={{ display: update === item.id ? "flex" : "none" }}
                   >
@@ -150,7 +155,7 @@ function Cart({ handleOverlay }) {
                       animation="border"
                       style={{ opacity: 1, color: "white" }}
                     />
-                  </div>
+                  </div> */}
                   <div className={styles.item}>
                     <div className={styles.imageContainer}>
                       <img src={item.image} className={styles.image} />

@@ -76,6 +76,7 @@
 
 .itemsContainer {
   overflow-y: auto;
+  overflow-x: hidden;
   height: 70vh;
   display: flex;
   flex-direction: column;
@@ -85,7 +86,7 @@
 .itemContainer {
   display: grid;
   grid-auto-flow: column;
-  margin: 0.2rem 0rem;
+  margin: 0.2rem 0.5rem;
   border-bottom: 1px solid gray;
 }
 
@@ -139,11 +140,10 @@
 }
 
 .spinner {
-  justify-self: center;
   width: 0.9rem;
   height: 0.9rem;
   font-size: 0.9rem;
-  margin: 0 auto;
+  margin-left: 2rem;
 }
 
 .priceHighlight {
