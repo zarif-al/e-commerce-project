@@ -21,6 +21,7 @@ function Cart({ handleOverlay }) {
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
   const [drop, setDrop] = useState(false);
+  const [update, setUpdate] = useState(null);
   //Drop state changer
   const changeDrop = () => {
     handleOverlay();
@@ -39,30 +40,33 @@ function Cart({ handleOverlay }) {
   };
   //holding cart, might switch to directly using data
   let cart = null;
-  if (!data || error) {
+  if (!data || error || data === undefined) {
     cart = null;
   } else {
     cart = data.data[0].cart;
   }
   //
   //remove item from cart function
-  const removeItem = async (index) => {
+  const removeItem = async (id) => {
+    setUpdate(id);
     const item = {
-      id: cart[index].id,
+      id: id,
       action: "delete",
     };
     const resp = await cartAction(item);
     if (resp === "success") {
+      setUpdate(null);
       mutate("/api/cartApi");
     }
   };
   //decrement item from cart function
-  const decrementItem = async (index) => {
-    if (cart[index].quantity === 1) {
-      removeItem(index);
+  const decrementItem = async (id) => {
+    const currentItem = cart.find((item) => item.id === id);
+    if (currentItem.quantity === 1) {
+      removeItem(id);
     } else {
       const item = {
-        id: cart[index].id,
+        id: id,
         action: "removeOne",
       };
       const resp = await cartAction(item);
@@ -72,9 +76,9 @@ function Cart({ handleOverlay }) {
     }
   };
   //increment item from cart function
-  const incrementItem = async (index) => {
+  const incrementItem = async (id) => {
     const item = {
-      id: cart[index].id,
+      id: id,
       action: "addOne",
     };
     const resp = await cartAction(item);
@@ -110,9 +114,7 @@ function Cart({ handleOverlay }) {
               padding: "0.5rem",
             }}
           >
-            {!data ? (
-              <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
-            ) : error ? (
+            {cart === null ? (
               <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
             ) : (
               itemCount(cart)
@@ -133,48 +135,68 @@ function Cart({ handleOverlay }) {
           <div className={styles.noItems}>No Items Added Yet!</div>
         ) : (
           <div className={styles.itemsContainer}>
-            {cart.map((item, i) => {
+            {cart.map((item) => {
               return (
-                <div className={styles.item} key={item.id}>
-                  <div className={styles.imageContainer}>
-                    <img src={item.image} className={styles.image} />
+                <div className={styles.itemContainer} key={item.id}>
+                  <div
+                    className={styles.loadingDiv}
+                    style={{ display: update === item.id ? "flex" : "none" }}
+                  >
+                    <Spinner
+                      animation="border"
+                      style={{ opacity: 1, color: "white" }}
+                    />
                   </div>
-                  <div className={styles.name_quantity}>
-                    <div>{item.name}</div>
-                    <div>
-                      <span className={styles.priceHighlight}>
-                        &#36;{item.price}
-                      </span>{" "}
-                      X {item.quantity} =
-                      <span className={styles.priceHighlight}>
-                        &#36;{item.quantity * item.price}
-                      </span>
+                  <div className={styles.item}>
+                    <div className={styles.imageContainer}>
+                      <img src={item.image} className={styles.image} />
                     </div>
-                  </div>
-                  <div className={styles.control_buttons}>
-                    <div
-                      className={styles.trash}
-                      onClick={() => {
-                        removeItem(i);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faTrash} size="xs" />
+                    <div className={styles.name_quantity}>
+                      <div>{item.name}</div>
+                      <div>
+                        {update === item.id ? (
+                          <Spinner
+                            animation="border"
+                            className={styles.spinner}
+                          />
+                        ) : (
+                          <>
+                            <span className={styles.priceHighlight}>
+                              &#36;{item.price}
+                            </span>{" "}
+                            X {item.quantity} =
+                            <span className={styles.priceHighlight}>
+                              &#36;{item.quantity * item.price}
+                            </span>
+                          </>
+                        )}
+                      </div>
                     </div>
-                    <div
-                      className={styles.plus}
-                      onClick={() => {
-                        incrementItem(i);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faPlusSquare} size="xs" />
-                    </div>
-                    <div
-                      className={styles.minus}
-                      onClick={() => {
-                        decrementItem(i);
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faMinusSquare} size="xs" />
+                    <div className={styles.control_buttons}>
+                      <div
+                        className={styles.trash}
+                        onClick={() => {
+                          removeItem(item.id);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faTrash} size="xs" />
+                      </div>
+                      <div
+                        className={styles.plus}
+                        onClick={() => {
+                          incrementItem(item.id);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faPlusSquare} size="xs" />
+                      </div>
+                      <div
+                        className={styles.minus}
+                        onClick={() => {
+                          decrementItem(item.id);
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faMinusSquare} size="xs" />
+                      </div>
                     </div>
                   </div>
                 </div>

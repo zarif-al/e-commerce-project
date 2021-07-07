@@ -72,7 +72,7 @@
   justify-content: center;
 }
 
-/* Items */
+/* Items Container */
 
 .itemsContainer {
   overflow-y: auto;
@@ -81,11 +81,29 @@
   flex-direction: column;
   padding: 0rem 0.5rem;
 }
+/* Item Container */
+.itemContainer {
+  display: grid;
+  grid-auto-flow: column;
+  margin: 0.2rem 0rem;
+  border-bottom: 1px solid gray;
+}
 
 .item {
   display: flex;
-  margin: 0.5rem 0rem;
-  border-bottom: 1px solid gray;
+  padding: 0.3rem 0;
+}
+
+.loadingDiv,
+.item {
+  grid-area: 1/1;
+}
+
+.loadingDiv {
+  z-index: 7;
+  background-color: rgba(0, 0, 0, 0.63);
+  justify-content: center;
+  align-items: center;
 }
 
 /* item image */
@@ -118,6 +136,14 @@
   font-size: 0.9rem;
   font-weight: 500;
   font-family: "Roboto", sans-serif;
+}
+
+.spinner {
+  justify-self: center;
+  width: 0.9rem;
+  height: 0.9rem;
+  font-size: 0.9rem;
+  margin: 0 auto;
 }
 
 .priceHighlight {

@@ -114,14 +114,7 @@ function Items({
     } else {
       setDisabledBrand(null);
     }
-
     getProducts();
-    //Filter Items on category //change
-    /*  const currentFilter = items_object.filter((item) => {
-      if (selected_brands.includes(item.brand)) {
-        return item;
-      }
-    }); */
   }, [selected_brands, userMinPrice, userMaxPrice, pageNumber, sort]);
   //The states don't reset when navigating to new page. This useEffect is necessary for updating page
   useEffect(() => {
@@ -366,7 +359,6 @@ function Items({
                                 });
                                 if (resp === "success") {
                                   mutate("/api/cartApi");
-                                  /*   setShow(true); */
                                   fireSwal();
                                   setAddToCart(null);
                                 }
