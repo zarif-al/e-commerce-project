@@ -38,7 +38,7 @@ function Cart({ handleOverlay }) {
     },
   };
   //holding cart, might switch to directly using data
-  let cart;
+  let cart = null;
   if (!data || error) {
     cart = null;
   } else {
@@ -110,10 +110,10 @@ function Cart({ handleOverlay }) {
               padding: "0.5rem",
             }}
           >
-            {isValidating || data === undefined ? (
+            {!data ? (
               <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
             ) : (
-              itemCount(data)
+              itemCount(cart)
             )}
           </span>
         </span>

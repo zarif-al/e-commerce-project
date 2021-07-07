@@ -1,17 +1,12 @@
 export function itemCount(data) {
-  if (data != undefined) {
-    if (data.message !== "Error" && data.data[0].cart !== undefined) {
-      let sum = 0;
-      data.data[0].cart.forEach((items) => {
-        sum += items.quantity;
-      });
-      return sum;
-    } else {
-      return 0;
-    }
-  } else {
+  let sum = 0;
+  if (data === null) {
     return 0;
   }
+  data.forEach((items) => {
+    sum += items.quantity;
+  });
+  return sum;
 }
 
 export function cartTotal(data) {
