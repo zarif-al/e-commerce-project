@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "../../styles/authentication/verifyRequest.module.css";
 import { useState, useEffect } from "react";
-import { connectToDatabase } from "../../../utils/mongodb";
+import { connectToDatabase } from "../../utils/mongodb";
 function verifyRequest({ categories_data, setCategories }) {
   //Sets the subNav instantly with no load time
   useEffect(() => {
