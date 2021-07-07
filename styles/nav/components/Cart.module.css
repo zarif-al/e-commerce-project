@@ -26,6 +26,7 @@
 }
 
 .cart_btn {
+  position: relative;
   color: black;
   background-color: white;
   height: 2.5rem;

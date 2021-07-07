@@ -135,51 +135,49 @@ function Cart({ handleOverlay }) {
           <div className={styles.itemsContainer}>
             {cart.map((item, i) => {
               return (
-                <>
-                  <div className={styles.item} key={item.id}>
-                    <div className={styles.imageContainer}>
-                      <img src={item.image} className={styles.image} />
-                    </div>
-                    <div className={styles.name_quantity}>
-                      <div>{item.name}</div>
-                      <div>
-                        <span className={styles.priceHighlight}>
-                          &#36;{item.price}
-                        </span>{" "}
-                        X {item.quantity} =
-                        <span className={styles.priceHighlight}>
-                          &#36;{item.quantity * item.price}
-                        </span>
-                      </div>
-                    </div>
-                    <div className={styles.control_buttons}>
-                      <div
-                        className={styles.trash}
-                        onClick={() => {
-                          removeItem(i);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faTrash} size="xs" />
-                      </div>
-                      <div
-                        className={styles.plus}
-                        onClick={() => {
-                          incrementItem(i);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faPlusSquare} size="xs" />
-                      </div>
-                      <div
-                        className={styles.minus}
-                        onClick={() => {
-                          decrementItem(i);
-                        }}
-                      >
-                        <FontAwesomeIcon icon={faMinusSquare} size="xs" />
-                      </div>
+                <div className={styles.item} key={item.id}>
+                  <div className={styles.imageContainer}>
+                    <img src={item.image} className={styles.image} />
+                  </div>
+                  <div className={styles.name_quantity}>
+                    <div>{item.name}</div>
+                    <div>
+                      <span className={styles.priceHighlight}>
+                        &#36;{item.price}
+                      </span>{" "}
+                      X {item.quantity} =
+                      <span className={styles.priceHighlight}>
+                        &#36;{item.quantity * item.price}
+                      </span>
                     </div>
                   </div>
-                </>
+                  <div className={styles.control_buttons}>
+                    <div
+                      className={styles.trash}
+                      onClick={() => {
+                        removeItem(i);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faTrash} size="xs" />
+                    </div>
+                    <div
+                      className={styles.plus}
+                      onClick={() => {
+                        incrementItem(i);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faPlusSquare} size="xs" />
+                    </div>
+                    <div
+                      className={styles.minus}
+                      onClick={() => {
+                        decrementItem(i);
+                      }}
+                    >
+                      <FontAwesomeIcon icon={faMinusSquare} size="xs" />
+                    </div>
+                  </div>
+                </div>
               );
             })}
           </div>
