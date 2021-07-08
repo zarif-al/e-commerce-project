@@ -31,9 +31,11 @@ function Products({
   // For reviews and specification animations
   const [direction, setDirection] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
+  let mainDescription = undefined;
+  let specifications = undefined;
   if (item != undefined) {
-    const specifications = item.specifications;
-    const mainDescription = item.mainDescription;
+    specifications = item.specifications;
+    mainDescription = item.mainDescription;
   }
   //for Add To Cart Button
   const [addingToCart, setAddToCart] = useState(false);
