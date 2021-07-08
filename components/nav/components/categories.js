@@ -98,9 +98,9 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
         onMouseLeave={subNav ? () => setCategory(null) : null}
       >
         <motion.div
-          variants={categories_button}
+        /* variants={categories_button}
           animate="visible"
-          initial="hidden"
+          initial="hidden" */
         >
           <a
             style={{

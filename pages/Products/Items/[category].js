@@ -21,7 +21,20 @@ import SideFilter from "../../../components/products/SideFilter";
 import { cartAction } from "../../../functions/functions";
 import Toast from "react-bootstrap/Toast";
 import { mutate } from "swr";
-function Items({ category, brands, handleOverlay, setShow, fireSwal }) {
+function Items({
+  category,
+  brands,
+  handleOverlay,
+  fireSwal,
+  categories_data,
+  setCategories,
+}) {
+  //Sets the subNav instantly with no load time
+  useEffect(() => {
+    if (categories_data) {
+      setCategories(categories_data);
+    }
+  }, [categories_data]);
   //Fix for Json Parse error given in vercel logs
   if (brands === undefined) {
     return <></>;
@@ -63,8 +76,8 @@ function Items({ category, brands, handleOverlay, setShow, fireSwal }) {
   const [loading, setLoading] = useState(true);
   //
   const [showSideFilter, setShowFilter] = useState(false);
-  //For Toast. For some reason it doesn't work with a differently named variable
-  /*  const [show, setShow] = useState(false); */
+  //for Add To Cart Button
+  const [addingToCart, setAddToCart] = useState(null);
   //fetch
   function getProducts() {
     fetch(
@@ -101,14 +114,7 @@ function Items({ category, brands, handleOverlay, setShow, fireSwal }) {
     } else {
       setDisabledBrand(null);
     }
-
     getProducts();
-    //Filter Items on category //change
-    /*  const currentFilter = items_object.filter((item) => {
-      if (selected_brands.includes(item.brand)) {
-        return item;
-      }
-    }); */
   }, [selected_brands, userMinPrice, userMaxPrice, pageNumber, sort]);
   //The states don't reset when navigating to new page. This useEffect is necessary for updating page
   useEffect(() => {
@@ -336,9 +342,14 @@ function Items({ category, brands, handleOverlay, setShow, fireSwal }) {
                           </Card.Text>
                           <div className={styles.cardFooter_buttons}>
                             <Button
-                              variant="outline-success"
+                              variant={
+                                addingToCart === i
+                                  ? "outline-info"
+                                  : "outline-success"
+                              }
                               block
                               onClick={async () => {
+                                setAddToCart(i);
                                 const resp = await cartAction({
                                   action: "addOne",
                                   id: item._id,
@@ -348,13 +359,21 @@ function Items({ category, brands, handleOverlay, setShow, fireSwal }) {
                                 });
                                 if (resp === "success") {
                                   mutate("/api/cartApi");
-                                  /*   setShow(true); */
                                   fireSwal();
+                                  setAddToCart(null);
                                 }
                               }}
-                              disabled={item.price === 0 ? true : false}
+                              disabled={
+                                addingToCart === i
+                                  ? true
+                                  : item.price === 0
+                                  ? true
+                                  : false
+                              }
                             >
-                              Add To Cart!
+                              {addingToCart === i
+                                ? "Adding..."
+                                : "Add To Cart!"}
                             </Button>
                             <Link
                               href={`/Products/Item/${encodeURIComponent(
@@ -456,33 +475,6 @@ function Items({ category, brands, handleOverlay, setShow, fireSwal }) {
                 <span>of {Math.ceil(total / nPerPage)}</span>
               </div>
             </Row>
-            {/* <div
-              style={{
-                position: "fixed",
-                bottom: 0,
-                left: "60%",
-                transform: "translate(-60%)",
-              }}
-            >
-              <Toast
-                onClose={() => setShow(false)}
-                show={show}
-                delay={3000}
-                autohide
-              >
-                <Toast.Body
-                  style={{
-                    background: "green",
-                    color: "white",
-                    border: "1px solid black",
-                    borderRadius: "5%",
-                    opacity: "0.7",
-                  }}
-                >
-                  Added To Cart!
-                </Toast.Body>
-              </Toast>
-            </div> */}
           </Col>
         </Row>
         <SideFilter
@@ -536,6 +528,11 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const { db } = await connectToDatabase();
+  const categories_data = await db
+    .collection("Categories")
+    .find()
+    .project({ _id: 0, category: 1, brand: 1 })
+    .toArray();
   const Brands = await db
     .collection("Categories")
     .find({ category: params.category })
@@ -548,7 +545,7 @@ export async function getStaticProps({ params }) {
   }
   var brands = JSON.stringify(Brands[0]);
   return {
-    props: { category: params.category, brands },
+    props: { category: params.category, brands, categories_data },
     revalidate: 600,
   };
 }

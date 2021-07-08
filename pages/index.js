@@ -4,7 +4,15 @@ import { Container, Row, Col } from "react-bootstrap";
 import Carousel from "react-bootstrap/Carousel";
 import styles from "../styles/index/Index.module.css";
 import Featured from "../components/index/Featured";
-export default function Home({ Items }) {
+import { useEffect } from "react";
+export default function Home({ Items, categories_data, setCategories }) {
+  //Sets the subNav instantly with no load time
+  useEffect(() => {
+    if (categories_data) {
+      setCategories(categories_data);
+    }
+  }, [categories_data]);
+
   return (
     <Container className={styles.indexContainer}>
       <Carousel indicators={false}>
@@ -44,6 +52,12 @@ export default function Home({ Items }) {
 
 export async function getStaticProps(context) {
   const { db } = await connectToDatabase();
+
+  const categories_data = await db
+    .collection("Categories")
+    .find()
+    .project({ _id: 0, category: 1, brand: 1 })
+    .toArray();
 
   const keyboards_data = await db
     .collection("Items")
@@ -95,6 +109,7 @@ export async function getStaticProps(context) {
   return {
     props: {
       Items: items_data,
+      categories_data,
     },
     revalidate: 600,
   };

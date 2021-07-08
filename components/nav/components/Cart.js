@@ -16,12 +16,14 @@ import Spinner from "react-bootstrap/Spinner";
 import { itemCount, cartTotal, cartAction } from "../../../functions/functions";
 import Button from "react-bootstrap/Button";
 import { mutate } from "swr";
-import { remove } from "js-cookie";
 function Cart({ handleOverlay }) {
+  //Not the best solution. Recommend to go back.
   //states
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
   const [drop, setDrop] = useState(false);
+  //Overlay on removed Item
+  const [removedItem, setRemovedItem] = useState(null);
   //Drop state changer
   const changeDrop = () => {
     handleOverlay();
@@ -38,6 +40,7 @@ function Cart({ handleOverlay }) {
       transition: { duration: 0.3 },
     },
   };
+  console.log(data, error, isValidating);
   //holding cart, might switch to directly using data
   let cart = null;
   if (data != undefined) {
@@ -47,9 +50,10 @@ function Cart({ handleOverlay }) {
   }
   //
   //remove item from cart function
-  const removeItem = async (index) => {
+  const removeItem = async (id) => {
+    setRemovedItem(id);
     const item = {
-      id: cart[index].id,
+      id: id,
       action: "delete",
     };
     const resp = await cartAction(item);
@@ -58,12 +62,13 @@ function Cart({ handleOverlay }) {
     }
   };
   //decrement item from cart function
-  const decrementItem = async (index) => {
-    if (cart[index].quantity === 1) {
-      removeItem(index);
+  const decrementItem = async (id) => {
+    const currentItem = cart.find((item) => item.id === id);
+    if (currentItem.quantity === 1) {
+      removeItem(id);
     } else {
       const item = {
-        id: cart[index].id,
+        id: id,
         action: "removeOne",
       };
       const resp = await cartAction(item);
@@ -73,9 +78,9 @@ function Cart({ handleOverlay }) {
     }
   };
   //increment item from cart function
-  const incrementItem = async (index) => {
+  const incrementItem = async (id) => {
     const item = {
-      id: cart[index].id,
+      id: id,
       action: "addOne",
     };
     const resp = await cartAction(item);
@@ -84,7 +89,7 @@ function Cart({ handleOverlay }) {
     }
   };
   return (
-    <>
+    <div>
       <div
         className={
           drop ? styles.backdrop + " " + styles.active : styles.backdrop
@@ -111,10 +116,10 @@ function Cart({ handleOverlay }) {
               padding: "0.5rem",
             }}
           >
-            {isValidating || data === undefined ? (
+            {data === undefined ? (
               <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
             ) : (
-              itemCount(data)
+              itemCount(cart)
             )}
           </span>
         </span>
@@ -132,10 +137,21 @@ function Cart({ handleOverlay }) {
           <div className={styles.noItems}>No Items Added Yet!</div>
         ) : (
           <div className={styles.itemsContainer}>
-            {cart.map((item, i) => {
+            {cart.map((item) => {
               return (
-                <>
-                  <div className={styles.item} key={item.id}>
+                <div className={styles.itemContainer} key={item.id}>
+                  <div
+                    className={styles.loadingDiv}
+                    style={{
+                      display: removedItem === item.id ? "flex" : "none",
+                    }}
+                  >
+                    <Spinner
+                      animation="border"
+                      style={{ opacity: 1, color: "white" }}
+                    />
+                  </div>
+                  <div className={styles.item}>
                     <div className={styles.imageContainer}>
                       <img src={item.image} className={styles.image} />
                     </div>
@@ -155,7 +171,7 @@ function Cart({ handleOverlay }) {
                       <div
                         className={styles.trash}
                         onClick={() => {
-                          removeItem(i);
+                          removeItem(item.id);
                         }}
                       >
                         <FontAwesomeIcon icon={faTrash} size="xs" />
@@ -163,7 +179,7 @@ function Cart({ handleOverlay }) {
                       <div
                         className={styles.plus}
                         onClick={() => {
-                          incrementItem(i);
+                          incrementItem(item.id);
                         }}
                       >
                         <FontAwesomeIcon icon={faPlusSquare} size="xs" />
@@ -171,14 +187,14 @@ function Cart({ handleOverlay }) {
                       <div
                         className={styles.minus}
                         onClick={() => {
-                          decrementItem(i);
+                          decrementItem(item.id);
                         }}
                       >
                         <FontAwesomeIcon icon={faMinusSquare} size="xs" />
                       </div>
                     </div>
                   </div>
-                </>
+                </div>
               );
             })}
           </div>
@@ -195,7 +211,7 @@ function Cart({ handleOverlay }) {
           </div>
         </div>
       </motion.div>
-    </>
+    </div>
   );
 }
 
