@@ -22,7 +22,8 @@ function Cart({ handleOverlay }) {
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
   const [drop, setDrop] = useState(false);
-  const [update, setUpdate] = useState(null);
+  //Overlay on removed Item
+  const [removedItem, setRemovedItem] = useState(null);
   //Drop state changer
   const changeDrop = () => {
     handleOverlay();
@@ -39,13 +40,9 @@ function Cart({ handleOverlay }) {
       transition: { duration: 0.3 },
     },
   };
+  console.log(data, error, isValidating);
   //holding cart, might switch to directly using data
   let cart = null;
-  /*if (!data || error || data === undefined) {
-    cart = null;
-  } else {
-    cart = data.data[0].cart;
-  } */
   if (data != undefined) {
     if (data.data[0].cart !== undefined) {
       cart = data.data[0].cart;
@@ -54,7 +51,7 @@ function Cart({ handleOverlay }) {
   //
   //remove item from cart function
   const removeItem = async (id) => {
-    /*     setUpdate(id); */
+    setRemovedItem(id);
     const item = {
       id: id,
       action: "delete",
@@ -62,7 +59,6 @@ function Cart({ handleOverlay }) {
     const resp = await cartAction(item);
     if (resp === "success") {
       mutate("/api/cartApi");
-      /*  setUpdate(null); */
     }
   };
   //decrement item from cart function
@@ -71,7 +67,6 @@ function Cart({ handleOverlay }) {
     if (currentItem.quantity === 1) {
       removeItem(id);
     } else {
-      /*     setUpdate(id); */
       const item = {
         id: id,
         action: "removeOne",
@@ -79,13 +74,11 @@ function Cart({ handleOverlay }) {
       const resp = await cartAction(item);
       if (resp === "success") {
         mutate("/api/cartApi");
-        /*  setUpdate(null); */
       }
     }
   };
   //increment item from cart function
   const incrementItem = async (id) => {
-    /*    setUpdate(id); */
     const item = {
       id: id,
       action: "addOne",
@@ -93,7 +86,6 @@ function Cart({ handleOverlay }) {
     const resp = await cartAction(item);
     if (resp === "success") {
       mutate("/api/cartApi");
-      /*    setUpdate(null); */
     }
   };
   return (
@@ -148,15 +140,17 @@ function Cart({ handleOverlay }) {
             {cart.map((item) => {
               return (
                 <div className={styles.itemContainer} key={item.id}>
-                  {/*    <div
+                  <div
                     className={styles.loadingDiv}
-                    style={{ display: update === item.id ? "flex" : "none" }}
+                    style={{
+                      display: removedItem === item.id ? "flex" : "none",
+                    }}
                   >
                     <Spinner
                       animation="border"
                       style={{ opacity: 1, color: "white" }}
                     />
-                  </div> */}
+                  </div>
                   <div className={styles.item}>
                     <div className={styles.imageContainer}>
                       <img src={item.image} className={styles.image} />
@@ -164,22 +158,13 @@ function Cart({ handleOverlay }) {
                     <div className={styles.name_quantity}>
                       <div>{item.name}</div>
                       <div>
-                        {update === item.id ? (
-                          <Spinner
-                            animation="border"
-                            className={styles.spinner}
-                          />
-                        ) : (
-                          <>
-                            <span className={styles.priceHighlight}>
-                              &#36;{item.price}
-                            </span>{" "}
-                            X {item.quantity} =
-                            <span className={styles.priceHighlight}>
-                              &#36;{item.quantity * item.price}
-                            </span>
-                          </>
-                        )}
+                        <span className={styles.priceHighlight}>
+                          &#36;{item.price}
+                        </span>{" "}
+                        X {item.quantity} =
+                        <span className={styles.priceHighlight}>
+                          &#36;{item.quantity * item.price}
+                        </span>
                       </div>
                     </div>
                     <div className={styles.control_buttons}>
