@@ -9,7 +9,7 @@ function SideNav({ categories, handleOverlay }) {
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
   //motion framer settings
-  const dropdown = {
+  const slideOut = {
     visible: {
       left: 0,
       transition: { duration: 0.3 },
@@ -42,11 +42,10 @@ function SideNav({ categories, handleOverlay }) {
           <FontAwesomeIcon icon={faBars} color="white" />
         </a>
         <motion.div
-          id="myDropdown"
-          className={styles.dropdownContent}
+          className={styles.slider}
           initial={"hidden"}
           animate={sidebar ? "visible" : "hidden"}
-          variants={dropdown}
+          variants={slideOut}
         >
           <ul className={styles.navMenuItems}>
             <Categories

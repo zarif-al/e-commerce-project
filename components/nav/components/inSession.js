@@ -49,8 +49,7 @@ function inSession({ handleOverlay, session }) {
         )}
       </a>
       <motion.div
-        id="myDropdown"
-        className={styles.dropdownContent}
+        className={styles.slider}
         initial={"hidden"}
         animate={drop ? "visible" : "hidden"}
         variants={dropdown}
