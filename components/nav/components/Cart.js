@@ -17,6 +17,7 @@ import { itemCount, cartTotal, cartAction } from "../../../functions/functions";
 import Button from "react-bootstrap/Button";
 import { mutate } from "swr";
 function Cart({ handleOverlay }) {
+  //Not the best solution. Recommend to go back.
   //states
   const fetcher = (url) => fetch(url).then((r) => r.json());
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
@@ -53,7 +54,7 @@ function Cart({ handleOverlay }) {
   //
   //remove item from cart function
   const removeItem = async (id) => {
-    setUpdate(id);
+    /*     setUpdate(id); */
     const item = {
       id: id,
       action: "delete",
@@ -61,7 +62,7 @@ function Cart({ handleOverlay }) {
     const resp = await cartAction(item);
     if (resp === "success") {
       mutate("/api/cartApi");
-      setUpdate(null);
+      /*  setUpdate(null); */
     }
   };
   //decrement item from cart function
@@ -70,7 +71,7 @@ function Cart({ handleOverlay }) {
     if (currentItem.quantity === 1) {
       removeItem(id);
     } else {
-      setUpdate(id);
+      /*     setUpdate(id); */
       const item = {
         id: id,
         action: "removeOne",
@@ -78,13 +79,13 @@ function Cart({ handleOverlay }) {
       const resp = await cartAction(item);
       if (resp === "success") {
         mutate("/api/cartApi");
-        setUpdate(null);
+        /*  setUpdate(null); */
       }
     }
   };
   //increment item from cart function
   const incrementItem = async (id) => {
-    setUpdate(id);
+    /*    setUpdate(id); */
     const item = {
       id: id,
       action: "addOne",
@@ -92,7 +93,7 @@ function Cart({ handleOverlay }) {
     const resp = await cartAction(item);
     if (resp === "success") {
       mutate("/api/cartApi");
-      setUpdate(null);
+      /*    setUpdate(null); */
     }
   };
   return (
