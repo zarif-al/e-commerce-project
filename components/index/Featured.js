@@ -21,6 +21,7 @@ function Featured({ Items }) {
             item.category
           )}/${encodeURIComponent(item.productCode)}`}
           passHref={true}
+          shallow={true}
         >
           <a>
             <Card className={styles.card}>
