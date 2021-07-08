@@ -15,7 +15,7 @@ import { cartAction } from "../../../../functions/functions";
 import { mutate } from "swr";
 function Products({
   item,
-  relatedItems,
+  RelatedItems,
   fireSwal,
   categories_data,
   setCategories,
@@ -26,21 +26,13 @@ function Products({
       setCategories(categories_data);
     }
   }, [categories_data]);
-  //Fix for Json Parse error given in vercel logs
-  /*   console.log(item);
-  console.log(relatedItems); */
-  /*   if (item === undefined || relatedItems === undefined) {
-    return <></>;
-  } */
-  const item_object = JSON.parse(item);
-  const relatedItems_array = JSON.parse(relatedItems);
-  //
+
   const [purchaseAmount, setPurchaseAmount] = useState(1);
   // For reviews and specification animations
   const [direction, setDirection] = useState(0);
   const [activeIndex, setActiveIndex] = useState(0);
-  const specifications = item_object.specifications;
-  const mainDescription = item_object.mainDescription;
+  const specifications = item.specifications;
+  const mainDescription = item.mainDescription;
   //for Add To Cart Button
   const [addingToCart, setAddToCart] = useState(false);
   let specificationRows = [];
@@ -106,7 +98,7 @@ function Products({
     }
   } else if (specifications === undefined) {
     const filter = mainDescription.description.filter(
-      (desc) => desc != item_object.name && desc.length > 0
+      (desc) => desc != item.name && desc.length > 0
     );
     mainDescriptionRows = filter.map((desc, i) => {
       return <li key={i}>{desc}</li>;
@@ -120,40 +112,40 @@ function Products({
             <FontAwesomeIcon icon={faHome} color="black" />
           </Breadcrumb.Item>
           <Breadcrumb.Item
-            href={`/Products/Items/${encodeURIComponent(item_object.category)}`}
+            href={`/Products/Items/${encodeURIComponent(item.category)}`}
             onClick={() => {
               Cookie.set("brand", "All", { sameSite: "strict" });
             }}
           >
-            {decodeURIComponent(item_object.category)}
+            {decodeURIComponent(item.category)}
           </Breadcrumb.Item>
           <Breadcrumb.Item
-            href={`/Products/Items/${encodeURIComponent(item_object.category)}`}
+            href={`/Products/Items/${encodeURIComponent(item.category)}`}
             onClick={() => {
-              Cookie.set("brand", item_object.brand, { sameSite: "strict" });
+              Cookie.set("brand", item.brand, { sameSite: "strict" });
             }}
           >
-            {item_object.brand}
+            {item.brand}
           </Breadcrumb.Item>
-          <Breadcrumb.Item active>{item_object.name}</Breadcrumb.Item>
+          <Breadcrumb.Item active>{item.name}</Breadcrumb.Item>
         </Breadcrumb>
         <Row>
           <Col lg={5} xs={12} sm={12} md={4} className={styles.imageContainer}>
             <Image
-              src={item_object.imageLink}
+              src={item.imageLink}
               layout="fill"
               className={styles.image}
-              alt={item_object.name}
+              alt={item.name}
             />
           </Col>
           <Col lg={7} xs={12} sm={12} md={8}>
             <Row>
-              <h4 className={styles.itemName}>{item_object.name}</h4>
+              <h4 className={styles.itemName}>{item.name}</h4>
             </Row>
             <Row className={styles.infoBar}>
-              {item_object.price > 0 ? (
+              {item.price > 0 ? (
                 <div>
-                  Price : <strong>&#36;{item_object.price}</strong>
+                  Price : <strong>&#36;{item.price}</strong>
                 </div>
               ) : (
                 <div>
@@ -164,16 +156,16 @@ function Products({
                 Status : <strong>In Stock</strong>
               </div>
               <div>
-                Product Code : <strong>{item_object.productCode}</strong>
+                Product Code : <strong>{item.productCode}</strong>
               </div>
               <div>
-                Brand : <strong>{item_object.brand}</strong>
+                Brand : <strong>{item.brand}</strong>
               </div>
             </Row>
             <Row className={styles.keyFeatures}>
               <h5>Key Features</h5>
               <ul>
-                {item_object.description.map((point, i) => {
+                {item.description.map((point, i) => {
                   return <li key={i}>{point}</li>;
                 })}
               </ul>
@@ -182,7 +174,7 @@ function Products({
               </a>
             </Row>
             <Row className={styles.purchaseRow} id="purchase_row">
-              {item_object.price > 0 ? (
+              {item.price > 0 ? (
                 <>
                   <h5 className={styles.purchaseHeader}>Payment</h5>
                   <div className={styles.purchaseButton}>
@@ -215,10 +207,10 @@ function Products({
                         setAddToCart(true);
                         const resp = await cartAction({
                           action: "addOne",
-                          id: item_object._id,
-                          image: item_object.imageLink,
-                          name: item_object.name,
-                          price: item_object.price,
+                          id: item._id,
+                          image: item.imageLink,
+                          name: item.name,
+                          price: item.price,
                         });
                         if (resp === "success") {
                           mutate("/api/cartApi");
@@ -342,11 +334,11 @@ function Products({
           <Col lg={3} sm={12} xs={12} className={styles.suggestionsCol}>
             <div className={styles.suggestionsDiv}>
               <h4 className={styles.relatedProductsHeader}>Related Products</h4>
-              {relatedItems_array.map((item, i) => {
+              {RelatedItems.map((item, i) => {
                 return (
                   <Link
                     href={`/Products/Item/${encodeURIComponent(
-                      item_object.category
+                      item.category
                     )}/${encodeURIComponent(item.productCode)}`}
                     passHref={true}
                     key={i}
@@ -429,7 +421,7 @@ export async function getStaticProps({ params }) {
           category: params.category,
           productCode: { $nin: [Item[0].productCode] },
         })
-        .project({ _id: -1, name: 1, imageLink: 1, price: 1, productCode: 1 })
+        .project({ _id: 0, name: 1, imageLink: 1, price: 1, productCode: 1 })
         .sort({ price: -1 })
         .limit(5)
         .toArray();
@@ -441,7 +433,7 @@ export async function getStaticProps({ params }) {
           price: { $lte: Item[0].price, $gt: 0 },
           productCode: { $nin: [Item[0].productCode] },
         })
-        .project({ _id: -1, name: 1, imageLink: 1, price: 1, productCode: 1 })
+        .project({ _id: 0, name: 1, imageLink: 1, price: 1, productCode: 1 })
         .limit(5)
         .toArray();
       if (RelatedItems.length < 5) {
@@ -453,7 +445,7 @@ export async function getStaticProps({ params }) {
             productCode: { $nin: [Item[0].productCode] },
           })
           .project({
-            _id: -1,
+            _id: 0,
             name: 1,
             imageLink: 1,
             price: 1,
@@ -464,11 +456,37 @@ export async function getStaticProps({ params }) {
       }
     }
   }
+  let item;
+  if (Item[0].mainDescription === undefined) {
+    item = {
+      _id: JSON.parse(JSON.stringify(Item[0]._id)),
+      productCode: Item[0].productCode,
+      specifications: Item[0].specifications,
+      brand: Item[0].brand,
+      category: Item[0].category,
+      name: Item[0].name,
+      description: Item[0].description,
+      price: Item[0].price,
+      imageLink: Item[0].imageLink,
+      reviews: Item[0].reviews,
+    };
+  } else {
+    item = {
+      _id: JSON.parse(JSON.stringify(Item[0]._id)),
+      productCode: Item[0].productCode,
+      brand: Item[0].brand,
+      category: Item[0].category,
+      name: Item[0].name,
+      description: Item[0].description,
+      price: Item[0].price,
+      imageLink: Item[0].imageLink,
+      reviews: Item[0].reviews,
+      mainDescription: Item[0].mainDescription,
+    };
+  }
 
-  var item = JSON.stringify(Item[0]);
-  var relatedItems = JSON.stringify(RelatedItems);
   return {
-    props: { item, relatedItems, categories_data },
+    props: { item, RelatedItems, categories_data },
     revalidate: 600,
   };
 }
