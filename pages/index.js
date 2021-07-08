@@ -104,7 +104,9 @@ export async function getStaticProps(context) {
     .limit(4)
     .toArray();
 
-  const items_data = keyboards_data.concat(graphics_data, headphones_data);
+  const items_data = keyboards_data.concat(
+    /* graphics_data, */ headphones_data
+  );
 
   return {
     props: {
