@@ -433,6 +433,7 @@ export async function getStaticProps({ params }) {
           price: { $lte: Item[0].price, $gt: 0 },
           productCode: { $nin: [Item[0].productCode] },
         })
+        .sort({ price: -1 })
         .project({ _id: 0, name: 1, imageLink: 1, price: 1, productCode: 1 })
         .limit(5)
         .toArray();
@@ -444,6 +445,7 @@ export async function getStaticProps({ params }) {
             price: { $gte: Item[0].price },
             productCode: { $nin: [Item[0].productCode] },
           })
+          .sort({ price: 1 })
           .project({
             _id: 0,
             name: 1,
