@@ -334,12 +334,12 @@ function Products({
           <Col lg={3} sm={12} xs={12} className={styles.suggestionsCol}>
             <div className={styles.suggestionsDiv}>
               <h4 className={styles.relatedProductsHeader}>Related Products</h4>
-              {RelatedItems.map((item, i) => {
+              {RelatedItems.map((relatedItem, i) => {
                 return (
                   <Link
                     href={`/Products/Item/${encodeURIComponent(
                       item.category
-                    )}/${encodeURIComponent(item.productCode)}`}
+                    )}/${encodeURIComponent(relatedItem.productCode)}`}
                     passHref={true}
                     key={i}
                   >
@@ -347,14 +347,14 @@ function Products({
                       <div className={styles.suggestionCard}>
                         <div>
                           <img
-                            src={item.imageLink}
+                            src={relatedItem.imageLink}
                             className={styles.suggestionImage}
                           />
                         </div>
                         <div className={styles.suggestionInfo}>
-                          <div>{item.name}</div>
+                          <div>{relatedItem.name}</div>
                           {item.price > 0 ? (
-                            <div>&#36;{item.price}</div>
+                            <div>&#36;{relatedItem.price}</div>
                           ) : (
                             <div>Upcoming!</div>
                           )}
