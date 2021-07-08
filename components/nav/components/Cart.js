@@ -47,18 +47,17 @@ function Cart({ handleOverlay }) {
     cart = data.cart;
   }
   //useEffect
-  /*   useEffect(() => {
+  useEffect(() => {
     let currentArray_removal = removedItems.filter((removedItems) =>
       data.cart.some((items) => items.id == removedItems)
     );
-    console.log(currentArray_removal);
-    setRemovedItem([]);
-  }, [data]); */
+    setRemovedItem(currentArray_removal);
+  }, [data]);
   //remove item from cart function
   const removeItem = async (id) => {
-    /*   let currentArray = removedItems;
+    let currentArray = removedItems;
     currentArray.push(id);
-    setRemovedItem(currentArray); */
+    setRemovedItem(currentArray);
     const item = {
       id: id,
       action: "delete",
