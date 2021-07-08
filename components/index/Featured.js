@@ -16,18 +16,16 @@ function Featured({ Items }) {
         key={item.productCode}
         className={styles.column + " d-flex justify-content-center"}
       >
-        {/*  <Link
-          href={`/Products/Item/${encodeURIComponent(
-            item.category
-          )}/${encodeURIComponent(item.productCode)}`}
-          passHref={true}
-          shallow={true}
-        > */}
-        <a
+        <Link
           href={`/Products/Item/${encodeURIComponent(
             item.category
           )}/${encodeURIComponent(item.productCode)}`}
         >
+          {/*   <a
+          href={`/Products/Item/${encodeURIComponent(
+            item.category
+          )}/${encodeURIComponent(item.productCode)}`}
+        > */}
           <Card className={styles.card}>
             <Card.Img
               variant="top"
@@ -41,8 +39,8 @@ function Featured({ Items }) {
               </Card.Text>
             </Card.Body>
           </Card>
-        </a>
-        {/* </Link> */}
+          {/*  </a> */}
+        </Link>
       </Col>
     );
     if ((i + 1) % 4 === 0) {

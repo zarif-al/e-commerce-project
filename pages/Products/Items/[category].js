@@ -19,7 +19,6 @@ import Link from "next/link";
 import ProductFilter from "../../../components/products/ProductFilter";
 import SideFilter from "../../../components/products/SideFilter";
 import { cartAction } from "../../../functions/functions";
-import Toast from "react-bootstrap/Toast";
 import { mutate } from "swr";
 function Items({
   category,
