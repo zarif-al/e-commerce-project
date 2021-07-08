@@ -357,7 +357,7 @@ function Items({
                                   name: item.name,
                                   price: item.price,
                                 });
-                                if (resp === "success") {
+                                if (resp == "success") {
                                   mutate("/api/cartApi");
                                   fireSwal();
                                   setAddToCart(null);
