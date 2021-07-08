@@ -19,7 +19,6 @@ import Link from "next/link";
 import ProductFilter from "../../../components/products/ProductFilter";
 import SideFilter from "../../../components/products/SideFilter";
 import { cartAction } from "../../../functions/functions";
-import Toast from "react-bootstrap/Toast";
 import { mutate } from "swr";
 function Items({
   category,
@@ -35,21 +34,15 @@ function Items({
       setCategories(categories_data);
     }
   }, [categories_data]);
-  //Fix for Json Parse error given in vercel logs
-  if (brands === undefined) {
-    return <></>;
-  }
+  //Regex to replace underscores
+  const regex = /_/g;
   //
-  //add filter sidebar for mobile
-  //Add a way to set Upcoming items to show or not
-  //parse props
-  const brands_object = JSON.parse(brands);
   //get cookie
   let cookieBrand = Cookie.get("brand");
   //initialize default state
   let defaultState = [];
   if (cookieBrand === "All" || cookieBrand === undefined) {
-    defaultState = brands_object.brand;
+    defaultState = brands.brand;
   } else {
     defaultState.push(cookieBrand);
   }
@@ -134,7 +127,7 @@ function Items({
   //checkList state manager
   const handleChecklist = (selection) => {
     if (selection === "All") {
-      const newArray = brands_object.brand;
+      const newArray = brands.brand;
       setBrands(newArray);
     } else {
       if (selected_brands.includes(selection)) {
@@ -173,7 +166,7 @@ function Items({
               setSliderMinPrice={setSliderMinPrice}
               setUserMaxPrice={setUserMaxPrice}
               setUserMinPrice={setUserMinPrice}
-              brands_object={brands_object}
+              brands_object={brands}
               selected_brands={selected_brands}
               handleChecklist={handleChecklist}
               sliderMinPrice={sliderMinPrice}
@@ -189,10 +182,8 @@ function Items({
                 <Breadcrumb.Item href="/">
                   <FontAwesomeIcon icon={faHome} />
                 </Breadcrumb.Item>
-                <Breadcrumb.Item
-                  href={`/Products/Items/${encodeURIComponent(category)}`}
-                >
-                  {decodeURIComponent(category)}
+                <Breadcrumb.Item href={`/Products/Items/${category}`}>
+                  {category.replace(regex, " ")}
                 </Breadcrumb.Item>
               </Breadcrumb>
               <div className={styles.pagination}>
@@ -376,9 +367,7 @@ function Items({
                                 : "Add To Cart!"}
                             </Button>
                             <Link
-                              href={`/Products/Item/${encodeURIComponent(
-                                item.category
-                              )}/${encodeURIComponent(item.productCode)}`}
+                              href={`/Products/Item/${item.category}/${item.productCode}`}
                               passHref={true}
                             >
                               <Button href="#" variant="outline-primary" block>
@@ -484,7 +473,7 @@ function Items({
           setSliderMinPrice={setSliderMinPrice}
           setUserMaxPrice={setUserMaxPrice}
           setUserMinPrice={setUserMinPrice}
-          brands_object={brands_object}
+          brands_object={brands}
           selected_brands={selected_brands}
           handleChecklist={handleChecklist}
           sliderMinPrice={sliderMinPrice}
@@ -543,9 +532,8 @@ export async function getStaticProps({ params }) {
       notFound: true,
     };
   }
-  var brands = JSON.stringify(Brands[0]);
   return {
-    props: { category: params.category, brands, categories_data },
+    props: { category: params.category, brands: Brands[0], categories_data },
     revalidate: 600,
   };
 }

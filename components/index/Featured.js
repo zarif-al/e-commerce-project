@@ -17,9 +17,7 @@ function Featured({ Items }) {
         className={styles.column + " d-flex justify-content-center"}
       >
         <Link
-          href={`/Products/Item/${encodeURIComponent(
-            item.category
-          )}/${encodeURIComponent(item.productCode)}`}
+          href={`/Products/Item/${item.category}/${item.productCode}`}
           passHref={true}
         >
           <a>

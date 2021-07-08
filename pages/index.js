@@ -76,7 +76,7 @@ export async function getStaticProps(context) {
 
   const graphics_data = await db
     .collection("Items")
-    .find({ category: "Graphics%20Card" })
+    .find({ category: "Graphics_Card" })
     .project({
       _id: 0,
       productCode: 1,
