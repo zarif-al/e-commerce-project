@@ -74,7 +74,7 @@ export async function getStaticProps(context) {
     .limit(4)
     .toArray();
 
-  const graphics_data = await db
+  /*  const graphics_data = await db
     .collection("Items")
     .find({ category: encodeURIComponent("Graphics Card") })
     .project({
@@ -87,7 +87,7 @@ export async function getStaticProps(context) {
     })
     .sort({ price: -1 })
     .limit(4)
-    .toArray();
+    .toArray(); */
 
   const headphones_data = await db
     .collection("Items")
@@ -104,7 +104,9 @@ export async function getStaticProps(context) {
     .limit(4)
     .toArray();
 
-  const items_data = keyboards_data.concat(graphics_data, headphones_data);
+  const items_data = keyboards_data.concat(
+    /* graphics_data, */ headphones_data
+  );
 
   return {
     props: {
