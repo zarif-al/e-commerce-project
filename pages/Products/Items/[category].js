@@ -37,21 +37,12 @@ function Items({
   //Regex to replace underscores
   const regex = /_/g;
   //
-  //Fix for Json Parse error given in vercel logs
-  /*   if (brands === undefined) {
-    return <></>;
-  } */
-  //
-  //add filter sidebar for mobile
-  //Add a way to set Upcoming items to show or not
-  //parse props
-  const brands_object = JSON.parse(brands);
   //get cookie
   let cookieBrand = Cookie.get("brand");
   //initialize default state
   let defaultState = [];
   if (cookieBrand === "All" || cookieBrand === undefined) {
-    defaultState = brands_object.brand;
+    defaultState = brands.brand;
   } else {
     defaultState.push(cookieBrand);
   }
@@ -136,7 +127,7 @@ function Items({
   //checkList state manager
   const handleChecklist = (selection) => {
     if (selection === "All") {
-      const newArray = brands_object.brand;
+      const newArray = brands.brand;
       setBrands(newArray);
     } else {
       if (selected_brands.includes(selection)) {
@@ -175,7 +166,7 @@ function Items({
               setSliderMinPrice={setSliderMinPrice}
               setUserMaxPrice={setUserMaxPrice}
               setUserMinPrice={setUserMinPrice}
-              brands_object={brands_object}
+              brands_object={brands}
               selected_brands={selected_brands}
               handleChecklist={handleChecklist}
               sliderMinPrice={sliderMinPrice}
@@ -482,7 +473,7 @@ function Items({
           setSliderMinPrice={setSliderMinPrice}
           setUserMaxPrice={setUserMaxPrice}
           setUserMinPrice={setUserMinPrice}
-          brands_object={brands_object}
+          brands_object={brands}
           selected_brands={selected_brands}
           handleChecklist={handleChecklist}
           sliderMinPrice={sliderMinPrice}
@@ -541,9 +532,8 @@ export async function getStaticProps({ params }) {
       notFound: true,
     };
   }
-  var brands = JSON.stringify(Brands[0]);
   return {
-    props: { category: params.category, brands, categories_data },
+    props: { category: params.category, brands: Brands[0], categories_data },
     revalidate: 600,
   };
 }

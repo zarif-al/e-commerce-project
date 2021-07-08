@@ -7,7 +7,9 @@ import Link from "next/link";
 import Cookie from "js-cookie";
 function categories({ categories, subNav, showSidebar, handleOverlay }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  //Regex to replace underscores
   const regex = /_/g;
+  //
   const setCategory = (category) => {
     if (selectedCategory === category) {
       setSelectedCategory(null);
