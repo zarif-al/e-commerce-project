@@ -465,11 +465,6 @@ export async function getStaticProps({ params }) {
     }
   }
 
-  if (!Item) {
-    return {
-      notFound: true,
-    };
-  }
   var item = JSON.stringify(Item[0]);
   var relatedItems = JSON.stringify(RelatedItems);
   return {
