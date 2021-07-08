@@ -29,8 +29,9 @@ export async function cartAction(item) {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(item),
-  }).then((response) => {
-    console.log(response);
-    return "success";
-  });
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      return data.message;
+    });
 }

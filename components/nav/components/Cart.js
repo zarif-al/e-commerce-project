@@ -23,7 +23,7 @@ function Cart({ handleOverlay }) {
   const { data, error, isValidating } = useSWR("/api/cartApi", fetcher);
   const [drop, setDrop] = useState(false);
   //Overlay on removed Item
-  const [removedItem, setRemovedItem] = useState(null);
+  const [removedItems, setRemovedItem] = useState([]);
 
   //Drop state changer
   const changeDrop = () => {
@@ -48,11 +48,17 @@ function Cart({ handleOverlay }) {
   }
   //useEffect
   /*   useEffect(() => {
-    setRemovedItem(null);
+    let currentArray_removal = removedItems.filter((removedItems) =>
+      data.cart.some((items) => items.id == removedItems)
+    );
+    console.log(currentArray_removal);
+    setRemovedItem([]);
   }, [data]); */
   //remove item from cart function
   const removeItem = async (id) => {
-    /*  setRemovedItem(id); */
+    /*   let currentArray = removedItems;
+    currentArray.push(id);
+    setRemovedItem(currentArray); */
     const item = {
       id: id,
       action: "delete",
@@ -144,7 +150,7 @@ function Cart({ handleOverlay }) {
                   <div
                     className={styles.loadingDiv}
                     style={{
-                      display: removedItem === item.id ? "flex" : "none",
+                      display: removedItems.includes(item.id) ? "flex" : "none",
                     }}
                   >
                     <Spinner
