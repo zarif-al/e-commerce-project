@@ -417,7 +417,35 @@ export async function getStaticProps({ params }) {
     .toArray();
 
   let RelatedItems;
+  let item;
   if (Item[0] != undefined) {
+    if (Item[0].mainDescription === undefined) {
+      item = {
+        _id: JSON.parse(JSON.stringify(Item[0]._id)),
+        productCode: Item[0].productCode,
+        specifications: Item[0].specifications,
+        brand: Item[0].brand,
+        category: Item[0].category,
+        name: Item[0].name,
+        description: Item[0].description,
+        price: Item[0].price,
+        imageLink: Item[0].imageLink,
+        reviews: Item[0].reviews,
+      };
+    } else {
+      item = {
+        _id: JSON.parse(JSON.stringify(Item[0]._id)),
+        productCode: Item[0].productCode,
+        brand: Item[0].brand,
+        category: Item[0].category,
+        name: Item[0].name,
+        description: Item[0].description,
+        price: Item[0].price,
+        imageLink: Item[0].imageLink,
+        reviews: Item[0].reviews,
+        mainDescription: Item[0].mainDescription,
+      };
+    }
     if (Item[0].price === 0) {
       RelatedItems = await db
         .collection("Items")
@@ -461,34 +489,6 @@ export async function getStaticProps({ params }) {
           .toArray();
       }
     }
-  }
-  let item;
-  if (Item[0].mainDescription === undefined) {
-    item = {
-      _id: JSON.parse(JSON.stringify(Item[0]._id)),
-      productCode: Item[0].productCode,
-      specifications: Item[0].specifications,
-      brand: Item[0].brand,
-      category: Item[0].category,
-      name: Item[0].name,
-      description: Item[0].description,
-      price: Item[0].price,
-      imageLink: Item[0].imageLink,
-      reviews: Item[0].reviews,
-    };
-  } else {
-    item = {
-      _id: JSON.parse(JSON.stringify(Item[0]._id)),
-      productCode: Item[0].productCode,
-      brand: Item[0].brand,
-      category: Item[0].category,
-      name: Item[0].name,
-      description: Item[0].description,
-      price: Item[0].price,
-      imageLink: Item[0].imageLink,
-      reviews: Item[0].reviews,
-      mainDescription: Item[0].mainDescription,
-    };
   }
 
   return {
