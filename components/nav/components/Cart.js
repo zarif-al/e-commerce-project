@@ -10,7 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import useSWR from "swr";
 import styles from "../../../styles/nav/components/Cart.module.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Spinner from "react-bootstrap/Spinner";
 import { itemCount, cartTotal, cartAction } from "../../../functions/functions";
@@ -24,6 +24,7 @@ function Cart({ handleOverlay }) {
   const [drop, setDrop] = useState(false);
   //Overlay on removed Item
   const [removedItem, setRemovedItem] = useState(null);
+
   //Drop state changer
   const changeDrop = () => {
     handleOverlay();
@@ -40,24 +41,24 @@ function Cart({ handleOverlay }) {
       transition: { duration: 0.3 },
     },
   };
-  console.log(data, error, isValidating);
-  //holding cart, might switch to directly using data
+  //cart variable
   let cart = null;
-  if (data != undefined) {
-    if (data.data[0].cart !== undefined) {
-      cart = data.data[0].cart;
-    }
+  if (data && !error) {
+    cart = data.cart;
   }
-  //
+  //useEffect
+  /*   useEffect(() => {
+    setRemovedItem(null);
+  }, [data]); */
   //remove item from cart function
   const removeItem = async (id) => {
-    setRemovedItem(id);
+    /*  setRemovedItem(id); */
     const item = {
       id: id,
       action: "delete",
     };
     const resp = await cartAction(item);
-    if (resp === "success") {
+    if (resp == "success") {
       mutate("/api/cartApi");
     }
   };
@@ -72,7 +73,7 @@ function Cart({ handleOverlay }) {
         action: "removeOne",
       };
       const resp = await cartAction(item);
-      if (resp === "success") {
+      if (resp == "success") {
         mutate("/api/cartApi");
       }
     }
@@ -84,7 +85,7 @@ function Cart({ handleOverlay }) {
       action: "addOne",
     };
     const resp = await cartAction(item);
-    if (resp === "success") {
+    if (resp == "success") {
       mutate("/api/cartApi");
     }
   };
@@ -116,7 +117,7 @@ function Cart({ handleOverlay }) {
               padding: "0.5rem",
             }}
           >
-            {data === undefined ? (
+            {cart == null ? (
               <Spinner animation="border" style={{ fontSize: "2.2rem" }} />
             ) : (
               itemCount(cart)
@@ -132,7 +133,7 @@ function Cart({ handleOverlay }) {
         variants={dropdown}
       >
         {cart === null ? (
-          <div className={styles.noItems}>No Items Added Yet!</div>
+          <div className={styles.noItems}>Loading Cart...</div>
         ) : cart.length === 0 ? (
           <div className={styles.noItems}>No Items Added Yet!</div>
         ) : (
@@ -202,7 +203,7 @@ function Cart({ handleOverlay }) {
         <div className={styles.checkoutDiv}>
           <div className={styles.total}>
             <div>Total</div>
-            <div>&#36;{cartTotal(data)}</div>
+            <div>&#36;{cartTotal(cart)}</div>
           </div>
           <div className={styles.purchaseButton}>
             <Button variant="outline-dark" disabled={true} block>
