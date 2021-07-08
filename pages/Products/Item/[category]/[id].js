@@ -29,9 +29,9 @@ function Products({
   //Fix for Json Parse error given in vercel logs
   console.log(item);
   console.log(relatedItems);
-  if (item === undefined || relatedItems === undefined) {
+  /*   if (item === undefined || relatedItems === undefined) {
     return <></>;
-  }
+  } */
   const item_object = JSON.parse(item);
   const relatedItems_array = JSON.parse(relatedItems);
   //
