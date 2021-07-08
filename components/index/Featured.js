@@ -16,31 +16,33 @@ function Featured({ Items }) {
         key={item.productCode}
         className={styles.column + " d-flex justify-content-center"}
       >
-        <Link
+        {/*  <Link
           href={`/Products/Item/${encodeURIComponent(
             item.category
           )}/${encodeURIComponent(item.productCode)}`}
           passHref={true}
           shallow={true}
+        > */}
+        <a
+          href={`/Products/Item/${encodeURIComponent(
+            item.category
+          )}/${encodeURIComponent(item.productCode)}`}
         >
-          <a>
-            <Card className={styles.card}>
-              <Card.Img
-                variant="top"
-                src={item.imageLink}
-                className={styles.cardImage}
-              />
-              <Card.Body className={styles.cardBody}>
-                <Card.Title className={styles.cardTitle}>
-                  {item.name}
-                </Card.Title>
-                <Card.Text className={styles.cardText}>
-                  &#36;{item.price}
-                </Card.Text>
-              </Card.Body>
-            </Card>
-          </a>
-        </Link>
+          <Card className={styles.card}>
+            <Card.Img
+              variant="top"
+              src={item.imageLink}
+              className={styles.cardImage}
+            />
+            <Card.Body className={styles.cardBody}>
+              <Card.Title className={styles.cardTitle}>{item.name}</Card.Title>
+              <Card.Text className={styles.cardText}>
+                &#36;{item.price}
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </a>
+        {/* </Link> */}
       </Col>
     );
     if ((i + 1) % 4 === 0) {
