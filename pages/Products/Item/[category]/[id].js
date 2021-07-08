@@ -26,7 +26,9 @@ function Products({
       setCategories(categories_data);
     }
   }, [categories_data]);
-
+  //Regex to replace underscores
+  const regex = /_/g;
+  //
   const [purchaseAmount, setPurchaseAmount] = useState(1);
   // For reviews and specification animations
   const [direction, setDirection] = useState(0);
@@ -116,15 +118,15 @@ function Products({
             <FontAwesomeIcon icon={faHome} color="black" />
           </Breadcrumb.Item>
           <Breadcrumb.Item
-            href={`/Products/Items/${encodeURIComponent(item.category)}`}
+            href={`/Products/Items/${item.category}`}
             onClick={() => {
               Cookie.set("brand", "All", { sameSite: "strict" });
             }}
           >
-            {decodeURIComponent(item.category)}
+            {item.category.replace(regex, " ")}
           </Breadcrumb.Item>
           <Breadcrumb.Item
-            href={`/Products/Items/${encodeURIComponent(item.category)}`}
+            href={`/Products/Items/${item.category}`}
             onClick={() => {
               Cookie.set("brand", item.brand, { sameSite: "strict" });
             }}
@@ -341,9 +343,7 @@ function Products({
               {RelatedItems.map((relatedItem, i) => {
                 return (
                   <Link
-                    href={`/Products/Item/${encodeURIComponent(
-                      item.category
-                    )}/${encodeURIComponent(relatedItem.productCode)}`}
+                    href={`/Products/Item/${item.category}/${relatedItem.productCode}`}
                     passHref={true}
                     key={i}
                   >
@@ -418,78 +418,78 @@ export async function getStaticProps({ params }) {
 
   let RelatedItems;
   let item;
-  if (Item[0] != undefined) {
-    if (Item[0].mainDescription === undefined) {
-      item = {
-        _id: JSON.parse(JSON.stringify(Item[0]._id)),
-        productCode: Item[0].productCode,
-        specifications: Item[0].specifications,
-        brand: Item[0].brand,
-        category: Item[0].category,
-        name: Item[0].name,
-        description: Item[0].description,
-        price: Item[0].price,
-        imageLink: Item[0].imageLink,
-        reviews: Item[0].reviews,
-      };
-    } else {
-      item = {
-        _id: JSON.parse(JSON.stringify(Item[0]._id)),
-        productCode: Item[0].productCode,
-        brand: Item[0].brand,
-        category: Item[0].category,
-        name: Item[0].name,
-        description: Item[0].description,
-        price: Item[0].price,
-        imageLink: Item[0].imageLink,
-        reviews: Item[0].reviews,
-        mainDescription: Item[0].mainDescription,
-      };
-    }
-    if (Item[0].price === 0) {
+  /*   if (Item[0] != undefined) { */
+  if (Item[0].mainDescription === undefined) {
+    item = {
+      _id: JSON.parse(JSON.stringify(Item[0]._id)),
+      productCode: Item[0].productCode,
+      specifications: Item[0].specifications,
+      brand: Item[0].brand,
+      category: Item[0].category,
+      name: Item[0].name,
+      description: Item[0].description,
+      price: Item[0].price,
+      imageLink: Item[0].imageLink,
+      reviews: Item[0].reviews,
+    };
+  } else {
+    item = {
+      _id: JSON.parse(JSON.stringify(Item[0]._id)),
+      productCode: Item[0].productCode,
+      brand: Item[0].brand,
+      category: Item[0].category,
+      name: Item[0].name,
+      description: Item[0].description,
+      price: Item[0].price,
+      imageLink: Item[0].imageLink,
+      reviews: Item[0].reviews,
+      mainDescription: Item[0].mainDescription,
+    };
+  }
+  if (Item[0].price === 0) {
+    RelatedItems = await db
+      .collection("Items")
+      .find({
+        category: params.category,
+        productCode: { $nin: [Item[0].productCode] },
+      })
+      .project({ _id: 0, name: 1, imageLink: 1, price: 1, productCode: 1 })
+      .sort({ price: -1 })
+      .limit(5)
+      .toArray();
+  } else {
+    RelatedItems = await db
+      .collection("Items")
+      .find({
+        category: params.category,
+        price: { $lte: Item[0].price, $gt: 0 },
+        productCode: { $nin: [Item[0].productCode] },
+      })
+      .sort({ price: -1 })
+      .project({ _id: 0, name: 1, imageLink: 1, price: 1, productCode: 1 })
+      .limit(5)
+      .toArray();
+    if (RelatedItems.length < 5) {
       RelatedItems = await db
         .collection("Items")
         .find({
           category: params.category,
+          price: { $gte: Item[0].price },
           productCode: { $nin: [Item[0].productCode] },
         })
-        .project({ _id: 0, name: 1, imageLink: 1, price: 1, productCode: 1 })
-        .sort({ price: -1 })
-        .limit(5)
-        .toArray();
-    } else {
-      RelatedItems = await db
-        .collection("Items")
-        .find({
-          category: params.category,
-          price: { $lte: Item[0].price, $gt: 0 },
-          productCode: { $nin: [Item[0].productCode] },
+        .sort({ price: 1 })
+        .project({
+          _id: 0,
+          name: 1,
+          imageLink: 1,
+          price: 1,
+          productCode: 1,
         })
-        .sort({ price: -1 })
-        .project({ _id: 0, name: 1, imageLink: 1, price: 1, productCode: 1 })
         .limit(5)
         .toArray();
-      if (RelatedItems.length < 5) {
-        RelatedItems = await db
-          .collection("Items")
-          .find({
-            category: params.category,
-            price: { $gte: Item[0].price },
-            productCode: { $nin: [Item[0].productCode] },
-          })
-          .sort({ price: 1 })
-          .project({
-            _id: 0,
-            name: 1,
-            imageLink: 1,
-            price: 1,
-            productCode: 1,
-          })
-          .limit(5)
-          .toArray();
-      }
     }
   }
+  /*   } */
 
   return {
     props: { item, RelatedItems, categories_data },

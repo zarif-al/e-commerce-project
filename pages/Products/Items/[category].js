@@ -34,6 +34,9 @@ function Items({
       setCategories(categories_data);
     }
   }, [categories_data]);
+  //Regex to replace underscores
+  const regex = /_/g;
+  //
   //Fix for Json Parse error given in vercel logs
   /*   if (brands === undefined) {
     return <></>;
@@ -188,10 +191,8 @@ function Items({
                 <Breadcrumb.Item href="/">
                   <FontAwesomeIcon icon={faHome} />
                 </Breadcrumb.Item>
-                <Breadcrumb.Item
-                  href={`/Products/Items/${encodeURIComponent(category)}`}
-                >
-                  {decodeURIComponent(category)}
+                <Breadcrumb.Item href={`/Products/Items/${category}`}>
+                  {category.replace(regex, " ")}
                 </Breadcrumb.Item>
               </Breadcrumb>
               <div className={styles.pagination}>
@@ -375,9 +376,7 @@ function Items({
                                 : "Add To Cart!"}
                             </Button>
                             <Link
-                              href={`/Products/Item/${encodeURIComponent(
-                                item.category
-                              )}/${encodeURIComponent(item.productCode)}`}
+                              href={`/Products/Item/${item.category}/${item.productCode}`}
                               passHref={true}
                             >
                               <Button href="#" variant="outline-primary" block>

@@ -7,7 +7,7 @@ import Link from "next/link";
 import Cookie from "js-cookie";
 function categories({ categories, subNav, showSidebar, handleOverlay }) {
   const [selectedCategory, setSelectedCategory] = useState(null);
-
+  const regex = /_/g;
   const setCategory = (category) => {
     if (selectedCategory === category) {
       setSelectedCategory(null);
@@ -48,10 +48,7 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
     const navContentArray = [];
     navContentArray.push(
       <li key="all">
-        <Link
-          href={`/Products/Items/${encodeURIComponent(category.category)}`}
-          passHref={true}
-        >
+        <Link href={`/Products/Items/${category.category}`} passHref={true}>
           <a
             onClick={() => {
               Cookie.set("brand", "All", { sameSite: "strict" });
@@ -69,10 +66,7 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
     category.brand.forEach((brand) => {
       navContentArray.push(
         <li key={brand}>
-          <Link
-            href={`/Products/Items/${encodeURIComponent(category.category)}`}
-            passHref={true}
-          >
+          <Link href={`/Products/Items/${category.category}`} passHref={true}>
             <a
               onClick={() => {
                 Cookie.set("brand", brand, { sameSite: "strict" });
@@ -109,7 +103,7 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
               transition: "1000",
             }}
           >
-            {decodeURIComponent(category.category)}
+            {category.category.replace(regex, " ")}
           </a>
           {!subNav ? (
             selectedCategory === category.category ? (
