@@ -20,26 +20,25 @@ function Featured({ Items }) {
           href={`/Products/Item/${encodeURIComponent(
             item.category
           )}/${encodeURIComponent(item.productCode)}`}
+          passHref={true}
         >
-          {/*   <a
-          href={`/Products/Item/${encodeURIComponent(
-            item.category
-          )}/${encodeURIComponent(item.productCode)}`}
-        > */}
-          <Card className={styles.card}>
-            <Card.Img
-              variant="top"
-              src={item.imageLink}
-              className={styles.cardImage}
-            />
-            <Card.Body className={styles.cardBody}>
-              <Card.Title className={styles.cardTitle}>{item.name}</Card.Title>
-              <Card.Text className={styles.cardText}>
-                &#36;{item.price}
-              </Card.Text>
-            </Card.Body>
-          </Card>
-          {/*  </a> */}
+          <a>
+            <Card className={styles.card}>
+              <Card.Img
+                variant="top"
+                src={item.imageLink}
+                className={styles.cardImage}
+              />
+              <Card.Body className={styles.cardBody}>
+                <Card.Title className={styles.cardTitle}>
+                  {item.name}
+                </Card.Title>
+                <Card.Text className={styles.cardText}>
+                  &#36;{item.price}
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </a>
         </Link>
       </Col>
     );

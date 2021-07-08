@@ -35,9 +35,9 @@ function Items({
     }
   }, [categories_data]);
   //Fix for Json Parse error given in vercel logs
-  if (brands === undefined) {
+  /*   if (brands === undefined) {
     return <></>;
-  }
+  } */
   //
   //add filter sidebar for mobile
   //Add a way to set Upcoming items to show or not
