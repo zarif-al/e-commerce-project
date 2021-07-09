@@ -5,6 +5,7 @@ import Carousel from "react-bootstrap/Carousel";
 import styles from "../styles/index/Index.module.css";
 import Featured from "../components/index/Featured";
 import { useEffect } from "react";
+import Image from "next/image";
 export default function Home({ Items, categories_data, setCategories }) {
   //Sets the subNav instantly with no load time
   useEffect(() => {
@@ -17,24 +18,30 @@ export default function Home({ Items, categories_data, setCategories }) {
     <Container className={styles.indexContainer}>
       <Carousel indicators={false}>
         <Carousel.Item interval={2000}>
-          <img
-            className={styles.carouselImage}
-            src="image samples/banners/asus.jpg"
-            alt="First slide"
+          <Image
+            src="/image samples/banners/asus.jpg"
+            alt="Asus Banner"
+            width={290}
+            height={100}
+            layout="responsive"
           />
         </Carousel.Item>
         <Carousel.Item interval={2000}>
-          <img
-            className={styles.carouselImage}
-            src="image samples/banners/intel.jpg"
-            alt="Second slide"
+          <Image
+            src="/image samples/banners/intel.jpg"
+            alt="Intel Banner"
+            width={290}
+            height={100}
+            layout="responsive"
           />
         </Carousel.Item>
         <Carousel.Item interval={2000}>
-          <img
-            className={styles.carouselImage}
-            src="image samples/banners/logitech.jpg"
-            alt="Third slide"
+          <Image
+            src="/image samples/banners/logitech.jpg"
+            alt="Logitech Banner"
+            width={290}
+            height={100}
+            layout="responsive"
           />
         </Carousel.Item>
       </Carousel>
