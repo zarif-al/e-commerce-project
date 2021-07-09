@@ -327,7 +327,9 @@
   .breadcrumb_custom > ol {
     font-size: 0.62rem;
     padding: 1rem 0.5rem;
+    max-width: 95%;
   }
+
   .breadcrumb_custom > ol > li {
     padding-left: 0.05rem !important;
     display: inline;
@@ -343,6 +345,7 @@
   .itemName {
     width: 100%;
     text-align: center;
+    margin: 0 0.34rem;
   }
 
   .infoBar {
@@ -417,8 +420,9 @@
     justify-content: center;
   }
   .breadcrumb_custom > ol {
-    font-size: 1rem;
+    font-size: 0.9rem;
     padding: 1rem 0.5rem;
+    max-width: 95%;
   }
   .breadcrumb_custom > ol > li {
     padding-left: 0.1rem !important;
@@ -484,8 +488,9 @@
     justify-content: center;
   }
   .breadcrumb_custom > ol {
-    font-size: 1rem;
+    font-size: 0.8rem;
     padding: 1rem 0.5rem;
+    max-width: 95%;
   }
   .breadcrumb_custom > ol > li {
     padding-left: 0.1rem !important;
