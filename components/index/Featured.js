@@ -3,7 +3,7 @@ import { Row, Col } from "react-bootstrap";
 import Card from "react-bootstrap/Card";
 import styles from "../../styles/index/components/Feature.module.css";
 import Link from "next/link";
-
+import Image from "next/image";
 function Featured({ Items }) {
   let itemsRow = [];
   let row = [];
@@ -24,8 +24,12 @@ function Featured({ Items }) {
             <Card className={styles.card}>
               <Card.Img
                 variant="top"
+                as={Image}
+                width={200}
+                height={200}
                 src={item.imageLink}
-                className={styles.cardImage}
+                /*  className={styles.cardImage} */
+                priority={true}
               />
               <Card.Body className={styles.cardBody}>
                 <Card.Title className={styles.cardTitle}>

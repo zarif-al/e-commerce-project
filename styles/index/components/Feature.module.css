@@ -15,10 +15,6 @@
   height: 100%;
 }
 
-.cardImage {
-  border-bottom: 3px solid black;
-}
-
 .cardBody {
   padding: 0.5rem 0 0 0;
   display: flex;

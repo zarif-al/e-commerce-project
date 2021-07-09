@@ -20,6 +20,7 @@ import ProductFilter from "../../../components/products/ProductFilter";
 import SideFilter from "../../../components/products/SideFilter";
 import { cartAction } from "../../../functions/functions";
 import { mutate } from "swr";
+import Image from "next/image";
 function Items({
   category,
   brands,
@@ -305,8 +306,10 @@ function Items({
                       <Card className={styles.card}>
                         <Card.Img
                           variant="top"
+                          as={Image}
+                          width={200}
+                          height={200}
                           src={item.imageLink}
-                          className={styles.cardImage}
                         />
                         <Card.Body className={styles.cardBody}>
                           <Card.Title className={styles.cardTitle}>
