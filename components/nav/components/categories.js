@@ -33,16 +33,6 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
     },
   };
 
-  const categories_button = {
-    visible: {
-      opacity: 1,
-      transition: { duration: 0.3, delay: 0.6 },
-    },
-    hidden: {
-      opacity: 0,
-    },
-  };
-
   const navItemArray = [];
 
   //Loop over categories
@@ -87,17 +77,13 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
 
     //create a nav item
     navItemArray.push(
-      <motion.li
+      <li
         key={category.category}
         onClick={!subNav ? () => setCategory(category.category) : null}
         onMouseEnter={subNav ? () => setCategory(category.category) : null}
         onMouseLeave={subNav ? () => setCategory(null) : null}
       >
-        <motion.div
-        /* variants={categories_button}
-          animate="visible"
-          initial="hidden" */
-        >
+        <div>
           <a
             style={{
               color:
@@ -116,7 +102,7 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
           ) : (
             ""
           )}
-        </motion.div>
+        </div>
         <motion.div
           id="myDropdown"
           initial={"hidden"}
@@ -131,7 +117,7 @@ function categories({ categories, subNav, showSidebar, handleOverlay }) {
             {navContentArray}
           </motion.ul>
         </motion.div>
-      </motion.li>
+      </li>
     );
   });
 
