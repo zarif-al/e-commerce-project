@@ -55,6 +55,7 @@ function MyApp({ Component, pageProps }) {
     <Provider session={pageProps.session}>
       <Head>
         <title>E-Commerce App</title>
+        <link rel="favicon" href="/newFavicon.ico" />
       </Head>
       <Container fluid style={{ padding: "0" }}>
         <NavBar handleOverlay={handleOverlay} categories={Categories} />
