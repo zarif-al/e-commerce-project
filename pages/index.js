@@ -5,7 +5,6 @@ import Carousel from "react-bootstrap/Carousel";
 import styles from "../styles/index/Index.module.css";
 import Featured from "../components/index/Featured";
 import { useEffect } from "react";
-import Image from "next/image";
 export default function Home({ Items, categories_data, setCategories }) {
   //Sets the subNav instantly with no load time
   useEffect(() => {
