@@ -43,14 +43,6 @@ function MyApp({ Component, pageProps }) {
     });
   };
 
-  /*   useEffect(() => {
-    fetch("/api/categories")
-      .then((response) => response.json())
-      .then((data) => {
-        setCategories(data);
-      });
-  }, []); */
-
   return (
     <Provider session={pageProps.session}>
       <Head>
