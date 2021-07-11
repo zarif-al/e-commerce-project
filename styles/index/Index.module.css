@@ -6,6 +6,12 @@
   justify-content: center;
 }
 
+.carouselImage {
+  display: block;
+  height: 290px;
+  width: 100%;
+}
+
 .featureRow {
   align-items: center;
   flex-direction: column;
@@ -28,6 +34,9 @@
     padding: 0;
     max-width: 100% !important;
   }
+  .carouselImage {
+    height: 150px;
+  }
 }
 
 @media screen and (min-width: 577px) and (max-width: 851px) {
@@ -35,5 +44,8 @@
     margin: 0rem;
     padding: 0;
     max-width: 100% !important;
+  }
+  .carouselImage {
+    height: 190px;
   }
 }
